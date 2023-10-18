@@ -12,6 +12,7 @@ import {
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
+
 function SignUp() {
     const [signIn, toggle] = React.useState(true);
     const [name, setName] = useState("");
