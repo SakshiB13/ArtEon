@@ -10,8 +10,8 @@ import {
   signInWithRedirect,
   signOut,
 } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useNavigate } from 'react-router-dom';
 
 
 function SignUp() {
@@ -20,7 +20,9 @@ function SignUp() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [selectedOption, setSelectedOption] = useState("artist");
-    const [user, loading] = useAuthState(auth);
+    const [user] = useAuthState(auth);
+    const history = useNavigate();
+
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -43,7 +45,7 @@ function SignUp() {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-    
+            
             if (selectedOption === 'artist') {
                 await createNewArtist(user, name, email);
             } else if (selectedOption === 'collector') {
@@ -70,6 +72,7 @@ function SignUp() {
             console.log('Sign-in successful');
             console.log('User:', user);
             console.log('Email:', email);
+            history('/home');
         } catch (error) {
             console.error('Sign-in failed:', error.message);
         }
