@@ -9,6 +9,7 @@ contract ArtEon is ERC721Enumerable, Ownable {
     using Strings for uint256;
     mapping(string => uint8) existingURIs;
     mapping(uint256 => address) public holderOf;
+    mapping(uint256 => address) private tokenOwners;
 
     address public artist;
     uint256 public royalityFee;
@@ -118,7 +119,7 @@ contract ArtEon is ERC721Enumerable, Ownable {
             minted[id - 1].metadataURI,
             block.timestamp
         );
-
+        
         minted[id - 1].owner = msg.sender;
     }
 
@@ -146,4 +147,13 @@ contract ArtEon is ERC721Enumerable, Ownable {
     function getAllTransactions() external view returns (TransactionStruct[] memory) {
         return transactions;
     }
+
+    function burn(uint256 tokenId) public onlyOwner {
+        address owner = tokenOwners[tokenId];
+        require(owner != address(0), "Token does not exist");
+        require(owner == msg.sender, "Only the owner can burn the token");
+        super._burn(tokenId);
+        delete tokenOwners[tokenId];
+    }
+    
 }
