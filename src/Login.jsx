@@ -62,6 +62,23 @@ margin: 8px 0;
 width: 100%;
 `;
 
+export const Label = styled.label`
+  font-weight: bold;
+  font-size: 16px;
+`;
+
+export const Select = styled.select`
+  background-color: #eee;
+  border: none;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%;
+`;
+
+export const Option = styled.option`
+  background-color: #eee; 
+  color: #333; 
+`;
 
 export const Button = styled.button`
    border-radius: 20px;
