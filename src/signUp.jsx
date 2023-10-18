@@ -5,6 +5,7 @@ import { createNewCollector } from './utils/collector';
 import { createNewArtist } from './utils/artist';
 import {
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signInWithRedirect,
   signOut,
@@ -37,42 +38,43 @@ function SignUp() {
         setSelectedOption(e.target.value);
     };
 
-    const handleSignUp = async () => {
-        await createUserWithEmailAndPassword(auth, email, password)
-            .then(async (userCredential) => {
-                const user = userCredential.user;
-
-                if (selectedOption === 'artist') {
-                    await createNewArtist(user, name, email);
-                } else if (selectedOption === 'collector') {
-                    await createNewCollector(user, name, email);
-                }
-
-                console.log('Sign-up successful');
-                console.log('User:', user);
-                console.log('User type:', selectedOption);
-                console.log('Name:', name);
-                console.log('Email:', email);
-            })
-            .catch((error) => {
-                console.error('Sign-up failed:', error.message);
-            });
+    const handleSignUp = async (e) => {
+        e.preventDefault(); 
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+    
+            if (selectedOption === 'artist') {
+                await createNewArtist(user, name, email);
+            } else if (selectedOption === 'collector') {
+                await createNewCollector(user, name, email);
+            }
+    
+            console.log('Sign-up successful');
+            console.log('User:', user);
+            console.log('User type:', selectedOption);
+            console.log('Name:', name);
+            console.log('Email:', email);
+        } catch (error) {
+            console.error('Sign-up failed:', error.message);
+        }
     };
+    
 
-    const handleSignIn = async () => {
-        await signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // User signed in successfully
-                const user = userCredential.user;
-
-                console.log('Sign-in successful');
-                console.log('User:', user);
-                console.log('Email:', email);
-            })
-            .catch((error) => {
-                console.error('Sign-in failed:', error.message);
-            });
+    const handleSignIn = async (e) => {
+        e.preventDefault();
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+    
+            console.log('Sign-in successful');
+            console.log('User:', user);
+            console.log('Email:', email);
+        } catch (error) {
+            console.error('Sign-in failed:', error.message);
+        }
     };
+    
 
     return (
         <div className="container-body-signup">
