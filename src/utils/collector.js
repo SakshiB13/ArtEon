@@ -19,6 +19,7 @@ export async function createNewCollector(user,name,email) {
         email: email,
         profilePicture: user.photoURL,
       });
+    
     }
   }
   
