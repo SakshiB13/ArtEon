@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # How to Build a Better NFT Marketplace with React, Solidity, and CometChat
 
 Read the full tutorial here: [**>> How to Build a Better NFT Marketplace with React, Solidity, and CometChat**](https://daltonic.github.io)
@@ -73,3 +74,6 @@ Access the [Teaching Guide Here](https://docs.google.com/document/d/13bBRyAO0bEw
 - 🎅 [Faucet](https://faucets.chain.link/rinkeby)
 - 🤖 [Ganache](https://trufflesuite.com/ganache/index.html)
 - ✨ [Live Demo](https://timelessnft-33dea.web.app/)
+=======
+# ArtEon
+>>>>>>> 82ad1c8c6264adeaa92fb342692a57508c118f03
