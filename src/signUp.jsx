@@ -1,28 +1,88 @@
 import React from "react";
 import * as Components from './Login';
+import { auth, provider} from '../utils/firebase';
+import { createNewCollector } from '../utils/collector';
+import { createNewArtist } from '../utils/artist';
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  signInWithRedirect,
+  signOut,
+} from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { useAuthState } from 'react-firebase-hooks/auth';
+
 
 function SignUp() {
     const [signIn, toggle] = React.useState(true);
+    const [name, setName] = useState(""); 
+    const [email, setEmail] = useState(""); 
+    const [password, setPassword] = useState(""); 
+    const [selectedOption, setSelectedOption] = useState("artist");
+    const [user, loading] = useAuthState(auth);
+
+
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+    };
+
+    const handleNameChange = (e) => {
+        setName(e.target.value);
+    };
+
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+    };
+
+    const handleOptionChange = (e) => {
+        setSelectedOption(e.target.value);
+    };
+
+    const handleSignUp = () => {
+        console.log("Selected Option:", selectedOption);
+        console.log("Name:", name)
+        console.log("Email:", email);
+        console.log("Password:", password);
+
+    };
+
+    const handleSignIn = () => {
+        console.log("Email:", email);
+        console.log("Password:", password);
+
+    };
+
+
      return(
       <div className="container-body-signup">
          <Components.Container>
              <Components.SignUpContainer signinIn={signIn}>
                  <Components.Form>
                      <Components.Title>Create Account</Components.Title>
-                     <Components.Input type='text' placeholder='Name' />
-                     <Components.Input type='email' placeholder='Email' />
-                     <Components.Input type='password' placeholder='Password' />
-                     <Components.Button>Sign Up</Components.Button>
+                        <Components.Label>Select Role:</Components.Label>
+                            <Components.Select value={selectedOption} onChange={handleOptionChange}>
+                                <Components.Option value="artist">Artist</Components.Option>
+                                <Components.Option value="collector">Collector</Components.Option>
+                        </Components.Select>
+                     <Components.Input type='text' placeholder='Name' value={name}
+                    onChange={handleNameChange}/>
+                     <Components.Input type='email' placeholder='Email'value={email}
+                    onChange={handleEmailChange} />
+                     <Components.Input type='password' placeholder='Password' value={password}
+                    onChange={handlePasswordChange}/>
+                     <Components.Button onClick={handleSignUp}>Sign Up</Components.Button>
                  </Components.Form>
              </Components.SignUpContainer>
 
              <Components.SignInContainer signinIn={signIn}>
                   <Components.Form>
                       <Components.Title>Sign in</Components.Title>
-                      <Components.Input type='email' placeholder='Email' />
-                      <Components.Input type='password' placeholder='Password' />
+                      <Components.Input type='email' placeholder='Email' value={email}
+                    onChange={handleEmailChange}/>
+                      <Components.Input type='password' placeholder='Password' value={password}
+                    onChange={handlePasswordChange}/>
                       <Components.Anchor href='#'>Forgot your password?</Components.Anchor>
-                      <Components.Button>Sigin In</Components.Button>
+                      <Components.Button onClick={handleSignIn}>Sign In</Components.Button>
                   </Components.Form>
              </Components.SignInContainer>
 
