@@ -9,7 +9,7 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 
-export async function createNewArtist(uid, email, name) {
+export async function createNewArtist(user, email, name) {
     const userRef = doc(db, 'artist', user.uid);
     const userDoc = await getDoc(userRef);
     if (!userDoc.exists()) {
