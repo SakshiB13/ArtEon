@@ -19,14 +19,14 @@ const Hero = () => {
             <span className="text-gradient">NFTs</span> Collections
           </h1>
           <p className="text-gray-500 font-semibold text-sm mt-3">
-            Mint and collect the hottest NFTs around.
+            Mint and collect the Digitl Art NFTs around.
           </p>
         </div>
 
         <div className="flex flex-row mt-5">
           <button
             className="shadow-xl shadow-black text-white
-            bg-[#e32970] hover:bg-[#bd255f]
+            bg-[#800080] hover:bg-[#b300b3]
             rounded-full cursor-pointer p-2"
             onClick={onCreatedNFT}
           >

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity 0.8.21;
 
-import "./ERC721.sol";
-import "./ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract TimelessNFT is ERC721Enumerable, Ownable {
+contract ArtEon is ERC721Enumerable, Ownable {
     using Strings for uint256;
     mapping(string => uint8) existingURIs;
     mapping(uint256 => address) public holderOf;
@@ -38,11 +38,12 @@ contract TimelessNFT is ERC721Enumerable, Ownable {
     TransactionStruct[] minted;
 
     constructor(
-        string memory _name,
-        string memory _symbol,
+        string memory __name,
+        string memory __symbol,
         uint256 _royalityFee,
         address _artist
-    ) ERC721(_name, _symbol) {
+    ) ERC721(__name, __symbol)
+    Ownable(msg.sender) {
         royalityFee = _royalityFee;
         artist = _artist;
     }

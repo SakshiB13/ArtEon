@@ -1,8 +1,9 @@
 /* eslint-disable no-undef */
-const TimelessNFT = artifacts.require('TimelessNFT')
 
-module.exports = async (deployer) => {
-  const accounts = await web3.eth.getAccounts()
+const Demo_Contract = artifacts.require("ArtEon");
 
-  await deployer.deploy(TimelessNFT, 'Timeless NFTs', 'TNT', 10, accounts[1])
-}
+module.exports = async(deployer) => {
+  await deployer.deploy(Demo_Contract);
+};
+
+

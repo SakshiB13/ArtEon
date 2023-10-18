@@ -12,7 +12,7 @@ import { mintNFT } from '../Blockchain.Services'
 const auth =
   'Basic ' +
   Buffer.from(
-    process.env.REACT_APP_INFURIA_PID + ':' + process.env.REACT_APP_INFURIA_API,
+    '2WoJmlP3wUJFD0jXvjNuaBcvHGP' + ':' + '20d129d7a1a55ed8a18994d064b24d1f',
   ).toString('base64')
 
 const client = create({
@@ -181,11 +181,10 @@ const CreateNFT = () => {
             type="submit"
             onClick={handleSubmit}
             className="flex flex-row justify-center items-center
-              w-full text-white text-md bg-[#e32970]
-              hover:bg-[#bd255f] py-2 px-5 rounded-full
+              w-full text-white text-md bg-[#800080] hover:bg-[#b300b3] py-2 px-5 rounded-full
               drop-shadow-xl border border-transparent
-              hover:bg-transparent hover:text-[#e32970]
-              hover:border hover:border-[#bd255f]
+              hover:bg-transparent hover:text-[#800080]
+              hover:border hover:border-[#b300b3]
               focus:outline-none focus:ring mt-5"
           >
             Mint Now

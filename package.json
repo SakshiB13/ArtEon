@@ -9,19 +9,26 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@pinata/sdk": "^2.1.0",
+    "dag-jose": "^4.0.0",
+    "firebase-admin": "^11.11.0",
     "ipfs-http-client": "^59.0.0",
+    "particles-bg": "^2.5.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hooks-global-state": "^1.0.2",
     "react-icons": "^4.3.1",
     "react-identicons": "^1.2.5",
-    "react-router-dom": "6",
+    "react-reveal": "^1.2.2",
+    "react-router": "^6.17.0",
+    "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.0",
+    "styled-components": "^6.1.0",
     "web-vitals": "^2.1.4",
     "web3": "^1.7.1"
   },
   "devDependencies": {
-    "@openzeppelin/contracts": "^4.5.0",
+    "@openzeppelin/contracts": "^5.0.0",
     "@tailwindcss/forms": "0.4.0",
     "@truffle/hdwallet-provider": "^2.0.4",
     "assert": "^2.0.0",
