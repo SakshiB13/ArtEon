@@ -4,7 +4,7 @@ import ParticlesBg from "particles-bg";
 
 const Main = () => {
   
-  const color =["#800080","#fc0fc0","##FF5733","#3498DB"," #2ECC71","#9B59B6"]
+  const color =["#800080","#fff700","#FF5733","#3498DB"," #2ECC71","#9B59B6"]
 
   return (
     <header id="home">
@@ -31,17 +31,11 @@ const Main = () => {
             </a>
           </li>
 
-          <li>
-            <a className="smoothscroll" href="#resume">
-              Resume
-            </a>
-          </li>
-
-          <li>
+          {/* <li>
             <a className="smoothscroll" href="#portfolio">
               Works
             </a>
-          </li>
+          </li> */}
 
           <li>
             <a className="smoothscroll" href="#contact">
@@ -56,16 +50,13 @@ const Main = () => {
           
             <h1 className="responsive-headline">ArtEon</h1>
 
-            <h3>Hi.</h3>
+            <h3>"Unlock the World of Digital Artistry"</h3>
         
           <hr />
        
             <ul className="social">
-              <a href="" className="button btn project-btn">
-                <i className="fa fa-book"></i>Project
-              </a>
-              <a href="" className="button btn github-btn">
-                <i className="fa fa-github"></i>Github
+              <a href="/signup" className="button btn project-btn">
+                <i className="fa fa-book"></i>Sign Up
               </a>
             </ul>
          

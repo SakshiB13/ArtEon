@@ -9,14 +9,21 @@
 
 
 .container-body-signup {
-  background: #f6f5f7;
+  
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   font-family: "Montserrat", sans-serif;
   height: 100vh;
-  margin: -20px 0 50px;
+  background-color: #151c25;
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsl(302deg 25% 18%) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 50% 0%, rgb(92, 20, 82) 0, transparent 50%),
+    radial-gradient(at 100% 0%, rgb(96, 22, 94) 0, transparent 50%);
 }
 
 body {
@@ -89,7 +96,7 @@ body {
 }
 header {
   position: relative;
-  height: 800px;
+  height: 100vh;
   min-height: 500px;
   width: 100%;
   text-align: center;
@@ -115,7 +122,7 @@ header .banner {
 
 header .banner-text { width: 100%; }
 header .banner-text h1 {
-  font: 90px/1.1em 'opensans-bold', sans-serif;
+  font: 120px/1.1em 'opensans-bold', sans-serif;
   font-family: 'Gulzar', serif;
   font-family: 'Young Serif', serif;
   color: #fff;
@@ -123,8 +130,8 @@ header .banner-text h1 {
   margin: 0 auto 18px auto;
 }
 header .banner-text h3 {
-  font: 18px/1.9em 'librebaskerville-regular', serif;
-  color: #ddd;
+  font: 30px/1.9em 'librebaskerville-regular', serif;
+  color: #ffffff;
   margin: 0 auto;
   width: 70%;
 }
@@ -240,6 +247,30 @@ ul#nav li a {
 ul#nav li a:active { background-color: transparent !important; }
 ul#nav li.current a { color: #fe6928; }
 
+/* Main page Button*/
+
+/* Style the Project link */
+a.button.btn.project-btn {
+  background-color: #008080; /* Set the background color */
+  color: #fff; /* Set the text color */
+  padding: 10px 20px; /* Adjust padding for spacing */
+  text-decoration: none; /* Remove underline by default */
+  border: 1px solid #0eece5; /* Add a border */
+  border-radius: 10px; /* Add rounded corners */
+  display: inline-block; /* Make it a block element */
+  margin-right: 10px; /* Adjust margin for spacing between links */
+}
+
+/* Style the GitHub link */
+a.button.btn.github-btn {
+  background-color: #333; /* Set the background color */
+  color: #fff; /* Set the text color */
+  padding: 10px 20px; /* Adjust padding for spacing */
+  text-decoration: none; /* Remove underline by default */
+  border: 1px solid #333; /* Add a border */
+  border-radius: 4px; /* Add rounded corners */
+  display: inline-block; /* Make it a block element */
+}
 
 
 @tailwind base;

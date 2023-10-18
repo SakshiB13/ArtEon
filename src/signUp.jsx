@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Components from './Login';
+
+import { auth, provider} from './utils/firebase';
+import { createNewCollector } from './utils/collector';
+import { createNewArtist } from './utils/artist';
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  signInWithRedirect,
+  signOut,
+} from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 function SignUp() {
     const [signIn, toggle] = React.useState(true);
      return(
       <div className="container-body-signup">
          <Components.Container>
-             <Components.SignUpContainer signinIn={signIn}>
+             <Components.SignUpContainer signinin={signIn}>
                  <Components.Form>
                      <Components.Title>Create Account</Components.Title>
                      <Components.Input type='text' placeholder='Name' />
