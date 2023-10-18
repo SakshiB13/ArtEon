@@ -9,14 +9,14 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 
-export async function createNewCollector(user) {
-    const userRef = doc(db, 'collector', user.uid);
+export async function createNewArtist(uid, email, name) {
+    const userRef = doc(db, 'artist', user.uid);
     const userDoc = await getDoc(userRef);
     if (!userDoc.exists()) {
       await setDoc(userRef, {
         userId: user.uid,
-        name: user.name,
-        email: user.email,
+        name: name,
+        email: email,
         profilePicture: user.photoURL,
       });
     }

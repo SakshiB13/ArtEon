@@ -1,8 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import * as Components from './Login';
-import { auth, provider} from '../utils/firebase';
-import { createNewCollector } from '../utils/collector';
-import { createNewArtist } from '../utils/artist';
+import { auth, provider} from './utils/firebase';
+import { createNewCollector } from './utils/collector';
+import { createNewArtist } from './utils/artist';
 import {
   createUserWithEmailAndPassword,
   signInWithPopup,
@@ -39,17 +39,43 @@ function SignUp() {
     };
 
     const handleSignUp = () => {
-        console.log("Selected Option:", selectedOption);
-        console.log("Name:", name)
-        console.log("Email:", email);
-        console.log("Password:", password);
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
 
+                if (selectedOption === 'artist') {
+                    // Create an artist profile
+                    createNewArtist(user, name, email);
+                } else if (selectedOption === 'collector') {
+                    // Create a collector profile
+                    createNewCollector(user, name, email);
+                }
+
+                console.log('Sign-up successful');
+                console.log('User:', user);
+                console.log('User type:', selectedOption);
+                console.log('Name:', name);
+                console.log('Email:', email);
+            })
+            .catch((error) => {
+                console.error('Sign-up failed:', error.message);
+            });
     };
 
-    const handleSignIn = () => {
-        console.log("Email:", email);
-        console.log("Password:", password);
 
+    const handleSignIn = () => {
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // User signed in successfully
+                const user = userCredential.user;
+
+                console.log('Sign-in successful');
+                console.log('User:', user);
+                console.log('Email:', email);
+            })
+            .catch((error) => {
+                console.error('Sign-in failed:', error.message);
+            });
     };
 
 
