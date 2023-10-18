@@ -20,7 +20,7 @@ function SignUp() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [selectedOption, setSelectedOption] = useState("artist");
-    const [user] = useAuthState(auth);
+    const [userInfo] = useAuthState(auth);
     const history = useNavigate();
 
 
@@ -72,7 +72,9 @@ function SignUp() {
             console.log('Sign-in successful');
             console.log('User:', user);
             console.log('Email:', email);
+            if(userInfo){
             history('/home');
+            }
         } catch (error) {
             console.error('Sign-in failed:', error.message);
         }

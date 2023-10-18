@@ -9,6 +9,7 @@ import { FaTimes } from 'react-icons/fa'
 import { create } from 'ipfs-http-client'
 import { mintNFT } from '../Blockchain.Services'
 
+
 const auth =
   'Basic ' +
   Buffer.from(
@@ -31,6 +32,8 @@ const CreateNFT = () => {
   const [description, setDescription] = useState('')
   const [fileUrl, setFileUrl] = useState('')
   const [imgBase64, setImgBase64] = useState(null)
+  const [mintednfts] = useGlobalState('nfts');
+
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -41,22 +44,35 @@ const CreateNFT = () => {
     setGlobalState('loading', { show: true, msg: 'Uploading IPFS data...' })
 
     try {
-      const created = await client.add(fileUrl)
-      const metadataURI = `https://ipfs.io/ipfs/${created.path}`
-      const nft = { title, price, description, metadataURI }
-
-      setLoadingMsg('Intializing transaction...')
-      setFileUrl(metadataURI)
-      await mintNFT(nft)
-
-      resetForm()
-      setAlert('Minting completed...', 'green')
-      window.location.reload()
+      const created = await client.add(fileUrl);
+      const metadataURI = `https://ipfs.io/ipfs/${created.path}`;
+      const nft = { title, price, description, metadataURI };
+      
+      setLoadingMsg('Verifying Art...');
+    
+      let exists = false;
+      for (let i = 0; i < mintednfts.length; i++) {
+        if (mintednfts[i].metadataURI === metadataURI) {
+          exists = true;
+          break; 
+        }
+      }
+    
+      if (exists) {
+        setAlert('Minting failed - Artpiece already minted', 'red');
+      } else {
+        setLoadingMsg('Initializing transaction...');
+        setFileUrl(metadataURI);
+        await mintNFT(nft);
+        resetForm();
+        setAlert('Minting completed...', 'green');
+        window.location.reload();
+      }
     } catch (error) {
-      console.log('Error uploading file: ', error)
-      setAlert('Minting failed...', 'red')
+      console.log('Error uploading file: ', error);
+      setAlert('Minting failed...', 'red');
     }
-  }
+  }  
 
   const changeImage = async (e) => {
     const reader = new FileReader()

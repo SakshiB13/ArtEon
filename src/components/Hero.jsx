@@ -3,6 +3,11 @@ import { setGlobalState, useGlobalState, truncate } from '../store'
 
 const Hero = () => {
   const [connectedAccount] = useGlobalState('connectedAccount')
+  const [userName] = useGlobalState('userName') 
+  const [usertype] = useGlobalState('usertype')  
+  console.log(userName);
+ 
+
   const onCreatedNFT = () => {
     setGlobalState('modal', 'scale-100')
   }
@@ -24,14 +29,14 @@ const Hero = () => {
         </div>
 
         <div className="flex flex-row mt-5">
-          <button
-            className="shadow-xl shadow-black text-white
-            bg-[#800080] hover:bg-[#b300b3]
-            rounded-full cursor-pointer p-2"
-            onClick={onCreatedNFT}
-          >
-            Create NFT
-          </button>
+        {usertype === 'artist' && ( 
+            <button
+              className="shadow-xl shadow-black text-white bg-[#800080] hover:bg-[#b300b3] rounded-full cursor-pointer p-2"
+              onClick={onCreatedNFT}
+            >
+              Create NFT
+            </button>
+          )}
         </div>
 
         <div className="w-3/4 flex justify-between items-center mt-5">
@@ -71,7 +76,7 @@ const Hero = () => {
                 ? truncate(connectedAccount, 4, 4, 11)
                 : 'Connect Your Wallet'}
             </p>
-            <small className="text-pink-800 font-bold">@you</small>
+            <small className="text-pink-800 font-bold">@{userName}</small>
           </div>
         </div>
       </div>
