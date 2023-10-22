@@ -22,18 +22,21 @@ contract ArtEon is ERC721Enumerable, Ownable {
         address indexed owner,
         uint256 cost,
         string metadataURI,
+        string phash,
         uint256 timestamp
     );
 
     struct TransactionStruct {
-        uint256 id;
-        address owner;
-        uint256 cost;
-        string title;
-        string description;
-        string metadataURI;
-        uint256 timestamp;
-    }
+    uint256 id;
+    address owner;
+    uint256 cost;
+    string title;
+    string description;
+    string metadataURI;
+    string phash; 
+    uint256 timestamp;
+}
+
 
     TransactionStruct[] transactions;
     TransactionStruct[] minted;
@@ -50,45 +53,48 @@ contract ArtEon is ERC721Enumerable, Ownable {
     }
 
     function payToMint(
-        string memory title,
-        string memory description,
-        string memory metadataURI,
-        uint256 salesPrice
-    ) external payable {
-        require(msg.value >= cost, "Ether too low for minting!");
-        require(existingURIs[metadataURI] == 0, "This NFT is already minted!");
-        
+    string memory title,
+    string memory description,
+    string memory metadataURI,
+    uint256 salesPrice,
+    string memory phash 
+) external payable {
+    require(msg.value >= cost, "Ether too low for minting!");
+    require(existingURIs[metadataURI] == 0, "This NFT is already minted!");
 
-        uint256 royality = (msg.value * royalityFee) / 100;
-        payTo(artist, royality);
-        payTo(owner(), (msg.value - royality));
+    uint256 royalty = (msg.value * royalityFee) / 100;
+    payTo(artist, royalty);
+    payTo(owner(), (msg.value - royalty));
 
-        supply++;
+    supply++;
 
-        minted.push(
-            TransactionStruct(
-                supply,
-                msg.sender,
-                salesPrice,
-                title,
-                description,
-                metadataURI,
-                block.timestamp
-            )
-        );
-
-        emit Sale(
+    minted.push(
+        TransactionStruct(
             supply,
             msg.sender,
-            msg.value,
+            salesPrice,
+            title,
+            description,
             metadataURI,
+            phash, 
             block.timestamp
-        );
+        )
+    );
 
-        _safeMint(msg.sender, supply);
-        existingURIs[metadataURI] = 1;
-        holderOf[supply] = msg.sender;
-    }
+    emit Sale(
+        supply,
+        msg.sender,
+        msg.value,
+        metadataURI,
+        phash,
+        block.timestamp    
+    );
+
+    _safeMint(msg.sender, supply);
+    existingURIs[metadataURI] = 1;
+    holderOf[supply] = msg.sender;
+   }
+
 
     function payToBuy(uint256 id) external payable {
         require(msg.value >= minted[id - 1].cost, "Ether too low for purchase!");
@@ -108,7 +114,8 @@ contract ArtEon is ERC721Enumerable, Ownable {
                 minted[id - 1].title,
                 minted[id - 1].description,
                 minted[id - 1].metadataURI,
-                block.timestamp
+                minted[id - 1].phash,
+                block.timestamp        
             )
         );
 
@@ -117,7 +124,8 @@ contract ArtEon is ERC721Enumerable, Ownable {
             msg.sender,
             msg.value,
             minted[id - 1].metadataURI,
-            block.timestamp
+            minted[id-1].phash,
+            block.timestamp     
         );
         
         minted[id - 1].owner = msg.sender;
@@ -141,7 +149,8 @@ contract ArtEon is ERC721Enumerable, Ownable {
     }
 
     function getNFT(uint256 id) external view returns (TransactionStruct memory) {
-        return minted[id - 1];
+    TransactionStruct memory nft = minted[id - 1];
+    return nft;
     }
 
     function getAllTransactions() external view returns (TransactionStruct[] memory) {

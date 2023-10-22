@@ -275,6 +275,12 @@
 					},
 					{
 						"indexed": false,
+						"internalType": "string",
+						"name": "phash",
+						"type": "string"
+					},
+					{
+						"indexed": false,
 						"internalType": "uint256",
 						"name": "timestamp",
 						"type": "uint256"
@@ -445,6 +451,11 @@
 								"type": "string"
 							},
 							{
+								"internalType": "string",
+								"name": "phash",
+								"type": "string"
+							},
+							{
 								"internalType": "uint256",
 								"name": "timestamp",
 								"type": "uint256"
@@ -492,6 +503,11 @@
 							{
 								"internalType": "string",
 								"name": "metadataURI",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "phash",
 								"type": "string"
 							},
 							{
@@ -567,6 +583,11 @@
 							{
 								"internalType": "string",
 								"name": "metadataURI",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "phash",
 								"type": "string"
 							},
 							{
@@ -705,6 +726,11 @@
 						"internalType": "uint256",
 						"name": "salesPrice",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "phash",
+						"type": "string"
 					}
 				],
 				"name": "payToMint",
@@ -1269,11 +1295,11 @@
 			]
 		},
 		"contracts/ArtEon.sol": {
-			"keccak256": "0xe3effb98bad4c0412ea6d90f7912e0f7827f4ed9fa67eb8fc80f290716cb8328",
+			"keccak256": "0xfa14c505833f8359fcddd02caf1ff414ebf1f465a388538be49fb5011606798f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://221dbe37074ff06d4431868de013da59ff6df4f9c86900471c63dde693f9a145",
-				"dweb:/ipfs/QmQKmDyuH9tPmpHDmN8G5JqYtGHPa2aX4t3dj4pZs4EUKk"
+				"bzz-raw://bf9e691bf9804a3d04be15657c1004779396dd24b370a2dd942226dd91f93e80",
+				"dweb:/ipfs/QmSyoQUoUSB2TSLoc4BFE8powbtk5Fs3Datxbnga1FJFWe"
 			]
 		}
 	},
