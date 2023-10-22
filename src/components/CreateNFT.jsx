@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { create } from 'ipfs-http-client'
 import { mintNFT } from '../Blockchain.Services'
-import { imghash } from 'imghash'; // Import the imghash library
+import { imghash } from 'imghash'; 
 
 const auth =
   'Basic ' +
@@ -45,16 +45,15 @@ const CreateNFT = () => {
     try {
       const created = await client.add(fileUrl)
       const metadataURI = `https://ipfs.io/ipfs/${created.path}`
-       // Calculate perceptual hash of the uploaded image
       const hash = await imghash(fileUrl);
 
-      const nft = { title, price, description, metadataURI }
+      const nft = { title, price, description, metadataURI, hash }
 
       setLoadingMsg('Verifying Art...');
 
       let exists = false;
       for (let i = 0; i < mintednfts.length; i++) {
-        if (mintednfts[i].metadataURI === metadataURI) {
+        if (mintednfts[i].metadataURI === metadataURI && mintednfts[i].hash === hash){
           exists = true;
           break;
         }
