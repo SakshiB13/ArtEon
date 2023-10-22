@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { create } from 'ipfs-http-client'
 import { mintNFT } from '../Blockchain.Services'
-
+import { imghash } from 'imghash'; // Import the imghash library
 
 const auth =
   'Basic ' +
@@ -34,32 +34,34 @@ const CreateNFT = () => {
   const [imgBase64, setImgBase64] = useState(null)
   const [mintednfts] = useGlobalState('nfts');
 
-
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!title || !price || !description) return
+    if (!title || !price || !description || !imgBase64) return;
 
     setGlobalState('modal', 'scale-0')
     setGlobalState('loading', { show: true, msg: 'Uploading IPFS data...' })
 
     try {
-      const created = await client.add(fileUrl);
-      const metadataURI = `https://ipfs.io/ipfs/${created.path}`;
-      const nft = { title, price, description, metadataURI };
-      
+      const created = await client.add(fileUrl)
+      const metadataURI = `https://ipfs.io/ipfs/${created.path}`
+       // Calculate perceptual hash of the uploaded image
+      const hash = await imghash(fileUrl);
+
+      const nft = { title, price, description, metadataURI }
+
       setLoadingMsg('Verifying Art...');
-    
+
       let exists = false;
       for (let i = 0; i < mintednfts.length; i++) {
         if (mintednfts[i].metadataURI === metadataURI) {
           exists = true;
-          break; 
+          break;
         }
       }
-    
+
       if (exists) {
-        setAlert('Minting failed - Artpiece already minted', 'red');
+        setAlert('Minting failed - Artwork already minted', 'red');
       } else {
         setLoadingMsg('Initializing transaction...');
         setFileUrl(metadataURI);
@@ -72,7 +74,7 @@ const CreateNFT = () => {
       console.log('Error uploading file: ', error);
       setAlert('Minting failed...', 'red');
     }
-  }  
+  }
 
   const changeImage = async (e) => {
     const reader = new FileReader()
