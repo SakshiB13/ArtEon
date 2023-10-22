@@ -22,7 +22,7 @@ const Artworks = () => {
           {collection.length > 0 ? 'Latest Artworks' : 'No Artworks Yet'}
         </h4>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-4 lg:gap-3 py-2.5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-4 lg:gap-3 py-2.5">
           {collection.map((nft, i) => (
             <Card key={i} nft={nft} />
           ))}
