@@ -1,17 +1,54 @@
 import ArtEon from '../assets/ArtEon.png'
 import { connectWallet } from '../Blockchain.Services'
-import { useGlobalState, truncate } from '../store'
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { setGlobalState, useGlobalState, truncate} from '../store'
+import {getUserCollection} from '../utils/user';
+import { updateCollectorWalletId, getCollectorNameByUID } from '../utils/collector';
+import { updateArtistWalletId, getArtistNameByUID } from '../utils/artist';
+import { auth } from '../utils/firebase';
+
 
 const Header = () => {
+  const [userInfo] = useAuthState(auth);
+  if(userInfo){
+  setGlobalState('userID', userInfo.uid);
+  }
   const [connectedAccount] = useGlobalState('connectedAccount')
+  
+
+  const handlewalletId = async (e) => {
+        try {
+        if(userInfo){
+          const userType = await getUserCollection(userInfo.uid);
+          console.log(userType);
+          setGlobalState('usertype', userType);
+        if (userType === 'artist') {
+            await updateArtistWalletId(userInfo.uid,connectedAccount);
+            let artistname = await getArtistNameByUID(userInfo.uid);
+            setGlobalState('userName', artistname);
+        } else if (userType === 'collector') {
+            await updateCollectorWalletId(userInfo.uid,connectedAccount);
+            let collectorname = await getCollectorNameByUID(userInfo.uid);
+            setGlobalState('userName', collectorname);
+            console.log("updated")
+        }
+        
+      }
+    } catch (error) {
+        console.error('update failed:', error.message);
+    }
+};
+
   return (
     <nav className="w-4/5 flex md:justify-center justify-between items-center py-4 mx-auto">
       <div className="md:flex-[0.5] flex-initial justify-center items-center">
-        <img
+        <a href='/home'>
+          <img
           className="w-32 cursor-pointer"
           src={ArtEon}
           alt="Timeless Logo"
         />
+        </a>
       </div>
 
       <ul
@@ -30,7 +67,7 @@ const Header = () => {
           className="shadow-xl shadow-black text-white
         bg-[#800080] hover:bg-[#b300b3] md:text-xs p-2
           rounded-full cursor-pointer"
-        >
+        onClick={handlewalletId}>
           {truncate(connectedAccount, 4, 4, 11)}
         </button>
       ) : (

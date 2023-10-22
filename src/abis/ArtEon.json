@@ -4,7 +4,6 @@
 	},
 	"language": "Solidity",
 	"output": {
-    "contractName": "ArtEon",
 		"abi": [
 			{
 				"inputs": [
@@ -357,6 +356,19 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					}
+				],
+				"name": "burn",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -1257,11 +1269,11 @@
 			]
 		},
 		"contracts/ArtEon.sol": {
-			"keccak256": "0x193745a8ea231c509e946c8d009b96874fbbc012fcf241b9cce55d9f470159a8",
+			"keccak256": "0xe3effb98bad4c0412ea6d90f7912e0f7827f4ed9fa67eb8fc80f290716cb8328",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://83a4c6ce74dddd9de55f60a5d3ee1d92105909bab5a7d6bb93ef2008fcfe9053",
-				"dweb:/ipfs/QmcvSdYBhHQXA9hnorCzsLZS774LBWpJ6D7zGCLgb91hM8"
+				"bzz-raw://221dbe37074ff06d4431868de013da59ff6df4f9c86900471c63dde693f9a145",
+				"dweb:/ipfs/QmQKmDyuH9tPmpHDmN8G5JqYtGHPa2aX4t3dj4pZs4EUKk"
 			]
 		}
 	},
