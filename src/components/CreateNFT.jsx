@@ -3,18 +3,18 @@ import {
   setGlobalState,
   setLoadingMsg,
   setAlert,
-} from '../store'
-import { useState } from 'react'
-import { FaTimes } from 'react-icons/fa'
-import { create } from 'ipfs-http-client'
-import { mintNFT } from '../Blockchain.Services'
-import { imghash } from 'imghash'; 
+} from '../store';
+import { useState } from 'react';
+import { FaTimes } from 'react-icons/fa';
+import { create } from 'ipfs-http-client';
+import { mintNFT } from '../Blockchain.Services';
+//const { getHash } = require('img-hasher');
 
 const auth =
   'Basic ' +
   Buffer.from(
     '2WoJmlP3wUJFD0jXvjNuaBcvHGP' + ':' + '20d129d7a1a55ed8a18994d064b24d1f',
-  ).toString('base64')
+  ).toString('base64');
 
 const client = create({
   host: 'ipfs.infura.io',
@@ -23,81 +23,98 @@ const client = create({
   headers: {
     authorization: auth,
   },
-})
+});
+
+// Function to compute perceptual hash from an image
+// async function computePerceptualHash(imageData) {
+//   try {
+//     const hash = await getHash(imageData);
+//     return hash;
+//   } catch (error) {
+//     console.error('Error computing perceptual hash:', error);
+//     return null;
+//   }
+// }
 
 const CreateNFT = () => {
-  const [modal] = useGlobalState('modal')
-  const [title, setTitle] = useState('')
-  const [price, setPrice] = useState('')
-  const [description, setDescription] = useState('')
-  const [fileUrl, setFileUrl] = useState('')
-  const [imgBase64, setImgBase64] = useState(null)
+  const [modal] = useGlobalState('modal');
+  const [title, setTitle] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const [fileUrl, setFileUrl] = useState('');
+  const [imgBase64, setImgBase64] = useState(null);
   const [mintednfts] = useGlobalState('nfts');
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!title || !price || !description || !imgBase64) return;
 
-    setGlobalState('modal', 'scale-0')
-    setGlobalState('loading', { show: true, msg: 'Uploading IPFS data...' })
+    setGlobalState('modal', 'scale-0');
+    setGlobalState('loading', { show: true, msg: 'Uploading IPFS data...' });
 
     try {
-      const created = await client.add(fileUrl)
-      const metadataURI = `https://ipfs.io/ipfs/${created.path}`
-      const hash = await imghash(fileUrl);
+      const created = await client.add(fileUrl);
+      const metadataURI = `https://ipfs.io/ipfs/${created.path}`;
+      //const hash = await computePerceptualHash(fileU);
 
-      const nft = { title, price, description, metadataURI, hash }
+      // if (!hash) {
+      //   setAlert('Minting failed - Error computing perceptual hash', 'red');
+      //   return;
+      // }
 
+      const nft = { title, price, description, metadataURI };
+      console.log(nft)
       setLoadingMsg('Verifying Art...');
 
       let exists = false;
+      if(!mintednfts){
       for (let i = 0; i < mintednfts.length; i++) {
-        if (mintednfts[i].metadataURI === metadataURI && mintednfts[i].hash === hash){
+        if (mintednfts[i].metadataURI === metadataURI) {
           exists = true;
           break;
         }
       }
-
-      if (exists) {
+    }      
+    if (exists) {
         setAlert('Minting failed - Artwork already minted', 'red');
       } else {
-        setLoadingMsg('Initializing transaction...');
-        setFileUrl(metadataURI);
+       setLoadingMsg('Initializing transaction...');
+       setFileUrl(metadataURI);
         await mintNFT(nft);
         resetForm();
-        setAlert('Minting completed...', 'green');
-        window.location.reload();
+       setAlert('Minting completed...', 'green');
+      //window.location.reload();
       }
     } catch (error) {
       console.log('Error uploading file: ', error);
       setAlert('Minting failed...', 'red');
     }
-  }
+  };
 
   const changeImage = async (e) => {
-    const reader = new FileReader()
-    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0])
+    const reader = new FileReader();
+    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
 
     reader.onload = (readerEvent) => {
-      const file = readerEvent.target.result
-      setImgBase64(file)
-      setFileUrl(e.target.files[0])
-    }
-  }
+      const file = readerEvent.target.result;
+      setImgBase64(file);
+      setFileUrl(e.target.files[0]);
+    };
+  };
 
   const closeModal = () => {
-    setGlobalState('modal', 'scale-0')
-    resetForm()
-  }
+    setGlobalState('modal', 'scale-0');
+    resetForm();
+  };
 
   const resetForm = () => {
-    setFileUrl('')
-    setImgBase64(null)
-    setTitle('')
-    setPrice('')
-    setDescription('')
-  }
+    setFileUrl('');
+    setImgBase64(null);
+    setTitle('');
+    setPrice('');
+    setDescription('');
+  };
 
   return (
     <div
@@ -209,7 +226,7 @@ const CreateNFT = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CreateNFT
+export default CreateNFT;
