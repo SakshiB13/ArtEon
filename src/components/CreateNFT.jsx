@@ -68,7 +68,7 @@ const CreateNFT = () => {
       setLoadingMsg('Verifying Art...');
 
       let exists = false;
-      if(!mintednfts){
+      if(mintednfts){
       for (let i = 0; i < mintednfts.length; i++) {
         if (mintednfts[i].metadataURI === metadataURI) {
           exists = true;
@@ -81,7 +81,7 @@ const CreateNFT = () => {
       } else {
        setLoadingMsg('Initializing transaction...');
        setFileUrl(metadataURI);
-        await mintNFT(nft);
+       await mintNFT(nft);
         resetForm();
        setAlert('Minting completed...', 'green');
       //window.location.reload();
