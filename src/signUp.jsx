@@ -12,7 +12,7 @@ import {
 } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-
+import '../src/style.css'; // Import the CSS file
 
 function SignUp() {
     const [signIn, toggle] = React.useState(true);
@@ -51,7 +51,7 @@ function SignUp() {
             } else if (selectedOption === 'collector') {
                 await createNewCollector(user, name, email);
             }
-    
+            alert("Sign-up successful");
             console.log('Sign-up successful');
             console.log('User:', user);
             console.log('User type:', selectedOption);
@@ -59,6 +59,7 @@ function SignUp() {
             console.log('Email:', email);
         } catch (error) {
             console.error('Sign-up failed:', error.message);
+            alert("Sign-up Failed");
         }
     };
     
@@ -68,7 +69,7 @@ function SignUp() {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-    
+            alert("Sign-in successful");
             console.log('Sign-in successful');
             console.log('User:', user);
             console.log('Email:', email);
@@ -77,6 +78,7 @@ function SignUp() {
             }
         } catch (error) {
             console.error('Sign-in failed:', error.message);
+            alert("Sign-in failed");
         }
     };
     
