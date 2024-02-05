@@ -6,35 +6,12 @@ import {
 } from '../store';
 import { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
-import { create } from 'ipfs-http-client';
+//import { create } from 'ipfs-http-client';
 import { mintNFT } from '../Blockchain.Services';
+import { uploadFileToIPFS } from '../utils/hashing.js';
+//import {pinFileToIPFS} from '../utils/ipfs.js'
 //const { getHash } = require('img-hasher');
-
-const auth =
-  'Basic ' +
-  Buffer.from(
-    '2WoJmlP3wUJFD0jXvjNuaBcvHGP' + ':' + '20d129d7a1a55ed8a18994d064b24d1f',
-  ).toString('base64');
-
-const client = create({
-  host: 'ipfs.infura.io',
-  port: 5001,
-  protocol: 'https',
-  headers: {
-    authorization: auth,
-  },
-});
-
-// Function to compute perceptual hash from an image
-// async function computePerceptualHash(imageData) {
-//   try {
-//     const hash = await getHash(imageData);
-//     return hash;
-//   } catch (error) {
-//     console.error('Error computing perceptual hash:', error);
-//     return null;
-//   }
-// }
+//import pinataSDK, { uploadToIPFS } from '@pinata/sdk'; 
 
 const CreateNFT = () => {
   const [modal] = useGlobalState('modal');
@@ -54,15 +31,12 @@ const CreateNFT = () => {
     setGlobalState('loading', { show: true, msg: 'Uploading IPFS data...' });
 
     try {
-      const created = await client.add(fileUrl);
-      const metadataURI = `https://ipfs.io/ipfs/${created.path}`;
-      //const hash = await computePerceptualHash(fileU);
 
-      // if (!hash) {
-      //   setAlert('Minting failed - Error computing perceptual hash', 'red');
-      //   return;
-      // }
-
+      // Upload to Pinata
+      const uploadResponse = await uploadFileToIPFS(fileUrl);
+      if (uploadResponse.success) {
+      const metadataURI = uploadResponse.pinataURL;
+      
       const nft = { title, price, description, metadataURI };
       console.log(nft)
       setLoadingMsg('Verifying Art...');
@@ -75,7 +49,8 @@ const CreateNFT = () => {
           break;
         }
       }
-    }      
+    }
+       
     if (exists) {
         setAlert('Minting failed - Artwork already minted', 'red');
       } else {
@@ -86,7 +61,9 @@ const CreateNFT = () => {
        setAlert('Minting completed...', 'green');
       //window.location.reload();
       }
-    } catch (error) {
+    }
+  }
+   catch (error) {
       console.log('Error uploading file: ', error);
       setAlert('Minting failed...', 'red');
     }

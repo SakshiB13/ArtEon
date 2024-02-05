@@ -10,12 +10,15 @@
   },
   "dependencies": {
     "@pinata/sdk": "^2.1.0",
+    "axios": "^1.6.7",
+    "browserify-zlib": "^0.2.0",
     "dag-jose": "^4.0.0",
     "firebase": "^10.5.0",
     "firebase-admin": "^11.11.0",
     "fs": "^0.0.1-security",
     "ipfs-http-client": "^59.0.0",
     "particles-bg": "^2.5.5",
+    "pinata-sdk": "^0.1.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-firebase-hooks": "^5.1.1",
@@ -27,6 +30,7 @@
     "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.0",
     "styled-components": "^6.1.0",
+    "tty-browserify": "^0.0.1",
     "web-vitals": "^2.1.4",
     "web3": "^1.7.1"
   },
