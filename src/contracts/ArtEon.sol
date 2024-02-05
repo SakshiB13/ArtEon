@@ -22,7 +22,7 @@ contract ArtEon is ERC721Enumerable, Ownable {
         address indexed owner,
         uint256 cost,
         string metadataURI,
-        string phash,
+        //string phash,
         uint256 timestamp
     );
 
@@ -33,7 +33,6 @@ contract ArtEon is ERC721Enumerable, Ownable {
     string title;
     string description;
     string metadataURI;
-    string phash; 
     uint256 timestamp;
 }
 
@@ -56,8 +55,7 @@ contract ArtEon is ERC721Enumerable, Ownable {
     string memory title,
     string memory description,
     string memory metadataURI,
-    uint256 salesPrice,
-    string memory phash 
+    uint256 salesPrice
 ) external payable {
     require(msg.value >= cost, "Ether too low for minting!");
     require(existingURIs[metadataURI] == 0, "This NFT is already minted!");
@@ -76,7 +74,7 @@ contract ArtEon is ERC721Enumerable, Ownable {
             title,
             description,
             metadataURI,
-            phash, 
+    
             block.timestamp
         )
     );
@@ -86,7 +84,6 @@ contract ArtEon is ERC721Enumerable, Ownable {
         msg.sender,
         msg.value,
         metadataURI,
-        phash,
         block.timestamp    
     );
 
@@ -114,7 +111,7 @@ contract ArtEon is ERC721Enumerable, Ownable {
                 minted[id - 1].title,
                 minted[id - 1].description,
                 minted[id - 1].metadataURI,
-                minted[id - 1].phash,
+               
                 block.timestamp        
             )
         );
@@ -124,7 +121,6 @@ contract ArtEon is ERC721Enumerable, Ownable {
             msg.sender,
             msg.value,
             minted[id - 1].metadataURI,
-            minted[id-1].phash,
             block.timestamp     
         );
         
