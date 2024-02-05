@@ -1,3 +1,4 @@
+// SignUp.js
 import React, { useState } from "react";
 import * as Components from './Login';
 import { auth } from './utils/firebase';
@@ -12,74 +13,94 @@ import {
 } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-
+import '../src/style.css'; // Import the CSS file
 
 function SignUp() {
-    const [signIn, toggle] = React.useState(true);
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [selectedOption, setSelectedOption] = useState("artist");
-    const [userInfo] = useAuthState(auth);
-    const history = useNavigate();
+  const [signIn, toggle] = React.useState(true);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [selectedOption, setSelectedOption] = useState("artist");
+  const [userInfo] = useAuthState(auth);
+  const history = useNavigate();
 
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
 
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    };
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
 
-    const handleNameChange = (e) => {
-        setName(e.target.value);
-    };
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
 
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    };
+  const handleOptionChange = (e) => {
+    setSelectedOption(e.target.value);
+  };
 
-    const handleOptionChange = (e) => {
-        setSelectedOption(e.target.value);
-    };
+  const handleSignUp = async (e) => {
+    e.preventDefault(); 
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      if (selectedOption === 'artist') {
+        await createNewArtist(user, name, email);
+      } else if (selectedOption === 'collector') {
+        await createNewCollector(user, name, email);
+      }
+      showAlert("Sign-up successful", "success");
+      console.log('Sign-up successful');
+      console.log('User:', user);
+      console.log('User type:', selectedOption);
+      console.log('Name:', name);
+      console.log('Email:', email);
+    } catch (error) {
+      console.error('Sign-up failed:', error.message);
+      showAlert("Sign-up Failed", "error");
+    }
+  };
 
-    const handleSignUp = async (e) => {
-        e.preventDefault(); 
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-            
-            if (selectedOption === 'artist') {
-                await createNewArtist(user, name, email);
-            } else if (selectedOption === 'collector') {
-                await createNewCollector(user, name, email);
-            }
-    
-            console.log('Sign-up successful');
-            console.log('User:', user);
-            console.log('User type:', selectedOption);
-            console.log('Name:', name);
-            console.log('Email:', email);
-        } catch (error) {
-            console.error('Sign-up failed:', error.message);
-        }
-    };
-    
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      showAlert("Log-in successful", "success");
+      console.log('Log-in successful');
+      console.log('User:', user);
+      console.log('Email:', email);
+      if(userInfo){
+        history('/home');
+      }
+    } catch (error) {
+      console.error('Log-in failed:', error.message);
+      showAlert("Log-in failed", "error");
+    }
+  };
 
-    const handleSignIn = async (e) => {
-        e.preventDefault();
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-    
-            console.log('Sign-in successful');
-            console.log('User:', user);
-            console.log('Email:', email);
-            if(userInfo){
-            history('/home');
-            }
-        } catch (error) {
-            console.error('Sign-in failed:', error.message);
-        }
-    };
-    
+  const showAlert = (message, type) => {
+    const alertBox = document.createElement('div');
+    alertBox.className = `alert ${type}`;
+    alertBox.textContent = message;
+    document.body.appendChild(alertBox);
+
+    // Triggering reflow to enable transition
+    alertBox.offsetHeight;
+
+    // Add the 'show' class to display the alert
+    alertBox.classList.add('show');
+
+    // Remove the alert after a certain time (e.g., 3 seconds)
+    setTimeout(() => {
+      alertBox.classList.remove('show');
+      setTimeout(() => {
+        document.body.removeChild(alertBox);
+      }, 500);
+    }, 3000);
+  };
 
     return (
         <div className="container-body-signup">
@@ -101,11 +122,11 @@ function SignUp() {
 
                 <Components.SignInContainer signinIn={signIn}>
                     <Components.Form>
-                        <Components.Title>Sign in</Components.Title>
+                        <Components.Title>Log in</Components.Title>
                         <Components.Input type='email' placeholder='Email' value={email} onChange={handleEmailChange} />
                         <Components.Input type='password' placeholder='Password' value={password} onChange={handlePasswordChange} />
                         <Components.Anchor href=''>Forgot your password?</Components.Anchor>
-                        <Components.Button onClick={handleSignIn}>Sign In</Components.Button>
+                        <Components.Button onClick={handleSignIn}>Log In</Components.Button>
                     </Components.Form>
                 </Components.SignInContainer>
 
@@ -118,7 +139,7 @@ function SignUp() {
                                 To keep connected with us please login with your personal info
                             </Components.Paragraph>
                             <Components.GhostButton onClick={() => toggle(true)}>
-                                Sign In
+                                Log In
                             </Components.GhostButton>
                         </Components.LeftOverlayPanel>
 
@@ -139,3 +160,5 @@ function SignUp() {
 }
 
 export default SignUp;
+
+
