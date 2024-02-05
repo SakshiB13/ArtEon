@@ -6,35 +6,12 @@ import {
 } from '../store';
 import { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
-import { create } from 'ipfs-http-client';
+//import { create } from 'ipfs-http-client';
 import { mintNFT } from '../Blockchain.Services';
+import { uploadFileToIPFS } from '../utils/hashing.js';
+//import {pinFileToIPFS} from '../utils/ipfs.js'
 //const { getHash } = require('img-hasher');
-
-const auth =
-  'Basic ' +
-  Buffer.from(
-    '2WoJmlP3wUJFD0jXvjNuaBcvHGP' + ':' + '20d129d7a1a55ed8a18994d064b24d1f',
-  ).toString('base64');
-
-const client = create({
-  host: 'ipfs.infura.io',
-  port: 5001,
-  protocol: 'https',
-  headers: {
-    authorization: auth,
-  },
-});
-
-// Function to compute perceptual hash from an image
-// async function computePerceptualHash(imageData) {
-//   try {
-//     const hash = await getHash(imageData);
-//     return hash;
-//   } catch (error) {
-//     console.error('Error computing perceptual hash:', error);
-//     return null;
-//   }
-// }
+//import pinataSDK, { uploadToIPFS } from '@pinata/sdk'; 
 
 const CreateNFT = () => {
   const [modal] = useGlobalState('modal');
@@ -48,46 +25,49 @@ const CreateNFT = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !price || !description) return;
+    if (!title || !price || !description || !imgBase64) return;
 
     setGlobalState('modal', 'scale-0');
     setGlobalState('loading', { show: true, msg: 'Uploading IPFS data...' });
 
     try {
-      const created = await client.add(fileUrl);
-      const metadataURI = `https://ipfs.io/ipfs/${created.path}`;
 
+      // Upload to Pinata
+      const uploadResponse = await uploadFileToIPFS(fileUrl);
+      if (uploadResponse.success) {
+      const metadataURI = uploadResponse.pinataURL;
+      
       const nft = { title, price, description, metadataURI };
-      console.log(nft);
-
-      // Uncomment the following line if you want to display a loading message
+      console.log(nft)
       setLoadingMsg('Verifying Art...');
 
-      // Uncomment the following block if you want to check for existing mintednfts
-      /* let exists = false;
-      if (mintednfts) {
-        for (let i = 0; i < mintednfts.length; i++) {
-          if (mintednfts[i].metadataURI === metadataURI) {
-            exists = true;
-            break;
-          }
+      let exists = false;
+      if(mintednfts){
+      for (let i = 0; i < mintednfts.length; i++) {
+        if (mintednfts[i].metadataURI === metadataURI) {
+          exists = true;
+          break;
         }
-      } */
-
-      //Uncomment the following block if you want to handle existing mintednfts
-    
-        setLoadingMsg('Initializing transaction...');
-        setFileUrl(metadataURI);
-        await mintNFT(nft);
+      }
+    }
+       
+    if (exists) {
+        setAlert('Minting failed - Artwork already minted', 'red');
+      } else {
+       setLoadingMsg('Initializing transaction...');
+       setFileUrl(metadataURI);
+       await mintNFT(nft);
         resetForm();
-        setAlert('Minting completed...', 'green');
-        window.location.reload();
-    } catch (error) {
+       setAlert('Minting completed...', 'green');
+      //window.location.reload();
+      }
+    }
+  }
+   catch (error) {
       console.log('Error uploading file: ', error);
       setAlert('Minting failed...', 'red');
     }
   };
-
 
   const changeImage = async (e) => {
     const reader = new FileReader();
