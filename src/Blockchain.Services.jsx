@@ -94,7 +94,7 @@ const burnNFT = async (tokenId) => {
   try {
     const contract = await getEtheriumContract(); // Your function to get the contract
     console.log('Burning NFT...');
-    await contract.methods.burn(tokenId).send({ from: "0x8788d03410f529863Dc7E7BB7F5cB49bF9BfA486"});
+    await contract.methods.burn(tokenId).send({ from: "0x599353494e66B64f4631f2e86bD3438D24CE6B89"});
     console.log('NFT burned successfully.');
   } catch (error) {
     reportError(error);

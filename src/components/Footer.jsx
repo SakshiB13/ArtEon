@@ -9,7 +9,7 @@ const Footer = () => (
 
       <div className="flex flex-1 justify-evenly items-center flex-wrap sm:mt-0 mt-5 w-full">
         <p className="text-white text-base text-center mx-2 cursor-pointer">
-          Market
+        <a href='/market'> Market </a>
         </p>
         <p className="text-white text-base text-center mx-2 cursor-pointer">
           Artist
@@ -24,7 +24,7 @@ const Footer = () => (
 
       <div className="flex flex-[0.25] justify-center items-center">
         <p className="text-white text-right text-xs">
-          &copy;2023 All rights reserved
+          &copy;2024 All rights reserved
         </p>
       </div>
     </div>
