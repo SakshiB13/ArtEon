@@ -4,6 +4,8 @@ import Main from './Main';
 import Home from './Home'
 import SignUp from './signUp';
 import LogIn from './Login';
+import Displaymarket from './Displaymarket';
+import ForgotPassword from './ForgotPassword';
 
 const App = () => {
 
@@ -14,6 +16,8 @@ const App = () => {
                       <Route path='/home' element={<Home/>}/>
         
                       <Route path='/signup' element={<SignUp/>}/>
+                      <Route path='/market' element={<Displaymarket/>}/>
+                      <Route path='/forgotpassword' element={<ForgotPassword/>}/>
                   </Routes>
     </div>
   );

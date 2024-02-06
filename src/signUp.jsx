@@ -13,7 +13,9 @@ import {
 } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import '../src/style.css'; // Import the CSS file
+import ForgotPassword from './ForgotPassword'; // Import the ForgotPassword component
+import '../src/style.css';
+
 
 function SignUp() {
   const [signIn, toggle] = React.useState(true);
@@ -26,7 +28,7 @@ function SignUp() {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-  };
+  }
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -45,7 +47,7 @@ function SignUp() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      
+
       if (selectedOption === 'artist') {
         await createNewArtist(user, name, email);
       } else if (selectedOption === 'collector') {
@@ -101,7 +103,7 @@ function SignUp() {
       }, 500);
     }, 3000);
   };
-
+  
     return (
         <div className="container-body-signup">
             <Components.Container>
@@ -125,7 +127,8 @@ function SignUp() {
                         <Components.Title>Log in</Components.Title>
                         <Components.Input type='email' placeholder='Email' value={email} onChange={handleEmailChange} />
                         <Components.Input type='password' placeholder='Password' value={password} onChange={handlePasswordChange} />
-                        <Components.Anchor href=''>Forgot your password?</Components.Anchor>
+                     {/*    {!signInMode && <ForgotPassword />} */}
+                        <Components.Anchor href='/forgotpassword'>Forgot your password?</Components.Anchor>
                         <Components.Button onClick={handleSignIn}>Log In</Components.Button>
                     </Components.Form>
                 </Components.SignInContainer>

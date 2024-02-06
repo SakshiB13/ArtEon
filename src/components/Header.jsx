@@ -56,7 +56,7 @@ const Header = () => {
         hidden list-none flex-row justify-between 
         items-center flex-initial"
       >
-        <li className="mx-4 cursor-pointer">Market</li>
+        <a href='/market'><li className="mx-4 cursor-pointer">  Market</li></a>
         <li className="mx-4 cursor-pointer">Artist</li>
         <li className="mx-4 cursor-pointer">Features</li>
         <li className="mx-4 cursor-pointer">Community</li>
