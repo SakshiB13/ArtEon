@@ -6,12 +6,9 @@ import {
 } from '../store';
 import { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
-//import { create } from 'ipfs-http-client';
 import { mintNFT } from '../Blockchain.Services';
 import { uploadFileToIPFS } from '../utils/hashing.js';
-//import {pinFileToIPFS} from '../utils/ipfs.js'
-//const { getHash } = require('img-hasher');
-//import pinataSDK, { uploadToIPFS } from '@pinata/sdk'; 
+
 
 const CreateNFT = () => {
   const [modal] = useGlobalState('modal');
@@ -59,7 +56,7 @@ const CreateNFT = () => {
        await mintNFT(nft);
         resetForm();
        setAlert('Minting completed...', 'green');
-      //window.location.reload();
+      window.location.reload();
       }
     }
   }
