@@ -586,6 +586,62 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address",
+						"name": "_owner",
+						"type": "address"
+					}
+				],
+				"name": "getNFTsByAddress",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "owner",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "cost",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "title",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "description",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "metadataURI",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "timestamp",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct ArtEon.TransactionStruct[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
@@ -1269,11 +1325,11 @@
 			]
 		},
 		"contracts/ArtEon.sol": {
-			"keccak256": "0x668f037a10e34a7a819aff15fe752e1e399c06bdf261528c9747f283da087d4e",
+			"keccak256": "0xe98da09b231e28387bfa10170f87799a852d2c6ffa17e72342cf492824cf9d47",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d29b0450fe7d706802f2a5c491e06590fa6636a75bd525ae788f1564fca82f08",
-				"dweb:/ipfs/QmWcio8Kut24VZFtcQXdUK9pgSHzDHxbt1C75Pd8Mz5DV8"
+				"bzz-raw://dd4adf7898e3eabacfc3dc5b6c98266a83c097c9c52c264e6173d5c0962b3b20",
+				"dweb:/ipfs/QmRKSduyJHcBxs33Qy9SbdAiEgWxk6BgYyVs3gj37nwQKi"
 			]
 		}
 	},
