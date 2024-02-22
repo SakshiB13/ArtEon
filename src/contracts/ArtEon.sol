@@ -153,6 +153,21 @@ contract ArtEon is ERC721Enumerable, Ownable {
         return transactions;
     }
 
+    function getNFTsByAddress(address _owner) external view returns (TransactionStruct[] memory) {
+    uint256 count = balanceOf(_owner);
+    TransactionStruct[] memory ownedNFTs = new TransactionStruct[](count);
+    
+    uint256 currentIndex = 0;
+    for (uint256 i = 0; i < minted.length; i++) {
+        if (ownerOf(i + 1) == _owner) {
+            ownedNFTs[currentIndex] = minted[i];
+            currentIndex++;
+        }
+    }
+    
+    return ownedNFTs;
+    }
+
     function burn(uint256 tokenId) public onlyOwner {
         address owner = tokenOwners[tokenId];
         require(owner != address(0), "Token does not exist");

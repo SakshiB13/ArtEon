@@ -8,7 +8,7 @@ window.web3 = new Web3(window.web3.currentProvider)
 
 const getEtheriumContract = async () => {
   const web3 = window.web3;
-  const contractAddress = '0xe6765eb8d52b626f4b8e84335e8ff5760e1d68fc'; 
+  const contractAddress = '0xefa9b2b94364d7fcb61621799730af27cfc17136'; 
   const contract = new web3.eth.Contract(abi.output.abi, contractAddress);
   return contract;
 }
@@ -149,6 +149,20 @@ const updateNFT = async ({ id, cost }) => {
     reportError(error)
   }
 }
+const getNFTsByAddress = async (ownerAddress) => {
+  try {
+    const contract = await getEtheriumContract();
+    const nfts = await contract.methods.getAllNFTs().call();
+
+    const nftsByAddress = nfts.filter(nft => nft.owner.toLowerCase() === ownerAddress.toLowerCase());
+
+    setGlobalState('nfts', structuredNfts(nftsByAddress));
+    console.log(nftsByAddress);
+  } catch (error) {
+    reportError(error);
+  }
+}
+
 
 const reportError = (error) => {
   setAlert(JSON.stringify(error), 'red')
@@ -163,4 +177,5 @@ export {
   isWalletConnected,
   getEtheriumContract,
   burnNFT,
+  getNFTsByAddress,
 }
