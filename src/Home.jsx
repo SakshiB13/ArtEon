@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { getAllNFTs, isWalletConnected } from './Blockchain.Services';
+import { getAllNFTs, isWalletConnected} from './Blockchain.Services';
 import Alert from './components/Alert';
 import Artworks from './components/Artworks';
 import CreateNFT from './components/CreateNFT';
@@ -18,7 +18,7 @@ const Home = () => {
     useEffect(async () => {
     await isWalletConnected();
     await getAllNFTs();
-    /* await burnNFT(4); */
+    //await burnNFT(4); 
 
   }, []);
 
