@@ -62,7 +62,7 @@ const structuredNfts = (nfts) => {
     .map((nft) => ({
       id: Number(nft.id),
       owner: nft.owner.toLowerCase(),
-      cost: window.web3.utils.fromWei(nft.cost),
+      cost: window.web3.utils.fromWei(nft.cost.toString()),
       title: nft.title,
       description: nft.description,
       metadataURI: nft.metadataURI,
@@ -79,12 +79,12 @@ const getAllNFTs = async () => {
     console.log(contract)
     const nfts = await contract.methods.getAllNFTs().call()
     const transactions = await contract.methods.getAllTransactions().call()
-
-    setGlobalState('nfts', structuredNfts(nfts))
-    setGlobalState('transactions', structuredNfts(transactions))
     console.log(nfts)
     console.log("transaction")
     console.log(transactions)
+    setGlobalState('nfts', nfts)
+    setGlobalState('transactions', transactions)
+    
   } catch (error) {
     reportError(error)
   }
@@ -157,12 +157,10 @@ const getNFTsByAddress = async (ownerAddress) => {
     const nfts = await contract.methods.getAllNFTs().call();
     console.log("All NFTs:", nfts);
     console.log("Owner Address:", ownerAddress);
-    
     const nftsByAddress = nfts.filter(nft => nft.owner === ownerAddress.id);
-    setGlobalState('nftsByAddress', structuredNfts(nftsByAddress));
+    setGlobalState('nftsByAddress', nftsByAddress);
     console.log("NFTs filtered by address:", nftsByAddress);
-    
-    
+
     //console.log(nftsByAddress);
   } catch (error) {
     reportError(error);
@@ -171,7 +169,7 @@ const getNFTsByAddress = async (ownerAddress) => {
 
 
 const reportError = (error) => {
-  setAlert(JSON.stringify(error), 'red')
+ console.log(error);
 }
 
 export {

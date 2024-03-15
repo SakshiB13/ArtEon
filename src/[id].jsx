@@ -40,8 +40,8 @@ const Portfolio = () => {
   const [collection, setCollection] = useState({});
   /* const [listings, setListings] = useState([]); */
   const [nfts] = useGlobalState('nftsByAddress');
-  //console.log(nfts);
-  
+
+  //console.log(nfts);  
 
   return (
     <div className="overflow-hidden">
