@@ -6,7 +6,9 @@ import SignUp from './signUp';
 import LogIn from './Login';
 import Displaymarket from './Displaymarket';
 import ForgotPassword from './ForgotPassword';
-import Portfolio from './Portfolio';
+//import Portfolio from './Portfolio';
+import Portfolio from './[id]';
+
 
 const App = () => {
 
@@ -19,7 +21,8 @@ const App = () => {
                       <Route path='/signup' element={<SignUp/>}/>
                       <Route path='/market' element={<Displaymarket/>}/>
                       <Route path='/forgotpassword' element={<ForgotPassword/>}/>
-                      <Route path='/Portfolio' element={<Portfolio/>}/>
+                      
+                      <Route path='/:id' element={<Portfolio/>}/>
                   </Routes>
     </div>
   );

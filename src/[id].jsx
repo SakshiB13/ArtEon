@@ -1,5 +1,6 @@
 import React, { useEffect , useState} from 'react';
-import { getAllNFTs} from './Blockchain.Services';
+import { useParams } from 'react-router-dom';
+import { getAllNFTs, getNFTsByAddress} from './Blockchain.Services';
 /* import { useWeb3 } from './web3'; // Assuming there is a web3 module */
 import { useGlobalState } from './store';
 /* import { CgWebsite, AiOutlineInstagram, AiOutlineTwitter, HiDotsVertical } from 'react-icons/all'; // Import necessary icons */
@@ -29,17 +30,15 @@ const Style = {
 
 
 const Portfolio = () => {
+    const { id } = useParams();
+    const addr = {id};
     useEffect(async () => {
-        await getAllNFTs();
-        //await burnNFT(4); 
+        await getNFTsByAddress(addr);
     
       }, []);
-  /* const router = useRouter(); */
-  /* const { provider } = useWeb3(); */
-/*   const { collectionId } = router.query; */
   const [collection, setCollection] = useState({});
   /* const [listings, setListings] = useState([]); */
-  const [nfts] = useGlobalState('nfts');
+  const [nfts] = useGlobalState('nftsByAddress');
   console.log(nfts);
   
 

@@ -8,7 +8,7 @@ window.web3 = new Web3(window.web3.currentProvider)
 
 const getEtheriumContract = async () => {
   const web3 = window.web3;
-  const contractAddress = '0xefa9b2b94364d7fcb61621799730af27cfc17136'; 
+  const contractAddress = '0xe9653a0c28740fdd4a638161db1e4c0e0ab3030b'; 
   const contract = new web3.eth.Contract(abi.output.abi, contractAddress);
   return contract;
 }
@@ -151,13 +151,18 @@ const updateNFT = async ({ id, cost }) => {
 }
 const getNFTsByAddress = async (ownerAddress) => {
   try {
+    console.log(ownerAddress)
     const contract = await getEtheriumContract();
     const nfts = await contract.methods.getAllNFTs().call();
-
-    const nftsByAddress = nfts.filter(nft => nft.owner.toLowerCase() === ownerAddress.toLowerCase());
-
-    setGlobalState('nfts', structuredNfts(nftsByAddress));
-    console.log(nftsByAddress);
+    console.log("All NFTs:", nfts);
+    console.log("Owner Address:", ownerAddress);
+    
+    const nftsByAddress = nfts.filter(nft => nft.owner === ownerAddress.id);
+    setGlobalState('nftsByAddress', structuredNfts(nftsByAddress));
+    console.log("NFTs filtered by address:", nftsByAddress);
+    
+    
+    //console.log(nftsByAddress);
   } catch (error) {
     reportError(error);
   }
