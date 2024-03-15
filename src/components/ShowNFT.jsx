@@ -13,7 +13,7 @@ const ShowNFT = () => {
     setGlobalState('updateModal', 'scale-100')
   }
 
-  const handleNFTPurchase = async () => {
+  const handleNFTPurchase = async () => {-
     setGlobalState('showModal', 'scale-0')
     setGlobalState('loading', {
       show: true,
