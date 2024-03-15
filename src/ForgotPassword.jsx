@@ -28,12 +28,12 @@ const ForgotPassword = () => {
   return (
     <div>
       <h2>Forgot Password</h2>
-      <form onSubmit={handleResetPassword}>
+      <form class="forget-form"onSubmit={handleResetPassword}>
         <input class="email-input-type" type="email" placeholder="Enter your email" value={email} onChange={handleEmailChange} />
-        <button type="submit">Reset Password</button>
+        <button type="submit" class="Reset-password">Reset Password</button>
       </form>
-      {resetMessage && <p>{resetMessage}</p>}
-      {error && <p>{error}</p>}
+      {resetMessage && <p class="reset-msg">{resetMessage}</p>}
+      {error && <p class="reset-msg">{error}</p>}
     </div>
   );
 };

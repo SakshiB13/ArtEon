@@ -36,7 +36,6 @@ const Home = () => {
             <Footer />
             <Alert />
             <Loading />
-            <ForgotPassword />
     </div>
   );
 };
