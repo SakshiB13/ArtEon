@@ -14,6 +14,7 @@ const { setGlobalState, useGlobalState, getGlobalState } = createGlobalState({
   nfts: [],
   transactions: [],
   contract: null,
+  nftsByAddress:[],
 })
 
 const setAlert = (msg, color = 'green') => {

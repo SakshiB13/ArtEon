@@ -18,7 +18,7 @@ const Home = () => {
     useEffect(async () => {
     await isWalletConnected();
     await getAllNFTs();
-    //await burnNFT(4); 
+    //await burnNFT(3); 
 
   }, []);
 
