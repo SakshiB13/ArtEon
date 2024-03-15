@@ -5,6 +5,7 @@ import { getAllNFTs, getNFTsByAddress} from './Blockchain.Services';
 import { useGlobalState } from './store';
 /* import { CgWebsite, AiOutlineInstagram, AiOutlineTwitter, HiDotsVertical } from 'react-icons/all'; // Import necessary icons */
 import Header from './components/Header';
+import Footer from './components/Footer';
 
 const Style = {
   bannerImageContainer: 'h-[20vh] w-screen overflow-hidden flex justify-center items-center',
@@ -39,12 +40,14 @@ const Portfolio = () => {
   const [collection, setCollection] = useState({});
   /* const [listings, setListings] = useState([]); */
   const [nfts] = useGlobalState('nftsByAddress');
-  /*console.log(nfts);*/
-  
+
+  //console.log(nfts);  
 
   return (
     <div className="overflow-hidden">
+       <div className="gradient-bg-hero">
       <Header />
+      </div>
       <div className={Style.bannerImageContainer}>
         <img
           className={Style.bannerImage}
@@ -136,6 +139,7 @@ const Portfolio = () => {
           <Card key={i} nft={nft} />
         ))}
       </div>
+      <Footer />
     </div>
   );
 };
