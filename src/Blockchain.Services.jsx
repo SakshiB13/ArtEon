@@ -149,6 +149,7 @@ const updateNFT = async ({ id, cost }) => {
     reportError(error)
   }
 }
+
 const getNFTsByAddress = async (ownerAddress) => {
   try {
     console.log(ownerAddress)
