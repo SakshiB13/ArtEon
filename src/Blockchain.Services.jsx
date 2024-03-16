@@ -229,4 +229,4 @@ export {
   createAuction,
   placeBid,
   endAuction,
-}
+};
