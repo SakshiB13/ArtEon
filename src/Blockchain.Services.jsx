@@ -233,4 +233,8 @@ export {
   getEtheriumContract,
   burnNFT,
   getNFTsByAddress,
+  createAuction,
+  placeBid,
+  endAuction,
 };
+
