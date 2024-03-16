@@ -15,17 +15,6 @@ const getEtheriumContract = async () => {
   return contract;
 }
 
-
-const getEtheriumContract = async () => {
-  try {
-    const contractAddress = '0xe9653a0c28740fdd4a638161db1e4c0e0ab3030b';
-    const contract = new web3.eth.Contract(abi.output.abi, contractAddress);
-    return contract;
-  } catch (error) {
-    throw new Error(`Error getting Ethereum contract: ${error}`);
-  }
-};
-
 const getAllNFTs = async () => {
   try {
     const contract = await getEtheriumContract();
