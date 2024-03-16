@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.21;
+pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
@@ -72,26 +72,32 @@ contract ArtEon is ERC721Enumerable, Ownable {
 
     // Function to create a new auction listing
 
-    function createAuction(uint256 tokenId, uint256 startPrice, uint256 startTime, uint256 endTime) external {
-    require(ownerOf(tokenId) == msg.sender, "Only the owner can create an auction");
-    require(auctions[tokenId].active == false, "Auction already exists for this token");
-    require(startTime >= block.timestamp, "Start time must be in the future");
-    require(endTime > startTime, "End time must be after start time");
+    function createAuction(uint256 tokenId, uint256 startPrice, uint256 startTime, uint256 endTime) external returns (Auction[] memory) {
+    require(ownerOf(tokenId) == msg.sender);
+    require(auctions[tokenId].active == false);
+    require(startTime >= block.timestamp) ;
+    require(endTime > startTime);
 
     auctions[nextAuctionId] = Auction(nextAuctionId, tokenId, msg.sender, startPrice, 0, address(0), startTime, endTime, true);
 
     emit AuctionCreated(nextAuctionId, tokenId, msg.sender, startPrice, startTime, endTime);
 
     nextAuctionId++;
+    Auction[] memory updatedAuctions = new Auction[](nextAuctionId - 1);
+    for (uint256 i = 1; i < nextAuctionId; i++) {
+        updatedAuctions[i - 1] = auctions[i];
+    }
+
+    return updatedAuctions;
     }
 
     // Function to place a bid on an auction
     function placeBid(uint256 auctionId) external payable {
         Auction storage auction = auctions[auctionId];
 
-        require(auction.active, "Auction is not active");
-        require(block.timestamp < auction.endTime, "Auction has ended");
-        require(msg.value > auction.currentBid, "Bid must be higher than current bid");
+        require(auction.active);
+        require(block.timestamp < auction.endTime);
+        require(msg.value > auction.currentBid, "");
 
         if (auction.currentBidder != address(0)) {
             // Refund the previous bidder
@@ -108,8 +114,8 @@ contract ArtEon is ERC721Enumerable, Ownable {
     function endAuction(uint256 auctionId) external {
         Auction storage auction = auctions[auctionId];
 
-        require(auction.active, "Auction is not active");
-        require(block.timestamp >= auction.endTime, "Auction has not ended yet");
+        require(auction.active);
+        require(block.timestamp >= auction.endTime);
 
         address winner = auction.currentBidder;
         uint256 winningBid = auction.currentBid;
@@ -132,8 +138,8 @@ contract ArtEon is ERC721Enumerable, Ownable {
     function cancelAuction(uint256 auctionId) external {
         Auction storage auction = auctions[auctionId];
 
-        require(auction.active, "Auction is not active");
-        require(msg.sender == auction.seller, "Only the seller can cancel the auction");
+        require(auction.active);
+        require(msg.sender == auction.seller);
 
         auction.active = false;
 
@@ -147,8 +153,8 @@ contract ArtEon is ERC721Enumerable, Ownable {
     string memory metadataURI,
     uint256 salesPrice
 ) external payable {
-    require(msg.value >= cost, "Ether too low for minting!");
-    require(existingURIs[metadataURI] == 0, "This NFT is already minted!");
+    require(msg.value >= cost);
+    require(existingURIs[metadataURI] == 0);
 
     uint256 royalty = (msg.value * royalityFee) / 100;
     payTo(artist, royalty);
@@ -184,8 +190,8 @@ contract ArtEon is ERC721Enumerable, Ownable {
 
 
     function payToBuy(uint256 id) external payable {
-        require(msg.value >= minted[id - 1].cost, "Ether too low for purchase!");
-        require(msg.sender != minted[id - 1].owner, "Operation Not Allowed!");
+        require(msg.value >= minted[id - 1].cost);
+        require(msg.sender != minted[id - 1].owner);
 
         uint256 royality = (msg.value * royalityFee) / 100;
         payTo(artist, royality);
@@ -218,8 +224,8 @@ contract ArtEon is ERC721Enumerable, Ownable {
     }
 
     function changePrice(uint256 id, uint256 newPrice) external returns (bool) {
-        require(newPrice > 0 ether, "Ether too low!");
-        require(msg.sender == minted[id - 1].owner, "Operation Not Allowed!");
+        require(newPrice > 0 ether);
+        require(msg.sender == minted[id - 1].owner);
 
         minted[id - 1].cost = newPrice;
         return true;
@@ -257,6 +263,15 @@ contract ArtEon is ERC721Enumerable, Ownable {
     
     return ownedNFTs;
     }
+
+    function getAllAuctions() external view returns (Auction[] memory) {
+    Auction[] memory allAuctions = new Auction[](nextAuctionId - 1);
+    for (uint256 i = 1; i < nextAuctionId; i++) {
+        allAuctions[i - 1] = auctions[i];
+    }
+    
+    return allAuctions;
+}
 
     
     
