@@ -1,14 +1,8 @@
-import {
-  useGlobalState,
-  setGlobalState,
-  setLoadingMsg,
-  setAlert,
-} from '../store';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useGlobalState, setGlobalState, setLoadingMsg, setAlert } from '../store';
 import { FaTimes } from 'react-icons/fa';
 import { mintNFT } from '../Blockchain.Services';
 import { uploadFileToIPFS } from '../utils/hashing.js';
-
 
 const CreateNFT = () => {
   const [modal] = useGlobalState('modal');
@@ -18,49 +12,68 @@ const CreateNFT = () => {
   const [fileUrl, setFileUrl] = useState('');
   const [imgBase64, setImgBase64] = useState(null);
   const [mintednfts] = useGlobalState('nfts');
+  const [isAuction, setIsAuction] = useState(false); // State to track if the NFT is being put on auction
+  // Additional states for auction
+  const [minimumPrice, setMinimumPrice] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !price || !description || !imgBase64) return;
+    if (!title || !description || !imgBase64) return;
 
     setGlobalState('modal', 'scale-0');
     setGlobalState('loading', { show: true, msg: 'Uploading IPFS data...' });
 
     try {
-
       // Upload to Pinata
       const uploadResponse = await uploadFileToIPFS(fileUrl);
       if (uploadResponse.success) {
-      const metadataURI = uploadResponse.pinataURL;
-      
-      const nft = { title, price, description, metadataURI };
-      console.log(nft)
-      setLoadingMsg('Verifying Art...');
+        const metadataURI = uploadResponse.pinataURL;
 
-      let exists = false;
-      if(mintednfts){
-      for (let i = 0; i < mintednfts.length; i++) {
-        if (mintednfts[i].metadataURI === metadataURI) {
-          exists = true;
-          break;
+        //auction
+        const nft = { title, description, metadataURI };
+        if (!isAuction) {
+          if (!price) {
+            setAlert('Please enter a price for minting', 'red');
+            return;
+          }
+          nft.price = price;
+        } else {
+          // Handle auction logic here
+          if (!minimumPrice || !startDate || !endDate) {
+            setAlert('Please fill in all auction details', 'red');
+            return;
+          }
+          nft.minimumPrice = minimumPrice;
+          nft.startDate = startDate;
+          nft.endDate = endDate;
+        }
+        setLoadingMsg('Verifying Art...');
+
+        let exists = false;
+        if (mintednfts) {
+          for (let i = 0; i < mintednfts.length; i++) {
+            if (mintednfts[i].metadataURI === metadataURI) {
+              exists = true;
+              break;
+            }
+          }
+        }
+
+        if (exists) {
+          setAlert('Minting failed - Artwork already minted', 'red');
+        } else {
+          setLoadingMsg('Initializing transaction...');
+          setFileUrl(metadataURI);
+          await mintNFT(nft);
+          resetForm();
+          setAlert('Minting completed...', 'green');
+          window.location.reload();
         }
       }
-    }
-       
-    if (exists) {
-        setAlert('Minting failed - Artwork already minted', 'red');
-      } else {
-       setLoadingMsg('Initializing transaction...');
-       setFileUrl(metadataURI);
-       await mintNFT(nft);
-        resetForm();
-       setAlert('Minting completed...', 'green');
-      window.location.reload();
-      }
-    }
-  }
-   catch (error) {
+    } catch (error) {
       console.log('Error uploading file: ', error);
       setAlert('Minting failed...', 'red');
     }
@@ -88,6 +101,10 @@ const CreateNFT = () => {
     setTitle('');
     setPrice('');
     setDescription('');
+    // Reset additional auction fields
+    setMinimumPrice('');
+    setStartDate('');
+    setEndDate('');
   };
 
   return (
@@ -155,21 +172,63 @@ const CreateNFT = () => {
             />
           </div>
 
-          <div className="flex flex-row justify-between items-center bg-gray-800 rounded-xl mt-5">
-            <input
-              className="block w-full text-sm
+          {isAuction ? (
+            <>
+              <div className="flex flex-row justify-between items-center bg-gray-800 rounded-xl mt-5">
+                <input
+                  className="block w-full text-sm text-slate-500 bg-transparent border-0 focus:outline-none focus:ring-0"
+                  type="number"
+                  step={0.01}
+                  min={0.01}
+                  name="minimumPrice"
+                  placeholder="Minimum Price (Eth)"
+                  onChange={(e) => setMinimumPrice(e.target.value)}
+                  value={minimumPrice}
+                  required
+                />
+              </div>
+
+              <div className="flex flex-row justify-between items-center bg-gray-800 rounded-xl mt-5">
+                <input
+                  className="block w-full text-sm text-slate-500 bg-transparent border-0 focus:outline-none focus:ring-0"
+                  type="datetime-local"
+                  name="startDate"
+                  placeholder="Start Date"
+                  onChange={(e) => setStartDate(e.target.value)}
+                  value={startDate}
+                  required
+                />
+              </div>
+
+              <div className="flex flex-row justify-between items-center bg-gray-800 rounded-xl mt-5">
+                <input
+                  className="block w-full text-sm text-slate-500 bg-transparent border-0 focus:outline-none focus:ring-0"
+                  type="datetime-local"
+                  name="endDate"
+                  placeholder="End Date"
+                  onChange={(e) => setEndDate(e.target.value)}
+                  value={endDate}
+                  required
+                />
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-row justify-between items-center bg-gray-800 rounded-xl mt-5">
+              <input
+                className="block w-full text-sm
                 text-slate-500 bg-transparent border-0
                 focus:outline-none focus:ring-0"
-              type="number"
-              step={0.01}
-              min={0.01}
-              name="price"
-              placeholder="Price (Eth)"
-              onChange={(e) => setPrice(e.target.value)}
-              value={price}
-              required
-            />
-          </div>
+                type="number"
+                step={0.01}
+                min={0.01}
+                name="price"
+                placeholder="Price (Eth)"
+                onChange={(e) => setPrice(e.target.value)}
+                value={price}
+                required
+              />
+            </div>
+          )}
 
           <div className="flex flex-row justify-between items-center bg-gray-800 rounded-xl mt-5">
             <textarea
@@ -197,6 +256,25 @@ const CreateNFT = () => {
           >
             Mint Now
           </button>
+
+          {/* Toggle button to switch between minting and auction */}
+          <div className="flex flex-row justify-center items-center mt-3">
+            <div
+              onClick={() => setIsAuction(!isAuction)}
+              className={`w-12 h-6 rounded-full cursor-pointer bg-gray-500 relative ${
+                isAuction ? 'bg-[#800080]' : ''
+              }`}
+            >
+              <div
+                className={`w-6 h-6 rounded-full absolute transition-transform duration-300 ease-in-out ${
+                  isAuction ? 'transform translate-x-full bg-[#800080]' : 'bg-gray-100'
+                }`}
+              ></div>
+            </div>
+            <p className="text-gray-500 text-sm ml-2">
+              {isAuction ? 'Switch to Minting' : 'Switch to Auction'}
+            </p>
+          </div>
         </form>
       </div>
     </div>
