@@ -57,27 +57,6 @@ const isWalletConnected = async () => {
   }
   
 }
-const getAllNFTs = async () => {
-  try {
-    const contract = await getEtheriumContract();
-    const nfts = await contract.methods.getAllNFTs().call();
-    const transactions = await contract.methods.getAllTransactions().call();
-
-const structuredNfts = (nfts) => {
-  return nfts
-    .map((nft) => ({
-      id: Number(nft.id),
-      owner: nft.owner.toLowerCase(),
-      cost: nft.cost ? window.web3.utils.fromWei(nft.cost.toString(), 'ether') : 'N/A',
-      title: nft.title,
-      description: nft.description,
-      metadataURI: nft.metadataURI,
-      timestamp: nft.timestamp,
-    }))
-    .reverse();
-};
-
-
 
 const getAllNFTs = async () => {
  
@@ -225,7 +204,7 @@ const endAuction = async (auctionId) => {
 
 const reportError = (error) => {
   console.log(error);
-};
+}
 
 export {
   getAllNFTs,
@@ -241,3 +220,4 @@ export {
   placeBid,
   endAuction,
 };
+  
