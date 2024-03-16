@@ -4,8 +4,17 @@ import abi from './abis/ArtEon.json';
 
 const { ethereum } = window;
 
+
 // Create a new Web3 instance using the injected provider
 const web3 = new Web3(ethereum);
+
+const getEtheriumContract = async () => {
+  const web3 = window.web3;
+  const contractAddress = '0xff0e665cee8913a8adf2cdd6072d6b70d4367fac'; 
+  const contract = new web3.eth.Contract(abi.output.abi, contractAddress);
+  return contract;
+}
+
 
 const getEtheriumContract = async () => {
   try {
@@ -152,6 +161,7 @@ const getNFTsByAddress = async (ownerAddress) => {
   }
 };
 
+
 const burnNFT = async (tokenId) => {
   try {
     const contract = await getEtheriumContract();
@@ -162,6 +172,52 @@ const burnNFT = async (tokenId) => {
     throw new Error(error);
   }
 };
+
+//create auction
+const createAuction = async ({ tokenId, startPrice, startTime, endTime }) => {
+  try {
+    const contract = await getEtheriumContract();
+    const account = getGlobalState('connectedAccount');
+
+    await contract.methods
+      .createAuction(tokenId, startPrice, startTime, endTime)
+      .send({ from: account });
+
+    return true;
+  } catch (error) {
+    reportError(error);
+  }
+}
+//place bid
+const placeBid = async (auctionId, bidAmount) => {
+  try {
+    bidAmount = window.web3.utils.toWei(bidAmount.toString(), 'ether');
+    const contract = await getEtheriumContract();
+    await contract.methods.placeBid(auctionId).send({ from: yourWalletAddress, value: bidAmount });
+    console.log('Bid successfully placed.');
+    return true;
+  } catch (error) {
+    console.error('Error placing bid:', error);
+    return false;
+  }
+}
+//end auction
+const endAuction = async (auctionId) => {
+  try {
+    const contract = await getEtheriumContract();
+    const account = getGlobalState('connectedAccount');
+
+    await contract.methods
+      .endAuction(auctionId)
+      .send({ from: account });
+
+    return true;
+  } catch (error) {
+    reportError(error);
+  }
+}
+
+
 
 const reportError = (error) => {
   console.log(error);
