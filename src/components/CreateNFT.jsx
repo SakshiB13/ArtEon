@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useGlobalState, setGlobalState, setLoadingMsg, setAlert } from '../store';
 import { FaTimes } from 'react-icons/fa';
-import { mintNFT } from '../Blockchain.Services';
+import { mintNFT,createAuction} from '../Blockchain.Services';
 import { uploadFileToIPFS } from '../utils/hashing.js';
 
 const CreateNFT = () => {
@@ -23,6 +23,12 @@ const CreateNFT = () => {
 
     if (!title || !description || !imgBase64) return;
 
+    const startPriceWei = web3.utils.toWei(price.toString(), 'ether');
+
+    // Convert start time and end time to Unix timestamp (in seconds)
+    const startTimeUnix = Math.floor(new Date(startDate).getTime() / 1000);
+    const endTimeUnix = Math.floor(new Date(endDate).getTime() / 1000);
+
     setGlobalState('modal', 'scale-0');
     setGlobalState('loading', { show: true, msg: 'Uploading IPFS data...' });
 
@@ -42,11 +48,11 @@ const CreateNFT = () => {
           nft.price = price;
         } else {
           // Handle auction logic here
-          if (!minimumPrice || !startDate || !endDate) {
+          if (!price || !startDate || !endDate) {
             setAlert('Please fill in all auction details', 'red');
             return;
           }
-          nft.minimumPrice = minimumPrice;
+          //nft.minimumPrice = minimumPrice;
           nft.startDate = startDate;
           nft.endDate = endDate;
         }
@@ -67,11 +73,22 @@ const CreateNFT = () => {
         } else {
           setLoadingMsg('Initializing transaction...');
           setFileUrl(metadataURI);
-          await mintNFT(nft);
+          const tokenId = await mintNFT({title,description,metadataURI,price});
+          if (isAuction && tokenId) {
+            const auctionResult = await createAuction({ tokenId, price: startPriceWei, startDate: startTimeUnix, endDate: endTimeUnix });
+            if (auctionResult) {
+              resetForm();
+              setAlert('Auction created successfully', 'green');
+              //window.location.reload();
+              console.log('auction')
+            } else {
+              setAlert('Failed to create auction', 'red');
+            }
+          } else{
           resetForm();
           setAlert('Minting completed...', 'green');
-          window.location.reload();
-        }
+         // window.location.reload();
+        }}
       }
     } catch (error) {
       console.log('Error uploading file: ', error);
@@ -180,10 +197,10 @@ const CreateNFT = () => {
                   type="number"
                   step={0.01}
                   min={0.01}
-                  name="minimumPrice"
+                  name="price"
                   placeholder="Minimum Price (Eth)"
-                  onChange={(e) => setMinimumPrice(e.target.value)}
-                  value={minimumPrice}
+                  onChange={(e) => setPrice(e.target.value)}
+                  value={price}
                   required
                 />
               </div>
