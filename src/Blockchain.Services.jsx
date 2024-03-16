@@ -8,7 +8,7 @@ window.web3 = new Web3(window.web3.currentProvider)
 
 const getEtheriumContract = async () => {
   const web3 = window.web3;
-  const contractAddress = '0xff0e665cee8913a8adf2cdd6072d6b70d4367fac'; 
+  const contractAddress = '0xe46b4a14b409de1624b8a9dd58a0256def4903b8'; 
   const contract = new web3.eth.Contract(abi.output.abi, contractAddress);
   return contract;
 }
@@ -58,6 +58,19 @@ const isWalletConnected = async () => {
   
 }
 
+const structuredNfts = (nfts) => {
+  return nfts
+    .map((nft) => ({
+      id: Number(nft.id),
+      owner: nft.owner.toLowerCase(),
+      cost: nft.cost ? window.web3.utils.fromWei(nft.cost.toString(), 'ether') : 'N/A',
+      title: nft.title,
+      description: nft.description,
+      metadataURI: nft.metadataURI,
+      timestamp: nft.timestamp,
+    }))
+    .reverse();
+};
 const getAllNFTs = async () => {
  
   try {
@@ -202,6 +215,35 @@ const endAuction = async (auctionId) => {
   }
 }
 
+const structuredAuctions = (auctions) => {
+  return auctions
+    .map((auction) => ({
+      id: Number(auction.id),
+      tokenId:Number(auction.tokenId),
+      seller: auction.seller.toLowerCase(),
+      startPrice: auction.startPrice ? window.web3.utils.fromWei(auction.startPrice.toString(), 'ether') : 'N/A',
+      currentBid: auction.currentBid ? window.web3.utils.fromWei(auction.currentBid.toString(), 'ether') : 'N/A',
+      currentBidder: auction.currentBidder.toLowerCase(),
+      startTime: auction.startTime,
+      endTime: auction.endTime,
+      active: auction.active,
+        }))
+    
+};
+const getAllAuctions = async () => {
+  try {
+    const contract = await getEtheriumContract(); 
+    const auctions = await contract.methods.getAllAuctions().call(); 
+    console.log('All Auctions:', structuredAuctions(auctions));
+    setGlobalState('auctions', structuredAuctions(auctions))
+    return structuredAuctions(auctions);
+  } catch (error) {
+    reportError(error);
+    return [];
+  }
+}
+
+
 const reportError = (error) => {
   console.log(error);
 }
@@ -219,5 +261,6 @@ export {
   createAuction,
   placeBid,
   endAuction,
+  getAllAuctions,
 };
   
