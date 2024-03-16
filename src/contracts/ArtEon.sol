@@ -40,6 +40,21 @@ contract ArtEon is ERC721Enumerable, Ownable {
     TransactionStruct[] transactions;
     TransactionStruct[] minted;
 
+    struct Auction {
+        uint256 id;
+        uint256 tokenId;
+        address seller;
+        uint256 startPrice;
+        uint256 currentBid;
+        address currentBidder;
+        uint256 startTime;
+        uint256 endTime;
+        bool active;
+    }
+
+    mapping(uint256 => Auction) public auctions;
+    uint256 public nextAuctionId = 1;
+
     constructor(
         string memory __name,
         string memory __symbol,
@@ -49,6 +64,81 @@ contract ArtEon is ERC721Enumerable, Ownable {
     Ownable(msg.sender) {
         royalityFee = _royalityFee;
         artist = _artist;
+    }
+
+    event AuctionCreated(uint256 auctionId, uint256 tokenId, address seller, uint256 startPrice, uint256 startTime, uint256 endTime);
+    event BidPlaced(uint256 auctionId, address bidder, uint256 amount);
+    event AuctionEnded(uint256 auctionId, address winner, uint256 amount);
+
+    // Function to create a new auction listing
+
+    function createAuction(uint256 tokenId, uint256 startPrice, uint256 startTime, uint256 endTime) external {
+    require(ownerOf(tokenId) == msg.sender, "Only the owner can create an auction");
+    require(auctions[tokenId].active == false, "Auction already exists for this token");
+    require(startTime >= block.timestamp, "Start time must be in the future");
+    require(endTime > startTime, "End time must be after start time");
+
+    auctions[nextAuctionId] = Auction(nextAuctionId, tokenId, msg.sender, startPrice, 0, address(0), startTime, endTime, true);
+
+    emit AuctionCreated(nextAuctionId, tokenId, msg.sender, startPrice, startTime, endTime);
+
+    nextAuctionId++;
+    }
+
+    // Function to place a bid on an auction
+    function placeBid(uint256 auctionId) external payable {
+        Auction storage auction = auctions[auctionId];
+
+        require(auction.active, "Auction is not active");
+        require(block.timestamp < auction.endTime, "Auction has ended");
+        require(msg.value > auction.currentBid, "Bid must be higher than current bid");
+
+        if (auction.currentBidder != address(0)) {
+            // Refund the previous bidder
+            payable(auction.currentBidder).transfer(auction.currentBid);
+        }
+
+        auction.currentBid = msg.value;
+        auction.currentBidder = msg.sender;
+
+        emit BidPlaced(auctionId, msg.sender, msg.value);
+    }
+    
+    // Function to end an auction and transfer the NFT to the highest bidder
+    function endAuction(uint256 auctionId) external {
+        Auction storage auction = auctions[auctionId];
+
+        require(auction.active, "Auction is not active");
+        require(block.timestamp >= auction.endTime, "Auction has not ended yet");
+
+        address winner = auction.currentBidder;
+        uint256 winningBid = auction.currentBid;
+
+        _transfer(auction.seller, winner, auction.tokenId);
+
+        // Pay royalty to artist
+        uint256 royalty = (winningBid * royalityFee) / 100;
+        payTo(artist, royalty);
+
+        // Pay remaining amount to seller
+        payTo(auction.seller, winningBid - royalty);
+
+        auction.active = false;
+
+        emit AuctionEnded(auctionId, winner, winningBid);
+    }
+
+    // Function to cancel an auction
+    function cancelAuction(uint256 auctionId) external {
+        Auction storage auction = auctions[auctionId];
+
+        require(auction.active, "Auction is not active");
+        require(msg.sender == auction.seller, "Only the seller can cancel the auction");
+
+        auction.active = false;
+
+        // Transfer the NFT back to the seller
+        _transfer(address(this), auction.seller, auction.tokenId);
     }
 
     function payToMint(
@@ -168,12 +258,6 @@ contract ArtEon is ERC721Enumerable, Ownable {
     return ownedNFTs;
     }
 
-    function burn(uint256 tokenId) public onlyOwner {
-        address owner = tokenOwners[tokenId];
-        require(owner != address(0), "Token does not exist");
-        require(owner == msg.sender, "Only the owner can burn the token");
-        super._burn(tokenId);
-        delete tokenOwners[tokenId];
-    }
+    
     
 }

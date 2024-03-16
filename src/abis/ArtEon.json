@@ -231,6 +231,99 @@
 				"anonymous": false,
 				"inputs": [
 					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "auctionId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "seller",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "startPrice",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "startTime",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "endTime",
+						"type": "uint256"
+					}
+				],
+				"name": "AuctionCreated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "auctionId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "winner",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "AuctionEnded",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "auctionId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "BidPlaced",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
 						"indexed": true,
 						"internalType": "address",
 						"name": "previousOwner",
@@ -342,6 +435,65 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "auctions",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "seller",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "currentBid",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "currentBidder",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "active",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "owner",
 						"type": "address"
@@ -362,11 +514,11 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "tokenId",
+						"name": "auctionId",
 						"type": "uint256"
 					}
 				],
-				"name": "burn",
+				"name": "cancelAuction",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -406,6 +558,47 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endTime",
+						"type": "uint256"
+					}
+				],
+				"name": "createAuction",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "auctionId",
+						"type": "uint256"
+					}
+				],
+				"name": "endAuction",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -697,6 +890,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "nextAuctionId",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "owner",
 				"outputs": [
 					{
@@ -764,6 +970,19 @@
 					}
 				],
 				"name": "payToMint",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "auctionId",
+						"type": "uint256"
+					}
+				],
+				"name": "placeBid",
 				"outputs": [],
 				"stateMutability": "payable",
 				"type": "function"
@@ -1325,11 +1544,11 @@
 			]
 		},
 		"contracts/ArtEon.sol": {
-			"keccak256": "0xe98da09b231e28387bfa10170f87799a852d2c6ffa17e72342cf492824cf9d47",
+			"keccak256": "0xcb52c187f2f001792c58088f327dcd8b1c4014eb38ea3fb2a7f2f9341fed2fe1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://dd4adf7898e3eabacfc3dc5b6c98266a83c097c9c52c264e6173d5c0962b3b20",
-				"dweb:/ipfs/QmRKSduyJHcBxs33Qy9SbdAiEgWxk6BgYyVs3gj37nwQKi"
+				"bzz-raw://69f694fc8a82cd3075407c8ea669a4d4e033b6114f9a1e185579114cc9a10c9e",
+				"dweb:/ipfs/QmWX5C5rhANdi92ghtnRoKJtE6YmyVDJroZJfYCdrGVQ92"
 			]
 		}
 	},
