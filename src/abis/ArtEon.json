@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.21+commit.d9974bed"
+		"version": "0.8.20+commit.a1b79de6"
 	},
 	"language": "Solidity",
 	"output": {
@@ -584,7 +584,60 @@
 					}
 				],
 				"name": "createAuction",
-				"outputs": [],
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "seller",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "startPrice",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "currentBid",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "currentBidder",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "startTime",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "endTime",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "active",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct ArtEon.Auction[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -599,6 +652,66 @@
 				"name": "endAuction",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAllAuctions",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "seller",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "startPrice",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "currentBid",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "currentBidder",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "startTime",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "endTime",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "active",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct ArtEon.Auction[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -1544,11 +1657,11 @@
 			]
 		},
 		"contracts/ArtEon.sol": {
-			"keccak256": "0xcb52c187f2f001792c58088f327dcd8b1c4014eb38ea3fb2a7f2f9341fed2fe1",
+			"keccak256": "0x0bd52b34ffced62c265a112f33c6a3863bb6812ab6b8826eb9a3fc917847c03d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://69f694fc8a82cd3075407c8ea669a4d4e033b6114f9a1e185579114cc9a10c9e",
-				"dweb:/ipfs/QmWX5C5rhANdi92ghtnRoKJtE6YmyVDJroZJfYCdrGVQ92"
+				"bzz-raw://28b9bb94b5dddadd2e6f2c9c9c36eca1e5ff13de2070436ff47bd80fa49c8ccf",
+				"dweb:/ipfs/QmbQtNUJDTcvYor99hdmCtwYeF2KMH7cwkbwt1xcqGfhGn"
 			]
 		}
 	},

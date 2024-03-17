@@ -8,7 +8,7 @@ window.web3 = new Web3(window.web3.currentProvider)
 
 const getEtheriumContract = async () => {
   const web3 = window.web3;
-  const contractAddress = '0x5f49f8fa3b85cd83ba059c6c1c746882e213bd44'; 
+  const contractAddress = '0xe46b4a14b409de1624b8a9dd58a0256def4903b8'; 
   const contract = new web3.eth.Contract(abi.output.abi, contractAddress);
   return contract;
 }
@@ -76,9 +76,6 @@ const structuredNfts = (nfts) => {
     }))
     .reverse();
 };
-
-
-
 const getAllNFTs = async () => {
  
   try {
@@ -223,9 +220,38 @@ const endAuction = async (auctionId) => {
   }
 }
 
+const structuredAuctions = (auctions) => {
+  return auctions
+    .map((auction) => ({
+      id: Number(auction.id),
+      tokenId:Number(auction.tokenId),
+      seller: auction.seller.toLowerCase(),
+      startPrice: auction.startPrice ? window.web3.utils.fromWei(auction.startPrice.toString(), 'ether') : 'N/A',
+      currentBid: auction.currentBid ? window.web3.utils.fromWei(auction.currentBid.toString(), 'ether') : 'N/A',
+      currentBidder: auction.currentBidder.toLowerCase(),
+      startTime: auction.startTime,
+      endTime: auction.endTime,
+      active: auction.active,
+        }))
+    
+};
+const getAllAuctions = async () => {
+  try {
+    const contract = await getEtheriumContract(); 
+    const auctions = await contract.methods.getAllAuctions().call(); 
+    console.log('All Auctions:', structuredAuctions(auctions));
+    setGlobalState('auctions', structuredAuctions(auctions))
+    return structuredAuctions(auctions);
+  } catch (error) {
+    reportError(error);
+    return [];
+  }
+}
+
+
 const reportError = (error) => {
   console.log(error);
-};
+}
 
 export {
   getAllNFTs,
@@ -240,5 +266,9 @@ export {
   createAuction,
   placeBid,
   endAuction,
+};
+  
+=======
+  getAllAuctions,
 };
   
