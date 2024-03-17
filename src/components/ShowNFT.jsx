@@ -2,16 +2,42 @@ import React, { useState } from 'react';
 import Identicon from 'react-identicons';
 import { FaTimes } from 'react-icons/fa';
 import { useGlobalState, setGlobalState, truncate, setAlert } from '../store';
-import { buyNFT } from '../Blockchain.Services';
+import { buyNFT, endAuction } from '../Blockchain.Services';
 
 const ShowNFT = () => {
   const [showModal] = useGlobalState('showModal');
   const [connectedAccount] = useGlobalState('connectedAccount');
   const [nft] = useGlobalState('nft');
+  const [auctions] = useGlobalState('auctions');
+/* const isNFTInAuction = auctions.some(auctionItem => auctionItem.tokenId === nft?.id); */
+const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
+  //console.log(auctions);
+  console.log(auctionItem);
+  const currentTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+    const endTime = parseInt(auctionItem?.endTime);
+    console.log(currentTime, endTime);
+    // Convert start time and end time to standard time format
+    const startDate = new Date(parseInt(auctionItem?.startTime) * 1000).toLocaleString();
+    const endDate = new Date(endTime * 1000).toLocaleString();
+    
 
   const onChangePrice = () => {
     setGlobalState('showModal', 'scale-0');
     setGlobalState('updateModal', 'scale-100');
+  };
+  const onEndAuction = async() => {
+    const auctionEnded = await endAuction(auctionItem?.id);
+    if (auctionEnded) {
+      const updatedAuctions = auctions.map(auctionItem => {
+        if (auctionItem.id === auctionId) {
+          // Update the active property to false for the auction item with the specified auctionId
+          return { ...auctionItem, active: false };
+        } else {
+          return auctionItem;
+        }
+      });
+     
+    }
   };
 
   const onstartauction = () => {
@@ -36,7 +62,7 @@ const ShowNFT = () => {
     }
   };
 
-  const onplacebid = () =>{};
+/*   const onplacebid = () =>{}; */
 
   return (
     <div
@@ -94,6 +120,54 @@ const ShowNFT = () => {
           </div>
           <div className="flex justify-between items-center space-x-2">
           {connectedAccount === nft?.owner ? (
+  // Check if the NFT is present in the auction array
+  auctionItem && currentTime < endTime? (
+    // If the NFT is present in the auction array, render only the Change Price button
+    <>
+    <button
+      className="flex flex-row justify-center items-center
+      w-full text-[#e32970] text-md border-[#e32970]
+      py-2 px-5 rounded-full bg-transparent 
+      drop-shadow-xl border hover:bg-[#bd255f]
+      hover:bg-transparent hover:text-white
+      hover:border hover:border-[#bd255f]
+      focus:outline-none focus:ring mt-5"
+      onClick={onChangePrice}
+    >
+      Change Price
+    </button> 
+    <p className="font-semibold text-gray-400">Auction ends on {endDate}</p>
+    </>
+  ) : auctionItem && currentTime >= endTime?  (
+    <>
+    <p className="font-semibold text-gray-400">Auction ended on {endDate}</p>
+      <button
+        className="flex flex-row justify-center items-center
+        w-full text-[#e32970] text-md border-[#e32970]
+        py-2 px-5 rounded-full bg-transparent 
+        drop-shadow-xl border hover:bg-[#bd255f]
+        hover:bg-transparent hover:text-white
+        hover:border hover:border-[#bd255f]
+        focus:outline-none focus:ring mt-5"
+        onClick={onChangePrice}
+      >
+        Change Price
+      </button>
+      <button
+        className="flex flex-row justify-center items-center
+        w-full text-[#e32970] text-md border-[#e32970]
+        py-2 px-5 rounded-full bg-transparent 
+        drop-shadow-xl border hover:bg-[#bd255f]
+        hover:bg-transparent hover:text-white
+        hover:border hover:border-[#bd255f]
+        focus:outline-none focus:ring mt-5"
+        onClick={onEndAuction}
+      >
+        End Auction 
+      </button>
+    </>
+  ): (
+    // If the NFT is not present in the auction array, render both the Change Price and Start Auction buttons
     <>
       <button
         className="flex flex-row justify-center items-center
@@ -115,39 +189,41 @@ const ShowNFT = () => {
         hover:bg-transparent hover:text-white
         hover:border hover:border-[#bd255f]
         focus:outline-none focus:ring mt-5"
-        onClick={onstartauction}
+        onClick={onChangePrice}
       >
         Start Auction 
       </button>
     </>
+  )
   ) : (
-    <>
-      <button
-        className="flex flex-row justify-center items-center
-        w-full text-white text-md bg-[#e32970]
-        hover:bg-[#bd255f] py-2 px-5 rounded-full
-        drop-shadow-xl border border-transparent
-        hover:bg-transparent hover:text-[#e32970]
-        hover:border hover:border-[#bd255f]
-        focus:outline-none focus:ring mt-5"
-        onClick={handleNFTPurchase}
-      >
-        Purchase Now
-      </button>
-      <button
-        className="flex flex-row justify-center items-center
-        w-full text-white text-md bg-[#e32970]
-        hover:bg-[#bd255f] py-2 px-5 rounded-full
-        drop-shadow-xl border border-transparent
-        hover:bg-transparent hover:text-[#e32970]
-        hover:border hover:border-[#bd255f]
-        focus:outline-none focus:ring mt-5"
-        onClick={onplacebid}
-      >
-        Start Bidding
-      </button>
-    </>
-  )}
+  // If the owner is not the connected account, render the Purchase Now and Start Bidding buttons
+  <>
+    <button
+      className="flex flex-row justify-center items-center
+      w-full text-white text-md bg-[#e32970]
+      hover:bg-[#bd255f] py-2 px-5 rounded-full
+      drop-shadow-xl border border-transparent
+      hover:bg-transparent hover:text-[#e32970]
+      hover:border hover:border-[#bd255f]
+      focus:outline-none focus:ring mt-5"
+      onClick={handleNFTPurchase}
+    >
+      Purchase Now
+    </button>
+    <button
+      className="flex flex-row justify-center items-center
+      w-full text-white text-md bg-[#e32970]
+      hover:bg-[#bd255f] py-2 px-5 rounded-full
+      drop-shadow-xl border border-transparent
+      hover:bg-transparent hover:text-[#e32970]
+      hover:border hover:border-[#bd255f]
+      focus:outline-none focus:ring mt-5"
+      onClick={handleNFTPurchase}
+    >
+      Start Bidding
+    </button>
+  </>
+)}
 </div>
    
 
