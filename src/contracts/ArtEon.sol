@@ -72,7 +72,7 @@ contract ArtEon is ERC721Enumerable, Ownable {
 
     // Function to create a new auction listing
 
-    function createAuction(uint256 tokenId, uint256 startPrice, uint256 startTime, uint256 endTime) external returns (Auction[] memory) {
+    function createAuction(uint256 tokenId, uint256 startPrice, uint256 startTime, uint256 endTime) external returns (Auction[] memory) { 
     require(ownerOf(tokenId) == msg.sender);
     require(auctions[tokenId].active == false);
     require(startTime >= block.timestamp) ;
@@ -130,7 +130,8 @@ contract ArtEon is ERC721Enumerable, Ownable {
         payTo(auction.seller, winningBid - royalty);
 
         auction.active = false;
-
+        auctions[auctionId] = auction;
+    
         emit AuctionEnded(auctionId, winner, winningBid);
     }
 
