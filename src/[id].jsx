@@ -2,7 +2,7 @@ import React, { useEffect , useState} from 'react';
 import { useParams } from 'react-router-dom';
 import { getAllNFTs, getNFTsByAddress} from './Blockchain.Services';
 /* import { useWeb3 } from './web3'; // Assuming there is a web3 module */
-import { useGlobalState } from './store';
+import { useGlobalState,setGlobalState } from './store';
 /* import { CgWebsite, AiOutlineInstagram, AiOutlineTwitter, HiDotsVertical } from 'react-icons/all'; // Import necessary icons */
 import Header from './components/Header';
 import Footer from './components/Footer';
