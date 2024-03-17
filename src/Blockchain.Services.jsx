@@ -57,11 +57,11 @@ const isWalletConnected = async () => {
   }
   
 }
-const getAllNFTs = async () => {
+/* const getAllNFTs = async () => {
   try {
     const contract = await getEtheriumContract();
     const nfts = await contract.methods.getAllNFTs().call();
-    const transactions = await contract.methods.getAllTransactions().call();
+    const transactions = await contract.methods.getAllTransactions().call(); */
 
 const structuredNfts = (nfts) => {
   return nfts
@@ -241,3 +241,4 @@ export {
   placeBid,
   endAuction,
 };
+  

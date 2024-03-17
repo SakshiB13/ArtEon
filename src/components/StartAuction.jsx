@@ -8,7 +8,7 @@ const StartAuction = () => {
   const [modal] = useGlobalState('startAuctionModal');
   //console.log('Modal state:', modal);
   const [nft] = useGlobalState('nft');
-  //console.log('NFT:', nft);
+  console.log('NFT:', nft);
   const [price, setPrice] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -35,7 +35,7 @@ const StartAuction = () => {
       setGlobalState('startAuctionModal', 'scale-0');
 
       const auctionResult = await createAuction({
-        tokenId: nft.tokenId,
+        tokenId: nft.id,
         price: startPriceWei,
         startDate: startTimeUnix,
         endDate: endTimeUnix,
