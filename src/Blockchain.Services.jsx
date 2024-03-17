@@ -13,6 +13,7 @@ const getEtheriumContract = async () => {
   return contract;
 }
 
+
 const connectWallet = async () => {
   try {
     if (!ethereum) return reportError('Please install Metamask')
@@ -56,6 +57,11 @@ const isWalletConnected = async () => {
   }
   
 }
+const getAllNFTs = async () => {
+  try {
+    const contract = await getEtheriumContract();
+    const nfts = await contract.methods.getAllNFTs().call();
+    const transactions = await contract.methods.getAllTransactions().call();
 
 const structuredNfts = (nfts) => {
   return nfts
