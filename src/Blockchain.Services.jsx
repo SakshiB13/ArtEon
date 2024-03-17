@@ -266,9 +266,6 @@ export {
   createAuction,
   placeBid,
   endAuction,
-};
-  
-=======
   getAllAuctions,
 };
   
