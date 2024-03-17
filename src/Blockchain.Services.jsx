@@ -8,7 +8,7 @@ window.web3 = new Web3(window.web3.currentProvider)
 
 const getEtheriumContract = async () => {
   const web3 = window.web3;
-  const contractAddress = '0xe46b4a14b409de1624b8a9dd58a0256def4903b8'; 
+  const contractAddress = '0xa63e19394adffa5189ab669ae7b64ca133becc90'; 
   const contract = new web3.eth.Contract(abi.output.abi, contractAddress);
   return contract;
 }
@@ -194,8 +194,9 @@ const createAuction = async ({ tokenId, price, startDate, endDate }) => {
 const placeBid = async (auctionId, bidAmount) => {
   try {
     bidAmount = window.web3.utils.toWei(bidAmount.toString(), 'ether');
+    const buyer = getGlobalState('connectedAccount');
     const contract = await getEtheriumContract();
-    await contract.methods.placeBid(auctionId).send({ from: yourWalletAddress, value: bidAmount });
+    await contract.methods.placeBid(auctionId).send({ from: buyer, value: bidAmount });
     console.log('Bid successfully placed.');
     return true;
   } catch (error) {

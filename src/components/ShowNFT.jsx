@@ -2,22 +2,26 @@ import React, { useState } from 'react';
 import Identicon from 'react-identicons';
 import { FaTimes } from 'react-icons/fa';
 import { useGlobalState, setGlobalState, truncate, setAlert } from '../store';
-import { buyNFT, endAuction } from '../Blockchain.Services';
+import { buyNFT, endAuction ,placeBid} from '../Blockchain.Services';
 
 const ShowNFT = () => {
   const [showModal] = useGlobalState('showModal');
   const [connectedAccount] = useGlobalState('connectedAccount');
   const [nft] = useGlobalState('nft');
   const [auctions] = useGlobalState('auctions');
+  const [bid, setBid] = useState('');
+  //if (bid) console.log(bid);
 /* const isNFTInAuction = auctions.some(auctionItem => auctionItem.tokenId === nft?.id); */
 const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
   //console.log(auctions);
   console.log(auctionItem);
   const currentTime = Math.floor(Date.now() / 1000); // Get current time in seconds
-    const endTime = parseInt(auctionItem?.endTime);
+  const endTime = parseInt(auctionItem?.endTime);
+  const startTime = parseInt(auctionItem?.startTime);
+
     console.log(currentTime, endTime);
     // Convert start time and end time to standard time format
-    const startDate = new Date(parseInt(auctionItem?.startTime) * 1000).toLocaleString();
+    const startDate = new Date(startTime * 1000).toLocaleString();
     const endDate = new Date(endTime * 1000).toLocaleString();
     
 
@@ -28,14 +32,7 @@ const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
   const onEndAuction = async() => {
     const auctionEnded = await endAuction(auctionItem?.id);
     if (auctionEnded) {
-      const updatedAuctions = auctions.map(auctionItem => {
-        if (auctionItem.id === auctionId) {
-          // Update the active property to false for the auction item with the specified auctionId
-          return { ...auctionItem, active: false };
-        } else {
-          return auctionItem;
-        }
-      });
+        console.log("Auction ended!", auctionEnded);
      
     }
   };
@@ -62,7 +59,23 @@ const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
     }
   };
 
-/*   const onplacebid = () =>{}; */
+  const onplacebid = async () => {
+    try {
+      const bidAmount = bid;
+      const success = await placeBid(auctionItem?.id, bidAmount);
+      if (success) {
+        console.log('Bid successfully placed.');
+        setAlert('Your Bid has been placed!', 'green');
+      } else {
+        console.log('Failed to place bid.');
+        setAlert('Failed to place your bid', 'red');
+      }
+    } catch (error) {
+      console.error('Error placing bid:', error);
+      // Handle the error case
+    }
+  };
+  
 
   return (
     <div
@@ -113,15 +126,26 @@ const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
               </div>
 
               <div className="flex flex-col">
-                <small className="text-xs">Current Price</small>
-                <p className="text-sm font-semibold">{nft?.cost} ETH</p>
+              {auctionItem?.active ? (
+                <>
+                <small className="text-xs">Current Highest Bid:</small>
+                
+                <p className="text-sm font-semibold"> {auctionItem?.currentBid} ETH</p>
+                </>
+                ):
+                (
+                  <>
+                  <small className="text-xs">Current Price:</small>
+                  <p className="text-sm font-semibold">{nft?.cost} ETH</p>
+                  </>
+                ) }
               </div>
             </div>
           </div>
           <div className="flex justify-between items-center space-x-2">
           {connectedAccount === nft?.owner ? (
   // Check if the NFT is present in the auction array
-  auctionItem && currentTime < endTime? (
+  auctionItem?.active  && currentTime < endTime ? (
     // If the NFT is present in the auction array, render only the Change Price button
     <>
     <button
@@ -189,15 +213,45 @@ const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
         hover:bg-transparent hover:text-white
         hover:border hover:border-[#bd255f]
         focus:outline-none focus:ring mt-5"
-        onClick={onChangePrice}
+        onClick={onstartauction}
       >
         Start Auction 
       </button>
     </>
   )
   ) : (
+    auctionItem && currentTime < endTime && currentTime >= startTime ?  (
+    // Render just the Place Bid button if auction is active
+
   // If the owner is not the connected account, render the Purchase Now and Start Bidding buttons
-  <>
+    <>
+    <input
+      className="block w-full text-sm text-slate-500 bg-transparent border-0 focus:outline-none focus:ring-0"
+      type="number"
+      step={0.01}
+      min={0.01}
+      name="bid"
+      placeholder="Place a bid higher than the current price"
+      onChange={(e) => setBid(e.target.value)}
+      value={bid}
+      required
+    />
+    
+    <button
+      className="flex flex-row justify-center items-center
+      w-full text-white text-md bg-[#e32970]
+      hover:bg-[#bd255f] py-2 px-5 rounded-full
+      drop-shadow-xl border border-transparent
+      hover:bg-transparent hover:text-[#e32970]
+      hover:border hover:border-[#bd255f]
+      focus:outline-none focus:ring mt-5"
+      onClick={onplacebid}
+    >
+     Place a Bid
+    </button>
+    </>
+    ):(
+    <>
     <button
       className="flex flex-row justify-center items-center
       w-full text-white text-md bg-[#e32970]
@@ -210,19 +264,8 @@ const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
     >
       Purchase Now
     </button>
-    <button
-      className="flex flex-row justify-center items-center
-      w-full text-white text-md bg-[#e32970]
-      hover:bg-[#bd255f] py-2 px-5 rounded-full
-      drop-shadow-xl border border-transparent
-      hover:bg-transparent hover:text-[#e32970]
-      hover:border hover:border-[#bd255f]
-      focus:outline-none focus:ring mt-5"
-      onClick={handleNFTPurchase}
-    >
-      Start Bidding
-    </button>
   </>
+  )
 )}
 </div>
    
