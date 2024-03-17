@@ -4,8 +4,8 @@ import { useLocation } from 'react-router-dom';
 
 const Artworks = () => {
   const [nfts] = useGlobalState('nfts')
-  const [end, setEnd] = useState(3)
-  const [count] = useState(3)
+  const [end, setEnd] = useState(4)
+  const [count] = useState(4)
   const [collection, setCollection] = useState([])
   const location = useLocation(); // Get current location
 

@@ -11,6 +11,7 @@ import ShowNFT from './components/ShowNFT';
 import Transactions from './components/Transactions';
 import UpdateNFT from './components/UpdateNFT';
 import ForgotPassword from './ForgotPassword';
+import StartAuction from './components/StartAuction';
 
 
 
@@ -34,6 +35,7 @@ const Home = () => {
             <CreateNFT />
             <ShowNFT />
             <UpdateNFT />
+            <StartAuction/>
             <Footer />
             <Alert />
             <Loading />

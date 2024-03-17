@@ -57,6 +57,11 @@ const isWalletConnected = async () => {
   }
   
 }
+/* const getAllNFTs = async () => {
+  try {
+    const contract = await getEtheriumContract();
+    const nfts = await contract.methods.getAllNFTs().call();
+    const transactions = await contract.methods.getAllTransactions().call(); */
 
 const structuredNfts = (nfts) => {
   return nfts
@@ -158,8 +163,8 @@ const getNFTsByAddress = async (ownerAddress) => {
     console.log("All NFTs:", nfts);
     console.log("Owner Address:", ownerAddress);
     const nftsByAddress = nfts.filter(nft => nft.owner === ownerAddress.id);
-    setGlobalState('nftsByAddress', nftsByAddress);
-    console.log("NFTs filtered by address:", nftsByAddress);
+    setGlobalState('nftsByAddress', structuredNfts(nftsByAddress));
+    console.log("NFTs filtered by address:", structuredNfts(nftsByAddress));
 
     //console.log(nftsByAddress);
   } catch (error) {
@@ -261,6 +266,9 @@ export {
   createAuction,
   placeBid,
   endAuction,
+};
+  
+=======
   getAllAuctions,
 };
   

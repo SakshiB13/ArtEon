@@ -1,34 +1,42 @@
-import Identicon from 'react-identicons'
-import { FaTimes } from 'react-icons/fa'
-import { useGlobalState, setGlobalState, truncate, setAlert } from '../store'
-import { buyNFT } from '../Blockchain.Services'
+import React, { useState } from 'react';
+import Identicon from 'react-identicons';
+import { FaTimes } from 'react-icons/fa';
+import { useGlobalState, setGlobalState, truncate, setAlert } from '../store';
+import { buyNFT } from '../Blockchain.Services';
 
 const ShowNFT = () => {
-  const [showModal] = useGlobalState('showModal')
-  const [connectedAccount] = useGlobalState('connectedAccount')
-  const [nft] = useGlobalState('nft')
+  const [showModal] = useGlobalState('showModal');
+  const [connectedAccount] = useGlobalState('connectedAccount');
+  const [nft] = useGlobalState('nft');
 
   const onChangePrice = () => {
-    setGlobalState('showModal', 'scale-0')
-    setGlobalState('updateModal', 'scale-100')
-  }
+    setGlobalState('showModal', 'scale-0');
+    setGlobalState('updateModal', 'scale-100');
+  };
 
-  const handleNFTPurchase = async () => {-
-    setGlobalState('showModal', 'scale-0')
+  const onstartauction = () => {
+    setGlobalState('showModal', 'scale-0');
+    setGlobalState('startAuctionModal','scale-100');
+  };
+
+  const handleNFTPurchase = async () => {
+    setGlobalState('showModal', 'scale-0');
     setGlobalState('loading', {
       show: true,
       msg: 'Initializing NFT transfer...',
-    })
+    });
 
     try {
-      await buyNFT(nft)
-      setAlert('Transfer completed...', 'green')
-      window.location.reload()
+      await buyNFT(nft);
+      setAlert('Transfer completed...', 'green');
+      window.location.reload();
     } catch (error) {
-      console.log('Error transfering NFT: ', error)
-      setAlert('Purchase failed...', 'red')
+      console.log('Error transferring NFT: ', error);
+      setAlert('Purchase failed...', 'red');
     }
-  }
+  };
+
+  const onplacebid = () =>{};
 
   return (
     <div
@@ -85,38 +93,69 @@ const ShowNFT = () => {
             </div>
           </div>
           <div className="flex justify-between items-center space-x-2">
-            {connectedAccount == nft?.owner ? (
-              <button
-                className="flex flex-row justify-center items-center
-                w-full text-[#e32970] text-md border-[#e32970]
-                py-2 px-5 rounded-full bg-transparent 
-                drop-shadow-xl border hover:bg-[#bd255f]
-                hover:bg-transparent hover:text-white
-                hover:border hover:border-[#bd255f]
-                focus:outline-none focus:ring mt-5"
-                onClick={onChangePrice}
-              >
-                Change Price
-              </button>
-            ) : (
-              <button
-                className="flex flex-row justify-center items-center
-                w-full text-white text-md bg-[#e32970]
-                hover:bg-[#bd255f] py-2 px-5 rounded-full
-                drop-shadow-xl border border-transparent
-                hover:bg-transparent hover:text-[#e32970]
-                hover:border hover:border-[#bd255f]
-                focus:outline-none focus:ring mt-5"
-                onClick={handleNFTPurchase}
-              >
-                Purchase Now
-              </button>
-            )}
-          </div>
+          {connectedAccount === nft?.owner ? (
+    <>
+      <button
+        className="flex flex-row justify-center items-center
+        w-full text-[#e32970] text-md border-[#e32970]
+        py-2 px-5 rounded-full bg-transparent 
+        drop-shadow-xl border hover:bg-[#bd255f]
+        hover:bg-transparent hover:text-white
+        hover:border hover:border-[#bd255f]
+        focus:outline-none focus:ring mt-5"
+        onClick={onChangePrice}
+      >
+        Change Price
+      </button>
+      <button
+        className="flex flex-row justify-center items-center
+        w-full text-[#e32970] text-md border-[#e32970]
+        py-2 px-5 rounded-full bg-transparent 
+        drop-shadow-xl border hover:bg-[#bd255f]
+        hover:bg-transparent hover:text-white
+        hover:border hover:border-[#bd255f]
+        focus:outline-none focus:ring mt-5"
+        onClick={onstartauction}
+      >
+        Start Auction 
+      </button>
+    </>
+  ) : (
+    <>
+      <button
+        className="flex flex-row justify-center items-center
+        w-full text-white text-md bg-[#e32970]
+        hover:bg-[#bd255f] py-2 px-5 rounded-full
+        drop-shadow-xl border border-transparent
+        hover:bg-transparent hover:text-[#e32970]
+        hover:border hover:border-[#bd255f]
+        focus:outline-none focus:ring mt-5"
+        onClick={handleNFTPurchase}
+      >
+        Purchase Now
+      </button>
+      <button
+        className="flex flex-row justify-center items-center
+        w-full text-white text-md bg-[#e32970]
+        hover:bg-[#bd255f] py-2 px-5 rounded-full
+        drop-shadow-xl border border-transparent
+        hover:bg-transparent hover:text-[#e32970]
+        hover:border hover:border-[#bd255f]
+        focus:outline-none focus:ring mt-5"
+        onClick={onplacebid}
+      >
+        Start Bidding
+      </button>
+    </>
+  )}
+</div>
+   
+
         </div>
       </div>
+      
     </div>
-  )
-}
+  );
+};
 
-export default ShowNFT
+export default ShowNFT;
