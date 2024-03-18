@@ -47,13 +47,24 @@ const Artworks = () => {
 }
 
 const Card = ({ nft }) => {
+  const [auctions] = useGlobalState('auctions');
+  const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
+  const currentTime = Math.floor(Date.now() / 1000);
+  const endTime = parseInt(auctionItem?.endTime);
+  const isAuctionActive = auctionItem && currentTime < endTime;
+
   const setNFT = () => {
     setGlobalState('nft', nft)
     setGlobalState('showModal', 'scale-100')
   }
 
   return (
-    <div className="w-full shadow-xl shadow-black rounded-md overflow-hidden bg-gray-800 my-2 p-3">
+    <div className="relative w-full shadow-xl shadow-black rounded-md overflow-hidden bg-gray-800 my-2 p-3">
+      {isAuctionActive && (
+        <div className="absolute top-0 right-0 bg-red-500 text-white font-semibold py-1 px-3 rounded-tr-md rounded-bl-md">
+          On Auction
+        </div>
+      )}
       <img
         src={nft.metadataURI}
         alt={nft.title}
@@ -63,10 +74,11 @@ const Card = ({ nft }) => {
       <p className="text-gray-400 text-xs my-1">{nft.description}</p>
       <div className="flex justify-between items-center mt-3 text-white">
         <div className="flex flex-col">
-          <small className="text-xs">Current Price</small>
-          <p className="text-sm font-semibold">{nft.cost} ETH</p>
+          <small className="text-xs">{isAuctionActive ? 'Current Highest Bid' : 'Current Price'}</small>
+          <p className="text-sm font-semibold">
+            {isAuctionActive ? (auctionItem?.currentBid || 'N/A') : (nft.cost + ' ETH')}
+          </p>
         </div>
-
         <button
           className="shadow-lg shadow-black text-white text-sm bg-[#e32970] hover:bg-[#bd255f] cursor-pointer rounded-full px-1.5 py-1"
           onClick={setNFT}
@@ -78,4 +90,4 @@ const Card = ({ nft }) => {
   )
 }
 
-export default Artworks
+export default Artworks;
