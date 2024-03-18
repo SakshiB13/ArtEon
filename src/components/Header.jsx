@@ -1,4 +1,5 @@
 import ArtEon from '../assets/ArtEon.png'
+import Profile from '../assets/profile.png'
 import { connectWallet } from '../Blockchain.Services'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { setGlobalState, useGlobalState, truncate} from '../store'
@@ -8,13 +9,16 @@ import { updateArtistWalletId, getArtistNameByUID } from '../utils/artist';
 import { auth } from '../utils/firebase';
 
 
+
+
 const Header = () => {
   const [userInfo] = useAuthState(auth);
   if(userInfo){
   setGlobalState('userID', userInfo.uid);
   }
   const [connectedAccount] = useGlobalState('connectedAccount')
-  
+ 
+
 
   const handlewalletId = async (e) => {
         try {
@@ -32,12 +36,13 @@ const Header = () => {
             setGlobalState('userName', collectorname);
             console.log("updated")
         }
-        
+       
       }
     } catch (error) {
         console.error('update failed:', error.message);
     }
 };
+
 
   return (
     <nav className="w-4/5 flex md:justify-center justify-between items-center py-4 mx-auto">
@@ -51,9 +56,10 @@ const Header = () => {
         </a>
       </div>
 
+
       <ul
         className="md:flex-[0.5] text-white md:flex
-        hidden list-none flex-row justify-between 
+        hidden list-none flex-row justify-between
         items-center flex-initial"
       >
         <a href='/market'><li className="mx-4 cursor-pointer">  Market</li></a>
@@ -62,7 +68,9 @@ const Header = () => {
         <li className="mx-4 cursor-pointer">Community</li>
       </ul>
 
+
       {connectedAccount ? (
+        <>
         <button
           className="shadow-xl shadow-black text-white
         bg-[#800080] hover:bg-[#b300b3] md:text-xs p-2
@@ -70,6 +78,15 @@ const Header = () => {
         onClick={handlewalletId}>
           {truncate(connectedAccount, 4, 4, 11)}
         </button>
+        <a href="/connected-wallet">
+        <img
+          className="w-8 h-8 rounded-full ml-2 cursor-pointer"
+          src={Profile}
+           // Replace with the path to the user profile logo
+          alt="User Profile"
+        />
+      </a>
+    </>
       ) : (
         <button
           className="shadow-xl shadow-black text-white
@@ -80,8 +97,16 @@ const Header = () => {
           Connect Wallet
         </button>
       )}
+
+
     </nav>
   )
 }
 
+
 export default Header
+
+
+
+
+
