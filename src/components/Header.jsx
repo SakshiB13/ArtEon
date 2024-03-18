@@ -78,7 +78,7 @@ const Header = () => {
         onClick={handlewalletId}>
           {truncate(connectedAccount, 4, 4, 11)}
         </button>
-        <a href="/connected-wallet">
+        <a href={`/${connectedAccount}`}>
         <img
           className="w-8 h-8 rounded-full ml-2 cursor-pointer"
           src={Profile}

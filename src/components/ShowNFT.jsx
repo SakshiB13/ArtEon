@@ -13,7 +13,6 @@ const ShowNFT = () => {
   //if (bid) console.log(bid);
 /* const isNFTInAuction = auctions.some(auctionItem => auctionItem.tokenId === nft?.id); */
 const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
-  //console.log(auctions);
   console.log(auctionItem);
   const currentTime = Math.floor(Date.now() / 1000); // Get current time in seconds
   const endTime = parseInt(auctionItem?.endTime);
@@ -222,9 +221,7 @@ const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
   ) : (
     auctionItem && currentTime < endTime && currentTime >= startTime ?  (
     // Render just the Place Bid button if auction is active
-
-  // If the owner is not the connected account, render the Purchase Now and Start Bidding buttons
-    <>
+ <>
 <input
   className="block w-full text-sm text-slate-500 bg-gray-800 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-[#e32970]"
   type="number"
