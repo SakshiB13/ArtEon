@@ -121,13 +121,22 @@ contract ArtEon is ERC721Enumerable, Ownable {
         uint256 winningBid = auction.currentBid;
 
         _transfer(auction.seller, winner, auction.tokenId);
+        
+
+        // Update the minted array to reflect the new owner
+        for (uint256 i = 0; i < minted.length; i++) {
+            if (minted[i].id == auction.tokenId) {
+                minted[i].owner = winner;
+                break;
+            }
+        }
 
         // Pay royalty to artist
         uint256 royalty = (winningBid * royalityFee) / 100;
-        payTo(artist, royalty);
+        payTo(payable(address(artist)), royalty);
 
         // Pay remaining amount to seller
-        payTo(auction.seller, winningBid - royalty);
+        payTo(payable(address(auction.seller)), winningBid - royalty);
 
         auction.active = false;
         auctions[auctionId] = auction;
@@ -158,8 +167,8 @@ contract ArtEon is ERC721Enumerable, Ownable {
     require(existingURIs[metadataURI] == 0);
 
     uint256 royalty = (msg.value * royalityFee) / 100;
-    payTo(artist, royalty);
-    payTo(owner(), (msg.value - royalty));
+    payTo(payable(address(artist)), royalty);
+    payTo(payable(address(owner())), (msg.value - royalty));
 
     supply++;
 
@@ -195,8 +204,8 @@ contract ArtEon is ERC721Enumerable, Ownable {
         require(msg.sender != minted[id - 1].owner);
 
         uint256 royality = (msg.value * royalityFee) / 100;
-        payTo(artist, royality);
-        payTo(minted[id - 1].owner, (msg.value - royality));
+        payTo(payable(address(artist)), royality);
+        payTo(payable(address(minted[id - 1].owner)), (msg.value - royality));
 
         totalTx++;
 
@@ -232,10 +241,12 @@ contract ArtEon is ERC721Enumerable, Ownable {
         return true;
     }
 
-    function payTo(address to, uint256 amount) internal {
-        (bool success, ) = payable(to).call{value: amount}("");
-        require(success);
+    function payTo(address payable to, uint256 amount) internal {
+    require(address(this).balance >= amount, "Insufficient contract balance");
+    (bool success, ) = to.call{value: amount}("");
+    require(success, "Payment failed");
     }
+
 
     function getAllNFTs() external view returns (TransactionStruct[] memory) {
         return minted;
