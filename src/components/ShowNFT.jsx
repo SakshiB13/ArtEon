@@ -225,30 +225,31 @@ const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
 
   // If the owner is not the connected account, render the Purchase Now and Start Bidding buttons
     <>
-    <input
-      className="block w-full text-sm text-slate-500 bg-transparent border-0 focus:outline-none focus:ring-0"
-      type="number"
-      step={0.01}
-      min={0.01}
-      name="bid"
-      placeholder="Place a bid higher than the current price"
-      onChange={(e) => setBid(e.target.value)}
-      value={bid}
-      required
-    />
-    
-    <button
-      className="flex flex-row justify-center items-center
-      w-full text-white text-md bg-[#e32970]
-      hover:bg-[#bd255f] py-2 px-5 rounded-full
-      drop-shadow-xl border border-transparent
-      hover:bg-transparent hover:text-[#e32970]
-      hover:border hover:border-[#bd255f]
-      focus:outline-none focus:ring mt-5"
-      onClick={onplacebid}
-    >
-     Place a Bid
-    </button>
+<input
+  className="block w-full text-sm text-slate-500 bg-gray-800 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-[#e32970]"
+  type="number"
+  step={0.01}
+  min={auctionItem?.currentBid ? (parseFloat(auctionItem.currentBid) + 0.01).toFixed(2) : 0.01}
+  name="bid"
+  placeholder={auctionItem?.currentBid ? `Place a bid higher than ${parseFloat(auctionItem.currentBid) + 0.01} ETH` : "Place a bid"}
+  onChange={(e) => setBid(e.target.value)}
+  value={bid}
+  required
+  style={{ width: "100%",fontSize: "0.875rem" }} // Adjust font size
+/>
+  
+  <button
+    className="flex flex-row justify-center items-center
+    w-full text-white text-md bg-[#e32970]
+    hover:bg-[#bd255f] py-2 px-5 rounded-full
+    drop-shadow-xl border border-transparent
+    hover:bg-transparent hover:text-[#e32970]
+    hover:border hover:border-[#bd255f]
+    focus:outline-none focus:ring"
+    onClick={onplacebid}
+  >
+    Place a Bid
+  </button>
     </>
     ):(
     <>
