@@ -52,7 +52,8 @@ const Card = ({ nft }) => {
   const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
   const currentTime = Math.floor(Date.now() / 1000);
   const endTime = parseInt(auctionItem?.endTime);
-  const isAuctionActive = auctionItem && currentTime < endTime;
+  const startTime = parseInt(auctionItem?.startTime);
+  const isAuctionActive = auctionItem?.active && currentTime < endTime && currentTime >= startTime;
 
   const setNFT = () => {
     setGlobalState('nft', nft)
