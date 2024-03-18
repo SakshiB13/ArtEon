@@ -8,6 +8,7 @@ const Artworks = () => {
   const [count] = useState(4)
   const [collection, setCollection] = useState([])
   const location = useLocation(); // Get current location
+ /*  const [auctions] = useGlobalState('auctions'); */
 
   const getCollection = () => {
     return location.pathname === "/market" ? nfts : nfts.slice(0, end)
@@ -86,6 +87,7 @@ const Card = ({ nft }) => {
           View Details
         </button>
       </div>
+      {/* <div><h3 className="text-white font-semibold">auction running</h3></div> */}
     </div>
   )
 }

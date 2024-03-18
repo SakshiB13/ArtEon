@@ -6,6 +6,7 @@ import { useGlobalState,setGlobalState } from './store';
 /* import { CgWebsite, AiOutlineInstagram, AiOutlineTwitter, HiDotsVertical } from 'react-icons/all'; // Import necessary icons */
 import Header from './components/Header';
 import Footer from './components/Footer';
+import instagram from './assets/instagram.png'
 
 const Style = {
   bannerImageContainer: 'h-[20vh] w-screen overflow-hidden flex justify-center items-center',
@@ -109,21 +110,21 @@ const Portfolio = () => {
             <div className={Style.collectionStat}>
               <div className={Style.statValue}>
                 <img
-                  src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"
+                  src={instagram}
                   alt="eth"
                   className={Style.ethLogo}
                 />
                 {collection?.floorPrice}
               </div>
-              <div className={Style.statName}>floor price</div>
+              <div className={Style.statName}>Instagram</div> 
             </div>
             <div className={Style.collectionStat}>
               <div className={Style.statValue}>
-                <img
+                {/* <img
                   src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"
                   alt="eth"
                   className={Style.ethLogo}
-                />
+                /> */}
                 {collection?.volumeTraded}.5K
               </div>
               <div className={Style.statName}>volume traded</div>
@@ -134,10 +135,12 @@ const Portfolio = () => {
           <div className={Style.description}>{collection?.description}</div>
         </div>
       </div>
+      <div className="w-4/5 py-10 mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-4 lg:gap-3 py-2.5">
         {nfts.map((nft,i) => (
           <Card key={i} nft={nft} />
         ))}
+      </div>
       </div>
       <Footer />
     </div>
