@@ -1,0 +1,316 @@
+/* Light Mode CSS */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
+
+* html {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.container-body-signup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: "Montserrat", sans-serif;
+  height: 100vh;
+  background-color: #f5f3f4; /* Light gray background color */
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsl(302deg 25% 80%) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 50% 0%, rgb(200, 150, 200) 0, transparent 50%),
+    radial-gradient(at 100% 0%, rgb(220, 170, 220) 0, transparent 50%);
+}
+
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f3f4; /* Light gray background color */
+}
+
+.gradient-bg-hero {
+  background-color: #f5f3f4; /* Light gray background color */
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsl(302deg 25% 80%) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 50% 0%, rgb(200, 150, 200) 0, transparent 50%),
+    radial-gradient(at 100% 0%, rgb(220, 170, 220) 0, transparent 50%);
+}
+
+.gradient-bg-artworks {
+  background-color: #f5f3f4; /* Light gray background color */
+  background-image: radial-gradient(
+      at 50% 50%,
+      hsl(302deg 25% 80%) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 0% 0%, hsla(253, 16%, 97%, 1) 0, transparent 50%),
+    radial-gradient(at 50% 50%, rgb(220, 170, 220) 0, transparent 50%);
+}
+
+.gradient-bg-footer {
+  background-color: #f5f3f4; /* Light gray background color */
+  background-image: radial-gradient(
+      at 0% 100%,
+      hsl(0deg 39% 90%) 0,
+      transparent 53%
+    ),
+    radial-gradient(at 50% 150%, rgb(220, 170, 220) 0, transparent 50%);
+}
+
+.text-gradient {
+  background: -webkit-linear-gradient(#333, #eee); /* Reverse gradient */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cus
+
+.lds-dual-ring {
+  display: inline-block;
+}
+.lds-dual-ring:after {
+  content: ' ';
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #000; /* Black border */
+  border-color: #000 transparent #000 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+header {
+  position: relative;
+  height: 100vh;
+  min-height: 500px;
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+  
+}
+
+/* vertically center banner section */
+header:before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+header .banner {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 auto;
+  width: 85%;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+header .banner-text { width: 100%; }
+header .banner-text h1 {
+  font: 120px/1.1em 'opensans-bold', sans-serif;
+  font-family: 'Gulzar', serif;
+  font-family: 'Young Serif', serif;
+  color: #333; /* Dark gray text color */
+  letter-spacing: -2px;
+  margin: 0 auto 18px auto;
+}
+header .banner-text h3 {
+  font: 30px/1.9em 'librebaskerville-regular', serif;
+  color: #333; /* Dark gray text color */
+  margin: 0 auto;
+  width: 70%;
+}
+header .banner-text h3 span,
+header .banner-text h3 a {
+  color: #333; /* Dark gray text color */
+}
+header .banner-text hr {
+  width: 60%;
+  margin: 18px auto 24px auto;
+  border-color: #aaa; /* Light gray border color */
+  border-color: rgba(150, 150, 150, .1);
+}
+
+/* header social links */
+header .social {
+  font-family: 'Gulzar', serif;
+  font-family: 'Young Serif', serif;
+
+  margin: 24px 0;
+  padding: 0;
+  font-size: 30px;
+}
+header .social li {
+  display: inline-block;
+  margin: 0 15px;
+  padding: 0;
+}
+header .social li a { color: #333; /* Dark gray text color */ }
+header .social li a:hover { color: #0762f9; }
+
+/* scrolldown link */
+header .scrolldown a {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  margin-left: -29px;
+  color: #333; /* Dark gray text color */
+  display: block;
+  height: 42px;
+  width: 42px;
+  font-size: 42px;
+  line-height: 42px;
+  color: #333; /* Dark gray text color */
+  border-radius: 100%;
+
+  -webkit-transition: all .3s ease-in-out;
+  -moz-transition: all .3s ease-in-out;
+  -o-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+}
+header .scrolldown a:hover { color: #0762f9; }
+
+/* primary navigation
+--------------------------------------------------------------------- */
+#nav-wrap ul, #nav-wrap li, #nav-wrap a {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+}
+
+/* nav-wrap */
+#nav-wrap {
+  font: 12px 'opensans-bold', sans-serif;
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  margin: 0 auto;
+  z-index: 100;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+.opaque { background-color: #eee; /* Light gray background color */ }
+
+/* hide toggle button */
+#nav-wrap > a.mobile-btn { display: none; }
+
+ul#nav {
+  min-height: 48px;
+  width: auto;
+
+  /* center align the menu */
+  text-align: center;
+}
+ul#nav li {
+  position: relative;
+  list-style: none;
+  height: 48px;
+  display: inline-block;
+}
+
+/* Links */
+ul#nav li a {
+
+/* 8px padding top + 8px padding bottom + 32px line-height = 48px */
+
+  display: inline-block;
+  padding: 8px 13px;
+  line-height: 32px;
+ text-decoration: none;
+  text-align: left;
+  color: #333; /* Dark gray text color */
+
+ -webkit-transition: color .2s ease-in-out;
+ -moz-transition: color .2s ease-in-out;
+ -o-transition: color .2s ease-in-out;
+ -ms-transition: color .2s ease-in-out;
+ transition: color .2s ease-in-out;
+}
+
+ul#nav li a:active { background-color: transparent !important; }
+ul#nav li.current a { color: #fe6928; }
+
+/* Main page Button*/
+
+/* Style the Project link */
+a.button.btn.project-btn {
+  background-color: #008080; /* Set the background color */
+  color: #fff; /* Set the text color */
+  padding: 10px 20px; /* Adjust padding for spacing */
+  text-decoration: none; /* Remove underline by default */
+  border: 1px solid #0eece5; /* Add a border */
+  border-radius: 10px; /* Add rounded corners */
+  display: inline-block; /* Make it a block element */
+  margin-right: 10px; /* Adjust margin for spacing between links */
+}
+
+/* Style the GitHub link */
+a.button.btn.github-btn {
+  background-color: #333; /* Set the background color */
+  color: #fff; /* Set the text color */
+  padding: 10px 20px; /* Adjust padding for spacing */
+  text-decoration: none; /* Remove underline by default */
+  border: 1px solid #333; /* Add a border */
+  border-radius: 4px; /* Add rounded corners */
+  display: inline-block; /* Make it a block element */
+}
+
+/* Add these styles to your CSS file */
+
+.side-panel {
+  position: fixed;
+  top: 0;
+  z-index: 999; /* Set a high z-index value */
+  right: -300px; /* Initially hidden */
+  width: 300px;
+  height: 100%;
+  background-color: #f5f3f4; /* Light gray background color */
+  background-image: radial-gradient(at 0% 0%, hsl(302deg 25% 80%) 0, transparent 50%),
+    radial-gradient(at 50% 0%, rgb(200, 150, 200) 0, transparent 50%),
+    radial-gradient(at 100% 0%, rgb(220, 170, 220) 0, transparent 50%);
+  transition: right 0.3s ease; /* Smooth transition */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Add box shadow for depth */
+}
+
+.side-panel.open {
+  right: 0; /* Slide in when open */
+}
+
+.side-panel ul {
+  list-style: none;
+  padding: 0;
+}
+
+.side-panel ul li {
+  padding: 10px 20px;
+  color: #333; /* Dark gray text color */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition for background */
+}
+
+.side-panel ul li:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Highlight on hover */
+}
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

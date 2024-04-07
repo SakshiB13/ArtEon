@@ -59,11 +59,15 @@ const Hero = () => {
         className="shadow-xl shadow-black md:w-2/5 w-full 
       mt-10 md:mt-0 rounded-md overflow-hidden bg-gray-800"
       >
-        <img
-          src="https://images.cointelegraph.com/images/1434_aHR0cHM6Ly9zMy5jb2ludGVsZWdyYXBoLmNvbS91cGxvYWRzLzIwMjEtMDYvNGE4NmNmOWQtODM2Mi00YmVhLThiMzctZDEyODAxNjUxZTE1LmpwZWc=.jpg"
-          alt="NFT Art"
+        <video
+          autoPlay
+          loop
+          muted
           className="h-60 w-full object-cover"
-        />
+        >
+          <source src="\images\Vmake-1712400512196.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
         <div className="flex justify-start items-center p-3">
           <Identicon
             string={connectedAccount ? connectedAccount : 'Connect Your Wallet'}

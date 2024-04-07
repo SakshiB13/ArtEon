@@ -52,7 +52,7 @@ const Portfolio = () => {
       <div className={Style.bannerImageContainer}>
         <img
           className={Style.bannerImage}
-          src={collection?.bannerImageUrl ? collection.bannerImageUrl : 'https://via.placeholder.com/200'}
+          src={collection?.bannerImageUrl ? collection.bannerImageUrl : '/images/ruchita.png'}
           alt="banner"
         />
       </div>
@@ -60,7 +60,7 @@ const Portfolio = () => {
         <div className={Style.midRow}>
           <img
             className={Style.profileImg}
-            src={collection?.imageUrl ? collection.imageUrl : 'https://via.placeholder.com/200'}
+            src={collection?.imageUrl ? collection.imageUrl : '/images/sakshi.png'}
             alt="profile image"
           />
         </div>
