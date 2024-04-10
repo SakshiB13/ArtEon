@@ -79,7 +79,7 @@ const CreateNFT = () => {
             if (auctionResult) {
               resetForm();
               setAlert('Auction created successfully', 'green');
-              //window.location.reload();
+              window.location.reload();
               console.log('auction')
             } else {
               setAlert('Failed to create auction', 'red');
@@ -87,7 +87,7 @@ const CreateNFT = () => {
           } else{
           resetForm();
           setAlert('Minting completed...', 'green');
-         // window.location.reload();
+          window.location.reload();
         }}
       }
     } catch (error) {
