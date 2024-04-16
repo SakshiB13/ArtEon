@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { setGlobalState, useGlobalState } from '../store'
 import { useLocation } from 'react-router-dom';
+import { FiHeart } from 'react-icons/fi'; // Importing heart icon
+import { AiFillHeart } from 'react-icons/ai'; // Filled heart icon
 
 const Artworks = () => {
   const [nfts] = useGlobalState('nfts')
@@ -60,6 +62,33 @@ const Card = ({ nft }) => {
     setGlobalState('showModal', 'scale-100')
   }
 
+
+const LikeButton = ({ initialCount = 0 }) => {
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(initialCount);
+
+  const toggleLike = () => {
+    if (liked) {
+      setLikeCount(likeCount - 1);
+    } else {
+      setLikeCount(likeCount + 1);
+    }
+    setLiked(!liked);
+  };
+
+  return (
+    <button onClick={toggleLike} className="flex items-center space-x-2">
+      {liked ? (
+        <AiFillHeart className="text-red-500 text-xl" />
+      ) : (
+        <FiHeart className="text-xl" />
+      )}
+      <span className="text-white">{likeCount}</span>
+    </button>
+  );
+};
+
+
   return (
     <div className="relative w-full shadow-xl shadow-black rounded-md overflow-hidden bg-gray-800 my-2 p-3">
       {isAuctionActive && (
@@ -72,7 +101,10 @@ const Card = ({ nft }) => {
         alt={nft.title}
         className="h-60 w-full object-cover shadow-lg shadow-black rounded-lg mb-3"
       />
-      <h4 className="text-white font-semibold">{nft.title}</h4>
+     <div className="flex justify-between items-center">
+        <h4 className="text-white font-semibold flex-1">{nft.title}</h4>
+        <LikeButton initialCount={nft.likes || 0} />
+      </div>
       <p className="text-gray-400 text-xs my-1">{nft.description}</p>
       <div className="flex justify-between items-center mt-3 text-white">
         <div className="flex flex-col">
