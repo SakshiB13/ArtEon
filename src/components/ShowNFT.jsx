@@ -125,7 +125,7 @@ const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
               </div>
 
               <div className="flex flex-col">
-              {auctionItem?.active ? (
+              {auctionItem?.active && auctionItem?.currentBid!=0 ? (
                 <>
                 <small className="text-xs">Current Highest Bid:</small>
                 
