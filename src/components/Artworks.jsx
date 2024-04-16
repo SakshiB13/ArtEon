@@ -76,9 +76,9 @@ const Card = ({ nft }) => {
       <p className="text-gray-400 text-xs my-1">{nft.description}</p>
       <div className="flex justify-between items-center mt-3 text-white">
         <div className="flex flex-col">
-          <small className="text-xs">{isAuctionActive ? 'Current Highest Bid' : 'Current Price'}</small>
+          <small className="text-xs">{isAuctionActive && auctionItem?.currentBid!=0? 'Current Highest Bid' : 'Current Price'}</small>
           <p className="text-sm font-semibold">
-            {isAuctionActive ? (auctionItem?.currentBid || 'N/A') : (nft.cost + ' ETH')}
+            {isAuctionActive && auctionItem?.currentBid !=0  ? (auctionItem?.currentBid + 'ETH') : (nft.cost + ' ETH')}
           </p>
         </div>
         <button
