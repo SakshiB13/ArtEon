@@ -12,13 +12,13 @@ const Footer = () => (
         <a href='/market'> Market </a>
         </p>
         <p className="text-white text-base text-center mx-2 cursor-pointer">
-          Artist
+        <a href='/artist'> Artist</a>
         </p>
         <p className="text-white text-base text-center mx-2 cursor-pointer">
-          Features
+        <a href='/collector'> Collector</a>
         </p>
         <p className="text-white text-base text-center mx-2 cursor-pointer">
-          Community
+        <a href='/feature'> Features</a>
         </p>
       </div>
 

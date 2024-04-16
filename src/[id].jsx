@@ -4,12 +4,13 @@ import { getAllNFTs, getNFTsByAddress} from './Blockchain.Services';
 /* import { useWeb3 } from './web3'; // Assuming there is a web3 module */
 import { useGlobalState,setGlobalState } from './store';
 /* import { CgWebsite, AiOutlineInstagram, AiOutlineTwitter, HiDotsVertical } from 'react-icons/all'; // Import necessary icons */
-import Header from './components/Header';
-import Footer from './components/Footer';
+//import Header from './components/Header';
+//import Footer from './components/Footer';
 import instagram from './assets/instagram.png'
 
 const Style = {
-  bannerImageContainer: 'h-[20vh] w-screen overflow-hidden flex justify-center items-center',
+  bannerImageContainer: 'h-[35vh] w-screen overflow-hidden flex justify-center items-center',
+  portfolioTitle: 'text-4xl font-bold italic text-center text-white mt-2 mb-2 font-dancing-script', // Updated with the font-dancing-script class
   bannerImage: 'w-full object-cover',
   infoContainer: 'w-screen px-4',
   midRow: 'w-full flex justify-center text-white',
@@ -46,8 +47,22 @@ const Portfolio = () => {
 
   return (
     <div className="overflow-hidden">
+       {/* Embedded header */}
        <div className="gradient-bg-hero">
-      <Header />
+        <div className="w-4/5 mx-auto py-4 flex justify-center items-center">
+          <a href="/home">
+            <img
+              className="w-32 cursor-pointer"
+              src="\images\ArtEon copy.png" // Path to your ArtEon logo
+              alt="ArtEon Logo"
+            />
+          </a>
+           {/* Styled Portfolio title */}
+           <h1 className={Style.portfolioTitle}>Portfolio</h1>
+        </div>
+      </div>
+      {/* End of embedded header */}
+       <div className="gradient-bg-hero">
       </div>
       <div className={Style.bannerImageContainer}>
         <img
@@ -142,7 +157,7 @@ const Portfolio = () => {
         ))}
       </div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
