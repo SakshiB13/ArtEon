@@ -8,6 +8,7 @@ import Header from './components/Header';
 import Loading from './components/Loading';
 import ShowNFT from './components/ShowNFT';
 import UpdateNFT from './components/UpdateNFT';
+import EditProfile from './components/EditProfile';
 
 
 const Displaymarket = () => {
@@ -30,6 +31,7 @@ const Displaymarket = () => {
             <Footer />
             <Alert />
             <Loading />
+            <EditProfile />
     </div>
   );
 };

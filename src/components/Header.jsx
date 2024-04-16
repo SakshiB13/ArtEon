@@ -8,12 +8,22 @@ import { updateArtistWalletId, getArtistNameByUID } from '../utils/artist';
 import { auth } from '../utils/firebase';
 import ArtEon from '../assets/ArtEon.png';
 import Profile from '../assets/profile.png';
+import EditProfile from './EditProfile';
 
 const Header = () => {
   const [userInfo] = useAuthState(auth);
   const [connectedAccount] = useGlobalState('connectedAccount');
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
   const sidePanelRef = useRef(null);
+  const [modal, setModal] = useGlobalState('modal');
+  const [EditProfilemodal] = useGlobalState('EditProfilemodal');
+
+  const openEditProfileModal = () => {
+    console.log('Cliked');
+    setGlobalState('EditProfilemodal', 'scale-100');
+    console.log(EditProfilemodal);
+    console.log('Cliked display');
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -108,15 +118,20 @@ const Header = () => {
       {isSidePanelOpen && (
         <div ref={sidePanelRef} className={`side-panel ${isSidePanelOpen ? 'open' : ''}`}>
           <ul>
-            <li>Edit Profile</li>
+          <li className="mr-6">
+            <button onClick={openEditProfileModal}>Edit Profile</button>
+          </li>
             <li><a href={`/${connectedAccount}`}>Visit Profile</a></li>
             <li>Switch Mode</li>
             <li>Logout</li>
           </ul>
         </div>
+        
       )}
     </nav>
+     
   );
+  {modal === 'scale-100' && <EditProfile />}
 };
 
 export default Header;

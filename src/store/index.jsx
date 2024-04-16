@@ -1,7 +1,9 @@
 import { createGlobalState } from 'react-hooks-global-state'
+import EditProfile from '../components/EditProfile'
 
 const { setGlobalState, useGlobalState, getGlobalState } = createGlobalState({
   modal: 'scale-0',
+  EditProfilemodal : 'scale-0',
   updateModal: 'scale-0',
   showModal: 'scale-0',
   startAuctionModal:'scale-0',
