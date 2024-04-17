@@ -11,6 +11,7 @@ import Portfolio from './[id]';
 import ArtistPage from './artist';
 import CollectorPage from './collector';
 import Feature from './feature';
+import EditProfile from './components/EditProfile';
 
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
                       <Route path='/artistpage' element={<ArtistPage/>}/>
                       <Route path='/collectorpage' element={<CollectorPage/>}/>
                       <Route path='/feature' element={<Feature/>}/>
+                      <Route path="/editprofile" element={<EditProfile />}></Route>
                   </Routes>
     </div>
   );
