@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { getAllNFTs, isWalletConnected, getNFTsByAddresss, getAllAuctions} from './Blockchain.Services';
+import { getAllNFTs, isWalletConnected, getAllAuctions } from './Blockchain.Services';
 import Alert from './components/Alert';
 import Artworks from './components/Artworks';
 import CreateNFT from './components/CreateNFT';
@@ -12,33 +12,36 @@ import Transactions from './components/Transactions';
 import UpdateNFT from './components/UpdateNFT';
 import ForgotPassword from './ForgotPassword';
 import StartAuction from './components/StartAuction';
-
-
+import { useTheme } from './components/themeContext'; // Import the useTheme hook
 
 const Home = () => {
-    useEffect(async () => {
-    await isWalletConnected();
-    await getAllNFTs();
-    await getAllAuctions();
-    //await burnNFT(3); 
+  const { darkMode } = useTheme(); // Get darkMode state from the theme context
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await isWalletConnected();
+      await getAllNFTs();
+      await getAllAuctions();
+    };
+
+    fetchData();
   }, []);
 
   return (
     <div className="min-h-screen">
-            <div className="gradient-bg-hero">
-              <Header />
-              <Hero />
-            </div>
-            <Artworks />
-            <Transactions />
-            <CreateNFT />
-            <ShowNFT />
-            <UpdateNFT />
-            <StartAuction/>
-            <Footer />
-            <Alert />
-            <Loading />
+      <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
+        <Header />
+        <Hero />
+      </div>
+      <Artworks />
+      <Transactions />
+      <CreateNFT />
+      <ShowNFT />
+      <UpdateNFT />
+      <StartAuction />
+      <Footer />
+      <Alert />
+      <Loading />
     </div>
   );
 };
