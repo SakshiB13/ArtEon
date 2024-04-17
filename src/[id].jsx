@@ -4,10 +4,8 @@ import { getAllNFTs, getNFTsByAddress} from './Blockchain.Services';
 /* import { useWeb3 } from './web3'; // Assuming there is a web3 module */
 import { useGlobalState,setGlobalState } from './store';
 import { getArtistByWalletId } from './utils/artist';
-/* import { CgWebsite, AiOutlineInstagram, AiOutlineTwitter, HiDotsVertical } from 'react-icons/all'; // Import necessary icons */
-//import Header from './components/Header';
-//import Footer from './components/Footer';
 import instagram from './assets/instagram.png'
+import mail from './assets/mail.png'
 
 const Style = {
   bannerImageContainer: 'h-[35vh] w-screen overflow-hidden flex justify-center items-center',
@@ -130,7 +128,7 @@ const Portfolio = () => {
             <div className={Style.collectionStat}>
               <div className={Style.statValue}>
               <a href={`mailto: ${collection?.email}`}><img
-                  src={instagram}
+                  src={mail}
                   alt="eth"
                   className={Style.ethLogo}
                 />
