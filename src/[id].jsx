@@ -5,6 +5,8 @@ import { useGlobalState, setGlobalState } from './store';
 import { getArtistByWalletId } from './utils/artist';
 import instagram from './assets/instagram.png';
 import { useTheme } from './components/themeContext'; // Import the useTheme hook
+import instagram from './assets/instagram.png'
+import mail from './assets/mail.png'
 
 const Style = {
   bannerImageContainer: 'h-[35vh] w-screen overflow-hidden flex justify-center items-center',
@@ -104,7 +106,7 @@ const Portfolio = () => {
             <div className={Style.collectionStat}>
               <div className={Style.statValue}>
               <a href={`mailto: ${collection?.email}`}><img
-                  src={instagram}
+                  src={mail}
                   alt="eth"
                   className={Style.ethLogo}
                 />
