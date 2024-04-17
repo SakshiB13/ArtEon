@@ -1,33 +1,34 @@
-import { useEffect, useState } from 'react'
-import { setGlobalState, useGlobalState } from '../store'
+import { useEffect, useState } from 'react';
+import { setGlobalState, useGlobalState } from '../store';
 import { useLocation } from 'react-router-dom';
 import { FiHeart } from 'react-icons/fi'; // Importing heart icon
 import { AiFillHeart } from 'react-icons/ai'; // Filled heart icon
-
+import { useTheme } from './themeContext'; // Import the useTheme hook
 const Artworks = () => {
-  const [nfts] = useGlobalState('nfts')
-  const [end, setEnd] = useState(4)
-  const [count] = useState(4)
-  const [collection, setCollection] = useState([])
+  const [nfts] = useGlobalState('nfts');
+  const [end, setEnd] = useState(4);
+  const [count] = useState(4);
+  const [collection, setCollection] = useState([]);
   const location = useLocation(); // Get current location
- /*  const [auctions] = useGlobalState('auctions'); */
+  const { darkMode } = useTheme(); // Get darkMode state from the theme context
+
 
   const getCollection = () => {
-    return location.pathname === "/market" ? nfts : nfts.slice(0, end)
-  }
+    return location.pathname === "/market" ? nfts : nfts.slice(0, end);
+  };
 
   useEffect(() => {
-    setCollection(getCollection())
-  }, [nfts, end, location.pathname])
+    setCollection(getCollection());
+  }, [nfts, end, location.pathname]);
 
   return (
-    <div className="bg-[#151c25] gradient-bg-artworks">
+    <div className={` ${darkMode ? 'bg-[#F8F0E3]' : 'bg-[#151c25] gradient-bg-artworks'}`}>
       <div className="w-4/5 py-10 mx-auto">
-        <h4 className="text-white text-3xl font-bold uppercase text-gradient">
+        <h4 className={`text-3xl font-bold uppercase  ${darkMode ? 'bg-[#F8F0E3]' : 'text-white text-gradient'}`}>
           {location.pathname === "/market" ? 'Browse Marketplace' : (collection.length > 0 ? 'Latest Artworks' : 'No Artworks Yet')}
         </h4>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-4 lg:gap-3 py-2.5">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-4 lg:gap-3 py-2.5 dark:bg-white">
           {collection.map((nft, i) => (
             <Card key={i} nft={nft} />
           ))}
@@ -46,8 +47,8 @@ const Artworks = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Card = ({ nft }) => {
   const [auctions] = useGlobalState('auctions');
@@ -58,36 +59,31 @@ const Card = ({ nft }) => {
   const isAuctionActive = auctionItem?.active && currentTime < endTime && currentTime >= startTime;
 
   const setNFT = () => {
-    setGlobalState('nft', nft)
-    setGlobalState('showModal', 'scale-100')
-  }
-
-
-const LikeButton = ({ initialCount = 0 }) => {
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(initialCount);
-
-  const toggleLike = () => {
-    if (liked) {
-      setLikeCount(likeCount - 1);
-    } else {
-      setLikeCount(likeCount + 1);
-    }
-    setLiked(!liked);
+    setGlobalState('nft', nft);
+    setGlobalState('showModal', 'scale-100');
   };
 
-  return (
-    <button onClick={toggleLike} className="flex items-center space-x-2">
-      {liked ? (
-        <AiFillHeart className="text-red-500 text-xl" />
-      ) : (
-        <FiHeart className="text-xl" />
-      )}
-      <span className="text-white">{likeCount}</span>
-    </button>
-  );
-};
+  const LikeButton = ({ initialCount = 0 }) => {
+    const [liked, setLiked] = useState(false);
+    const [likeCount, setLikeCount] = useState(initialCount);
 
+    const toggleLike = () => {
+      const newCount = liked ? likeCount - 1 : likeCount + 1;
+      setLikeCount(newCount);
+      setLiked(!liked);
+    };
+
+    return (
+      <button onClick={toggleLike} className="flex items-center space-x-2">
+        {liked ? (
+          <AiFillHeart className="text-red-500 text-xl" />
+        ) : (
+          <FiHeart className="text-xl" />
+        )}
+        <span className="text-white">{likeCount}</span>
+      </button>
+    );
+  };
 
   return (
     <div className="relative w-full shadow-xl shadow-black rounded-md overflow-hidden bg-gray-800 my-2 p-3">
@@ -101,16 +97,16 @@ const LikeButton = ({ initialCount = 0 }) => {
         alt={nft.title}
         className="h-60 w-full object-cover shadow-lg shadow-black rounded-lg mb-3"
       />
-     <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center">
         <h4 className="text-white font-semibold flex-1">{nft.title}</h4>
         <LikeButton initialCount={nft.likes || 0} />
       </div>
       <p className="text-gray-400 text-xs my-1">{nft.description}</p>
       <div className="flex justify-between items-center mt-3 text-white">
         <div className="flex flex-col">
-          <small className="text-xs">{isAuctionActive && auctionItem?.currentBid!=0? 'Current Highest Bid' : 'Current Price'}</small>
+          <small className="text-xs">{isAuctionActive && auctionItem?.currentBid!=0 ? 'Current Highest Bid' : 'Current Price'}</small>
           <p className="text-sm font-semibold">
-            {isAuctionActive && auctionItem?.currentBid !=0  ? (auctionItem?.currentBid + 'ETH') : (nft.cost + ' ETH')}
+            {isAuctionActive && auctionItem?.currentBid !=0  ? (auctionItem?.currentBid + ' ETH') : (nft.cost + ' ETH')}
           </p>
         </div>
         <button
@@ -120,9 +116,8 @@ const LikeButton = ({ initialCount = 0 }) => {
           View Details
         </button>
       </div>
-      {/* <div><h3 className="text-white font-semibold">auction running</h3></div> */}
     </div>
-  )
-}
+  );
+};
 
 export default Artworks;
