@@ -26,15 +26,7 @@ const Header = () => {
     console.log(EditProfilemodal);
     console.log('Clicked display');
   };
-  //const [editModal] = useGlobalState('editmodal');
 
-  
-  // const openEditProfileModal = () => {
-  //   console.log('Cliked');
-  //   setGlobalState('editmodal', 'scale-100');
-  //   console.log(editModal);
-  //   console.log('Cliked display');
-  // };
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidePanelRef.current && !sidePanelRef.current.contains(event.target)) {
@@ -138,20 +130,8 @@ const Header = () => {
         )}
       </nav>
     </div>
-      {isSidePanelOpen && (
-        <div ref={sidePanelRef} className={`side-panel ${isSidePanelOpen ? 'open' : ''}`}>
-          <ul>
-          <li><a href='/editprofile'>Edit Profile</a></li>
-            <li><a href={`/${connectedAccount}`}>Visit Profile</a></li>
-            <li>Switch Mode</li>
-            <li>Logout</li>
-          </ul>
-        </div>
-        
-      )}
-    </nav>
-     
   );
+  {modal === 'scale-100' && <EditProfile />}
 };
 
 export default Header;
