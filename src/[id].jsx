@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { getAllNFTs, getNFTsByAddress} from './Blockchain.Services';
 /* import { useWeb3 } from './web3'; // Assuming there is a web3 module */
 import { useGlobalState,setGlobalState } from './store';
+import { getArtistByWalletId } from './utils/artist';
 /* import { CgWebsite, AiOutlineInstagram, AiOutlineTwitter, HiDotsVertical } from 'react-icons/all'; // Import necessary icons */
 //import Header from './components/Header';
 //import Footer from './components/Footer';
@@ -37,12 +38,22 @@ const Portfolio = () => {
     const addr = {id};
     useEffect(async () => {
         await getNFTsByAddress(addr);
+        const fetchArtists = async () => {
+          try {
+            const fetchedArtists = await getArtistByWalletId(addr.id); // Fetch artists asynchronously
+            setCollection(fetchedArtists); // Update state with fetched artists
+          } catch (error) {
+            console.error('Error fetching artists:', error);
+          }
+        };
     
+        fetchArtists();
+
       }, []);
   const [collection, setCollection] = useState({});
   /* const [listings, setListings] = useState([]); */
   const [nfts] = useGlobalState('nftsByAddress');
-
+  console.log(collection);
   //console.log(nfts);  
 
   return (
@@ -67,7 +78,7 @@ const Portfolio = () => {
       <div className={Style.bannerImageContainer}>
         <img
           className={Style.bannerImage}
-          src={collection?.bannerImageUrl ? collection.bannerImageUrl : '/images/ruchita.png'}
+          src={collection?.bannerPicture ? collection.bannerPicture : '/images/ruchita.png'}
           alt="banner"
         />
       </div>
@@ -75,7 +86,7 @@ const Portfolio = () => {
         <div className={Style.midRow}>
           <img
             className={Style.profileImg}
-            src={collection?.imageUrl ? collection.imageUrl : '/images/sakshi.png'}
+            src={collection?.profilePicture ? collection.profilePicture : '/images/sakshi.png'}
             alt="profile image"
           />
         </div>
@@ -107,7 +118,7 @@ const Portfolio = () => {
         </div>
         <div className={Style.midRow}>
           <div className={Style.createdBy}>
-            Created by <span className="text-[#2081e2]">{collection?.creator}</span>
+            Created by <span className="text-[#2081e2]">{collection?.name}</span>
           </div>
         </div>
         <div className={Style.midRow}>
@@ -118,17 +129,23 @@ const Portfolio = () => {
             </div>
             <div className={Style.collectionStat}>
               <div className={Style.statValue}>
-                {collection?.allOwners ? collection.allOwners.length : ''}
-              </div>
-              <div className={Style.statName}>owners</div>
-            </div>
-            <div className={Style.collectionStat}>
-              <div className={Style.statValue}>
-                <img
+              <a href={`mailto: ${collection?.email}`}><img
                   src={instagram}
                   alt="eth"
                   className={Style.ethLogo}
                 />
+                </a>
+              </div>
+              <div className={Style.statName}>email</div>
+            </div>
+            <div className={Style.collectionStat}>
+              <div className={Style.statValue}>
+                <a href={`https://www.instagram.com/${collection?.insta}`}><img
+                  src={instagram}
+                  alt="eth"
+                  className={Style.ethLogo}
+                />
+                </a>
                 {collection?.floorPrice}
               </div>
               <div className={Style.statName}>Instagram</div> 
@@ -147,7 +164,7 @@ const Portfolio = () => {
           </div>
         </div>
         <div className={Style.midRow}>
-          <div className={Style.description}>{collection?.description}</div>
+          <div className={Style.description}>{collection?.quote}</div>
         </div>
       </div>
       <div className="w-4/5 py-10 mx-auto">
