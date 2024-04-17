@@ -1,67 +1,97 @@
 // EditProfile.jsx
+
 import React, { useState } from 'react';
-import { useGlobalState, setGlobalState } from '../store';
-import { FaTimes } from 'react-icons/fa';
+import Footer from './Footer';
+import Header from './Header';
 
 const EditProfile = () => {
-  const [EditProfilemodal] = useGlobalState('EditProfilemodal');
-  const [name, setName] = useState('');
-  const [bannerImage, setBannerImage] = useState('');
   const [profilePic, setProfilePic] = useState('');
-  const [socialLinks, setSocialLinks] = useState('');
+  const [bannerPic, setBannerPic] = useState('');
+  const [name, setName] = useState('');
+  const [quote, setQuote] = useState('');
+  const [email, setEmail] = useState('');
+  const [insta, setInsta] = useState('');
+  const [website, setWebsite] = useState('');
+
+
+  const handleProfilePicChange = (e) => {
+    setProfilePic(e.target.value);
+  };
+
+  const handleBannerPicChange = (e) => {
+    setBannerPic(e.target.value);
+  };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleQuoteChange = (e) => {
+    setQuote(e.target.value);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleInstaChange = (e) => {
+    setInsta(e.target.value);
+  };
+
+  const handleWebsiteChange = (e) => {
+    setWebsite(e.target.value);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Perform form submission logic here
-    console.log('Submitted:', { name, bannerImage, profilePic, socialLinks });
-
-    // Reset form fields after submission
-    setName('');
-    setBannerImage('');
-    setProfilePic('');
-    setSocialLinks('');
-
-    // Close modal after submission
-    setGlobalState('EditProfilemodal', 'scale-0');
-  };
-
-  const closeModal = () => {
-    // Close modal without performing any action
-    setGlobalState('EditProfilemodal', 'scale-0');
+    // Handle form submission here (e.g., save to Firebase database)
+    console.log('Form submitted:', { profilePic, bannerPic, name, quote, email, insta, website });
   };
 
   return (
-    <div className={`fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black bg-opacity-50 transform transition-transform duration-300 ${EditProfilemodal}`}>
-      <div className="bg-[#151c25] shadow-xl shadow-[#e32970] rounded-xl w-11/12 md:w-2/5 h-7/12 p-6">
-        <form className="flex flex-col" onSubmit={handleSubmit}>
-          <div className="flex flex-row justify-between items-center">
-            <p className="font-semibold text-gray-400">Edit Profile</p>
-            <button type="button" onClick={closeModal} className="border-0 bg-transparent focus:outline-none">
-              <FaTimes className="text-gray-400" />
-            </button>
+    <div className="min-h-screen">
+      <div className="gradient-bg-hero">
+        <Header />
+      </div>
+    <div className="container-body-signup">
+      <div className="edit-profile-container">
+        <h2>Edit Profile</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Profile Picture:</label>
+            <input type="file" value={profilePic} onChange={handleProfilePicChange} />
           </div>
-
-          <input
-            className="block w-full text-sm text-slate-500 bg-transparent border-0 focus:outline-none focus:ring-0"
-            type="text"
-            name="name"
-            placeholder="Name"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            required
-          />
-
-          {/* Add more input fields for banner image, profile picture, and social links */}
-
-          <button
-            type="submit"
-            className="flex flex-row justify-center items-center w-full text-white text-md bg-[#800080] hover:bg-[#b300b3] py-2 px-5 rounded-full drop-shadow-xl border border-transparent hover:bg-transparent hover:text-[#800080] hover:border hover:border-[#b300b3] focus:outline-none focus:ring mt-5"
-          >
-            Save Changes
-          </button>
+          <div className="form-group">
+            <label>Banner Picture:</label>
+            <input type="file" value={bannerPic} onChange={handleBannerPicChange} />
+          </div>
+          <div className="form-group">
+            <label>Name:</label>
+            <input type="text" value={name} onChange={handleNameChange} />
+          </div>
+          <div className="form-group">
+            <label>Quote:</label>
+            <input type="text" value={quote} onChange={handleQuoteChange} />
+          </div>
+          <div className="form-group">
+            <label>Email:</label>
+            <input type="email" value={email} onChange={handleEmailChange} />
+          </div>
+          <div className="form-group">
+            <label>Instagram:</label>
+            <input type="text" value={insta} onChange={handleInstaChange} />
+          </div>
+          <div className="form-group">
+            <label>Website:</label>
+            <input type="text" value={website} onChange={handleWebsiteChange} />
+          </div>
+          <div className="button-container">
+          <button type="submit">Save Changes</button>
+          </div>
         </form>
       </div>
+      <Footer />
+    </div>
     </div>
   );
 };
