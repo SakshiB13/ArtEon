@@ -1,5 +1,3 @@
-// EditProfile.jsx
-
 import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { updateArtistProfile } from '../utils/artist';
@@ -9,22 +7,21 @@ import Footer from './Footer';
 import Header from './Header';
 
 const EditProfile = () => {
-  const [userInfo] = useAuthState(auth);
+  const [profilePic, setProfilePic] = useState('');
+  const [bannerPic, setBannerPic] = useState('');
   const [name, setName] = useState('');
   const [quote, setQuote] = useState('');
   const [email, setEmail] = useState('');
   const [insta, setInsta] = useState('');
   const [website, setWebsite] = useState('');
-  const [profilePicFile, setProfilePicFile] = useState(null);
-  const [bannerPicFile, setBannerPicFile] = useState(null);
 
 
   const handleProfilePicChange = (e) => {
-    setProfilePicFile(e.target.files[0]);
+    setProfilePic(e.target.value);
   };
 
   const handleBannerPicChange = (e) => {
-    setBannerPicFile(e.target.files[0]);
+    setBannerPic(e.target.value);
   };
 
   const handleNameChange = (e) => {
@@ -47,42 +44,28 @@ const EditProfile = () => {
     setWebsite(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    try {
-      const isupdated = await updateArtistProfile(userInfo.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
-      if(isupdated){
-        console.log('Artist profile updated successfully!');
-        window.location.href = '/home';
-      }
-
-      // Optionally, add a success message or redirect to another page upon successful update
-    } catch (error) {
-      console.error('Error updating artist profile:', error);
-      // Handle error (e.g., display error message to user)
-    }
+    // Handle form submission here (e.g., save to Firebase database)
+    console.log('Form submitted:', { profilePic, bannerPic, name, quote, email, insta, website });
   };
-
- 
-
 
   return (
     <div className="min-h-screen">
       <div className="gradient-bg-hero">
         <Header />
       </div>
-    <div className="container-body-signup">
+    <div className="container-body-signupp">
       <div className="edit-profile-container">
         <h2>Edit Profile</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Profile Picture:</label>
-            <input type="file" onChange={handleProfilePicChange} />
+            <input type="file" value={profilePic} onChange={handleProfilePicChange} />
           </div>
           <div className="form-group">
             <label>Banner Picture:</label>
-            <input type="file" onChange={handleBannerPicChange} />
+            <input type="file" value={bannerPic} onChange={handleBannerPicChange} />
           </div>
           <div className="form-group">
             <label>Name:</label>
@@ -94,7 +77,7 @@ const EditProfile = () => {
           </div>
           <div className="form-group">
             <label>Email:</label>
-            <input type="email" value={email} onChange={handleEmailChange} />
+            <input type="emaill" value={email} onChange={handleEmailChange} />
           </div>
           <div className="form-group">
             <label>Instagram:</label>
@@ -109,8 +92,9 @@ const EditProfile = () => {
           </div>
         </form>
       </div>
+      </div>
       <Footer />
-    </div>
+    
     </div>
   );
 };
