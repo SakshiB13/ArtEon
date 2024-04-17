@@ -86,7 +86,7 @@ const Header = () => {
         </div>
 
         <ul
-          className="md:flex-[0.5] text-white md:flex hidden list-none flex-row justify-between items-center flex-initial"
+          className={` md:flex-[0.5] text-white md:flex hidden list-none flex-row justify-between items-center flex-initial ${darkMode ? 'text-black' : ''}`}
         >
           <a href='/market'><li className="mx-4 cursor-pointer">Market</li></a>
           <a href='/artistpage'><li className="mx-4 cursor-pointer">Artist</li></a>

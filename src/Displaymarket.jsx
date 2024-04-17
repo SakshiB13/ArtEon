@@ -9,6 +9,7 @@ import Loading from './components/Loading';
 import ShowNFT from './components/ShowNFT';
 import UpdateNFT from './components/UpdateNFT';
 import EditProfile from './components/EditProfile';
+import { useTheme } from './components/themeContext'; // Import the useTheme hook
 
 
 const Displaymarket = () => {
@@ -18,12 +19,13 @@ const Displaymarket = () => {
     //await burnNFT(1);
 
   }, []);
+  const { darkMode } = useTheme(); // Get darkMode state from the theme context
 
   return (
     <div className="min-h-screen">
-            <div className="gradient-bg-hero">
-              <Header />
-            </div>
+            <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
+        <Header />
+      </div>
             <Artworks />
             <CreateNFT />
             <ShowNFT />
@@ -31,7 +33,7 @@ const Displaymarket = () => {
             <Footer />
             <Alert />
             <Loading />
-            <EditProfile />
+            
     </div>
   );
 };

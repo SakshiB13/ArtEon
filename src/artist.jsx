@@ -1,20 +1,18 @@
-// ArtistPage.jsx
-
 import React, { useEffect, useState } from 'react';
-import { getAllNFTs, isWalletConnected } from './Blockchain.Services';
+import { getAllArtists } from './utils/artist';
 import Footer from './components/Footer';
 import Header from './components/Header';
-import { getAllArtists } from './utils/artist';
-
+import { useTheme } from './components/themeContext'; // Import the useTheme hook
 
 const ArtistPage = () => {
   const [artists, setArtists] = useState([]);
+  const { darkMode } = useTheme(); // Get darkMode state from the theme context
 
   useEffect(() => {
     const fetchArtists = async () => {
       try {
-        const fetchedArtists = await getAllArtists(); // Fetch artists asynchronously
-        setArtists(fetchedArtists); // Update state with fetched artists
+        const fetchedArtists = await getAllArtists();
+        setArtists(fetchedArtists);
       } catch (error) {
         console.error('Error fetching artists:', error);
       }
@@ -23,11 +21,9 @@ const ArtistPage = () => {
     fetchArtists();
   }, []);
 
-  console.log(artists);
-
   return (
-    <div className="min-h-screen">
-      <div className="gradient-bg-hero">
+    <div className={`min-h-screen ${darkMode ? 'bg-white' : ''}`}> {/* Conditionally apply white background */}
+      <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
         <Header />
       </div>
       <div className="container-fluid mx-auto mt-10 px-4 mb-10">

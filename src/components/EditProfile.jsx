@@ -5,6 +5,7 @@ import { useGlobalState, setGlobalState, truncate } from '../store';
 import { auth } from '../utils/firebase';
 import Footer from './Footer';
 import Header from './Header';
+import { useTheme } from './themeContext'; // Import the useTheme hook
 
 const EditProfile = () => {
   const [userInfo] = useAuthState(auth);
@@ -13,6 +14,17 @@ const EditProfile = () => {
   const [email, setEmail] = useState('');
   const [insta, setInsta] = useState('');
   const [website, setWebsite] = useState('');
+  const { darkMode } = useTheme(); // Get darkMode state from the theme context
+
+
+
+  const handleProfilePicChange = (e) => {
+    setProfilePic(e.target.value);
+  };
+
+  const handleBannerPicChange = (e) => {
+    setBannerPic(e.target.value);
+  };
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [bannerPicFile, setBannerPicFile] = useState(null);
 
@@ -58,10 +70,10 @@ const EditProfile = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="gradient-bg-hero">
+      <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
         <Header />
       </div>
-    <div className="container-body-signupp">
+    <div className={`container-body-signupp ${darkMode ? 'bg-[#F8F0E3]' : ''}`}>
       <div className="edit-profile-container">
         <h2>Edit Profile</h2>
         <form onSubmit={handleSubmit}>
