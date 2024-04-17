@@ -34,7 +34,7 @@ const ArtistPage = () => {
         <div className="grid grid-cols-5 gap-8">
           {artists.map((artist) => (
             <div key={artist.id} className="artist-card"> {/* Apply class name */}
-              <img className="w-full h-48 object-cover object-center rounded-full" src={artist.profilePicture} alt={artist.name} />
+              <img className="w-full h-49 object-cover object-center" src={artist.profilePicture} />
               <div className="artist-details"> {/* Apply class name */}
                 <h2 className="artist-name">{artist.name}</h2>
                 <p className="artist-quote">{artist.quote}</p>

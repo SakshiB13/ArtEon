@@ -71,7 +71,7 @@ const EditProfile = () => {
       <div className="gradient-bg-hero">
         <Header />
       </div>
-    <div className="container-body-signup">
+    <div className="container-body-signupp">
       <div className="edit-profile-container">
         <h2>Edit Profile</h2>
         <form onSubmit={handleSubmit}>
@@ -93,7 +93,7 @@ const EditProfile = () => {
           </div>
           <div className="form-group">
             <label>Email:</label>
-            <input type="email" value={email} onChange={handleEmailChange} />
+            <input type="emaill" value={email} onChange={handleEmailChange} />
           </div>
           <div className="form-group">
             <label>Instagram:</label>
@@ -108,8 +108,9 @@ const EditProfile = () => {
           </div>
         </form>
       </div>
+      </div>
       <Footer />
-    </div>
+    
     </div>
   );
 };
