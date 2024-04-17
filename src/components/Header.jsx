@@ -17,7 +17,7 @@ const Header = () => {
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
   const sidePanelRef = useRef(null);
   const [modal, setModal] = useGlobalState('modal');
-  const [EditProfilemodal] = useGlobalState('EditProfilemodal');
+  //const [EditProfilemodal] = useGlobalState('EditProfilemodal');
   const { darkMode, toggleDarkMode } = useTheme(); // Get darkMode state and toggleDarkMode function from the theme context
 
   const openEditProfileModal = () => {
