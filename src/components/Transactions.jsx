@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react'
 import { BiTransfer } from 'react-icons/bi'
 import { MdOpenInNew } from 'react-icons/md'
 import { useGlobalState, truncate } from '../store'
+import { useTheme } from './themeContext'; // Import the useTheme hook
 
 const Transactions = () => {
   const [transactions] = useGlobalState('transactions')
   const [end, setEnd] = useState(3)
   const [count] = useState(3)
   const [collection, setCollection] = useState([])
+  const { darkMode } = useTheme(); // Get darkMode state from the theme context
+
 
   const getCollection = () => {
     return transactions.slice(0, end)
@@ -18,9 +21,9 @@ const Transactions = () => {
   }, [transactions, end])
 
   return (
-    <div className="bg-[#151c25]">
+    <div className={` ${darkMode ? 'bg-[#F8F0E3]' : 'bg-[#151c25] gradient-bg-artworks'}`}>
       <div className="w-4/5 py-10 mx-auto">
-        <h4 className="text-white text-3xl font-bold uppercase text-gradient">
+        <h4 className={` text-3xl font-bold uppercase ${darkMode ? 'bg-[#F8F0E3]' : 'text-white text-gradient'}`}>
           {collection.length > 0 ? 'Latest Transactions' : 'No Transaction Yet'}
         </h4>
 

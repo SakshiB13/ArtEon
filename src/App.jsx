@@ -11,12 +11,15 @@ import Portfolio from './[id]';
 import ArtistPage from './artist';
 import CollectorPage from './collector';
 import Feature from './feature';
+import EditProfile from './components/EditProfile';
+import { ThemeProvider } from './components/themeContext';
 
 
 const App = () => {
 
   return (
     <div>
+             <ThemeProvider>
                   <Routes>
                       <Route path='/' element={<Main/>}/>
                       <Route path='/home' element={<Home/>}/>
@@ -29,7 +32,9 @@ const App = () => {
                       <Route path='/artistpage' element={<ArtistPage/>}/>
                       <Route path='/collectorpage' element={<CollectorPage/>}/>
                       <Route path='/feature' element={<Feature/>}/>
+                      <Route path="/editprofile" element={<EditProfile />}></Route>
                   </Routes>
+                  </ThemeProvider>
     </div>
   );
 };
