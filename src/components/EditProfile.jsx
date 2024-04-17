@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { updateArtistProfile } from '../utils/artist';
+import { useGlobalState, setGlobalState, truncate } from '../store';
 import { auth } from '../utils/firebase';
 import Footer from './Footer';
 import Header from './Header';
