@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { getAllNFTs, getNFTsByAddress } from './Blockchain.Services';
 import { useGlobalState, setGlobalState } from './store';
 import { getArtistByWalletId } from './utils/artist';
-import instagram from './assets/instagram.png';
 import { useTheme } from './components/themeContext'; // Import the useTheme hook
 // import instagram from './assets/instagram.png'
 import mail from './assets/mail.png';
