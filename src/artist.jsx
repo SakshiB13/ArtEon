@@ -26,17 +26,19 @@ const ArtistPage = () => {
       <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
         <Header />
       </div>
-      <div className="container-fluid mx-auto mt-10 px-4 mb-10">
+      <div className={`container-fluid mx-auto container-body-signupp px-5 ${darkMode ? 'bg-white' : ''}`}>
         <div className="grid grid-cols-5 gap-8">
           {artists.map((artist) => (
-            <div key={artist.id} className="artist-card"> {/* Apply class name */}
-              <img className="w-full h-49 object-cover object-center" src={artist.profilePicture} />
-              <div className="artist-details"> {/* Apply class name */}
-                <h2 className="artist-name">{artist.name}</h2>
-                <p className="artist-quote">{artist.quote}</p>
-                <button className="view-profile-btn">View Profile</button> {/* Apply class name */}
-              </div>
+            <div key={artist.id} className="artist-card">
+            <div className="artist-image-container">
+              <img className="artist-image" src={artist.profilePicture} alt={artist.name} />
             </div>
+            <div className="artist-details">
+              <h2 className="artist-name">{artist.name}</h2>
+              <p className="artist-quote">{artist.quote}</p>
+              <button className="view-profile-btn">View Profile</button>
+            </div>
+          </div>
           ))}
         </div>
       </div>
