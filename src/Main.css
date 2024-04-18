@@ -86,7 +86,13 @@
   font-size: 50px; 
 }
 
-#about p,
+#about p {
+  text-align: center;
+  font-family: "Times New Roman", Times, serif;
+  color: white;
+  font-size: 20px; /* Increased font size */
+  padding: 0 50px; /* Added side padding */
+}
 #contact p,
 #creators p {
   text-align: center; /* Center the text horizontally */
