@@ -1,13 +1,21 @@
 // themeContext.js
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    // Retrieve dark mode preference from local storage if available, default to false
+    const savedDarkMode = localStorage.getItem('darkMode');
+    return savedDarkMode ? JSON.parse(savedDarkMode) : false;
+  });
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    setDarkMode((prevMode) => {
+      const newMode = !prevMode;
+      localStorage.setItem('darkMode', JSON.stringify(newMode)); // Store new dark mode preference
+      return newMode;
+    });
   };
 
   return (

@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
-import { setGlobalState, useGlobalState } from '../store';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { FiHeart } from 'react-icons/fi'; // Importing heart icon
-import { AiFillHeart } from 'react-icons/ai'; // Filled heart icon
-import { useTheme } from './themeContext'; // Import the useTheme hook
+import { useGlobalState } from '../store'; // Add import for useGlobalState
+import { FiHeart } from 'react-icons/fi';
+import { AiFillHeart } from 'react-icons/ai';
+import { useTheme } from './themeContext';
+
 const Artworks = () => {
-  const [nfts] = useGlobalState('nfts');
+  const [nfts] = useGlobalState('nfts'); // Add nfts state
   const [end, setEnd] = useState(4);
   const [count] = useState(4);
   const [collection, setCollection] = useState([]);
-  const location = useLocation(); // Get current location
-  const { darkMode } = useTheme(); // Get darkMode state from the theme context
-
+  const location = useLocation();
+  const { darkMode } = useTheme();
 
   const getCollection = () => {
     return location.pathname === "/market" ? nfts : nfts.slice(0, end);

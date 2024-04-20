@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+// Header.js
+import React, { useRef, useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { connectWallet } from '../Blockchain.Services';
 import { useGlobalState, setGlobalState, truncate } from '../store';
@@ -9,23 +10,14 @@ import { auth } from '../utils/firebase';
 import ArtEon from '../assets/ArtEon.png';
 import Profile from '../assets/profile.png';
 import EditProfile from './EditProfile';
-import { useTheme } from './themeContext'; // Import the useTheme hook
+import { useTheme } from './themeContext';
 
 const Header = () => {
   const [userInfo] = useAuthState(auth);
   const [connectedAccount] = useGlobalState('connectedAccount');
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
   const sidePanelRef = useRef(null);
-  const [modal, setModal] = useGlobalState('modal');
-  //const [EditProfilemodal] = useGlobalState('EditProfilemodal');
-  const { darkMode, toggleDarkMode } = useTheme(); // Get darkMode state and toggleDarkMode function from the theme context
-
-  const openEditProfileModal = () => {
-    console.log('Clicked');
-    setGlobalState('EditProfilemodal', 'scale-100');
-    console.log(EditProfilemodal);
-    console.log('Clicked display');
-  };
+  const { darkMode, toggleDarkMode } = useTheme();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -49,7 +41,6 @@ const Header = () => {
     try {
       if (userInfo) {
         const userType = await getUserCollection(userInfo.uid);
-        console.log(userType);
         setGlobalState('usertype', userType);
         if (userType === 'artist') {
           await updateArtistWalletId(userInfo.uid, connectedAccount);
@@ -59,7 +50,6 @@ const Header = () => {
           await updateCollectorWalletId(userInfo.uid, connectedAccount);
           let collectorname = await getCollectorNameByUID(userInfo.uid);
           setGlobalState('userName', collectorname);
-          console.log("updated")
         }
       }
     } catch (error) {
@@ -68,8 +58,12 @@ const Header = () => {
   };
 
   const handleProfileClick = (e) => {
-    e.stopPropagation(); // Stop event propagation to prevent closing the panel immediately
-    handleToggleSidePanel(); // Open or close the side panel
+    e.stopPropagation(); 
+    handleToggleSidePanel(); 
+  };
+
+  const openEditProfileModal = () => {
+    setGlobalState('EditProfilemodal', 'scale-100');
   };
 
   return (
@@ -85,9 +79,7 @@ const Header = () => {
           </a>
         </div>
 
-        <ul
-          className={` md:flex-[0.5] text-white md:flex hidden list-none flex-row justify-between items-center flex-initial ${darkMode ? 'text-black' : ''}`}
-        >
+        <ul className={`md:flex-[0.5] text-white md:flex hidden list-none flex-row justify-between items-center flex-initial ${darkMode ? 'text-black' : ''}`}>
           <a href='/market'><li className="mx-4 cursor-pointer">Market</li></a>
           <a href='/artistpage'><li className="mx-4 cursor-pointer">Artist</li></a>
           <a href='/collectorpage'><li className="mx-4 cursor-pointer">Collector</li></a>
@@ -106,12 +98,12 @@ const Header = () => {
               className="w-8 h-8 rounded-full ml-2 cursor-pointer"
               src={Profile}
               alt="User Profile"
-              onClick={handleProfileClick} // Attach handleProfileClick function
+              onClick={handleProfileClick} 
             />
           </>
         ) : (
           <button
-            className="shadow-xl shadow-black text-white bg-white dark:bg-[#800080] hover:bg-[#b300b3] md:text-xs p-2 rounded-full cursor-pointer"
+            className="shadow-xl shadow-black text-white  dark:bg-[#800080] hover:bg-[#b300b3] md:text-xs p-2 rounded-full cursor-pointer"
             onClick={connectWallet}
           >
             Connect Wallet

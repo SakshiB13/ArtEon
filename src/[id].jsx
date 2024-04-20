@@ -4,6 +4,7 @@ import { getAllNFTs, getNFTsByAddress } from './Blockchain.Services';
 import { useGlobalState, setGlobalState } from './store';
 import { getArtistByWalletId } from './utils/artist';
 import { useTheme } from './components/themeContext'; // Import the useTheme hook
+import mail from './assets/mail.png'
 // import instagram from './assets/instagram.png'
 import mail from './assets/mail.png';
 
