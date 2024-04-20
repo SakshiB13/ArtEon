@@ -89,7 +89,7 @@ const Main = () => {
           <div className="twelve columns">
             <h2>Contact Us</h2>
             <p className="address">
-              <span>Email: your_email@example.com</span>
+              <span>Email: arteon@example.com</span>
             </p>
           </div>
         </div>

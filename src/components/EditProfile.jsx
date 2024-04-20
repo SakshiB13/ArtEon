@@ -15,6 +15,7 @@ const EditProfile = () => {
 
 
 
+
   const handleProfilePicChange = (e) => {
     setProfilePic(e.target.value);
   };
@@ -22,6 +23,8 @@ const EditProfile = () => {
   const handleBannerPicChange = (e) => {
     setBannerPic(e.target.value);
   };
+  const [profilePicFile, setProfilePicFile] = useState(null);
+  const [bannerPicFile, setBannerPicFile] = useState(null);
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -42,6 +45,13 @@ const EditProfile = () => {
   const handleWebsiteChange = (e) => {
     setWebsite(e.target.value);
   };
+  // const handleProfilePicChange = (e) => {
+  //   setProfilePicFile(e.target.files[0]);
+  // };
+
+  // const handleBannerPicChange = (e) => {
+  //   setBannerPicFile(e.target.files[0]);
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();

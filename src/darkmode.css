@@ -659,6 +659,7 @@ button {
   background-color: #b3b3b3;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   border-radius: 10px;
+  padding: 10px;
   overflow: hidden;
   transition: background-color 0.3s ease; /* Add transition for smooth hover effect */
 }
@@ -667,12 +668,18 @@ button {
   box-shadow: 0 8px 12px -2px rgb(251, 208, 246), 0 4px 8px -2px rgba(0, 0, 0, 0.06);
 }
 
-.artist-image {
+.artist-image-container {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: 280px; /* Set a fixed height for the container */
+  overflow: hidden; /* Hide any overflowing content */
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+}
+
+.artist-image {
+  width: 100%; /* Occupy the entire width of the container */
+  height: 100%; /* Occupy the entire height of the container */
+  object-fit: cover; /* Cover the container while maintaining aspect ratio */
 }
 
 .artist-details {
@@ -704,7 +711,7 @@ button {
   background-color: #af0cc2;
 }
 /* EditProfile.css */
-.container-body-signup {
+.container-body-signupp {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -722,7 +729,7 @@ button {
   border-radius: 15px;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
 }
-.container-body-signup {
+.container-body-signupp {
   display: flex;
   justify-content: center;
   align-items: center;
