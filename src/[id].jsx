@@ -4,7 +4,7 @@ import { getAllNFTs, getNFTsByAddress } from './Blockchain.Services';
 import { useGlobalState, setGlobalState } from './store';
 import { getArtistByWalletId } from './utils/artist';
 import { useTheme } from './components/themeContext'; // Import the useTheme hook
-// import instagram from './assets/instagram.png'
+import instagram from './assets/instagram.jpeg'
 import mail from './assets/mail.png';
 
 const Style = {
@@ -65,7 +65,7 @@ const Portfolio = () => {
           <h1 className={`${Style.portfolioTitle} ${darkMode ? 'text-white' : 'text-black'}`}>Portfolio</h1>
         </div>
       </div>
-      <div className={`gradient-bg-hero ${darkMode ? '' : 'bg-white'}`}>
+      <div className={` ${darkMode ? 'bg-white' : 'gradient-bg-hero'}`}>
       </div>
       <div className={Style.bannerImageContainer}>
         <img
