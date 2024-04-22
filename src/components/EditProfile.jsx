@@ -45,13 +45,13 @@ const EditProfile = () => {
   const handleWebsiteChange = (e) => {
     setWebsite(e.target.value);
   };
-  // const handleProfilePicChange = (e) => {
-  //   setProfilePicFile(e.target.files[0]);
-  // };
+  const handleProfilePicChange = (e) => {
+    setProfilePicFile(e.target.files[0]);
+  };
 
-  // const handleBannerPicChange = (e) => {
-  //   setBannerPicFile(e.target.files[0]);
-  // };
+  const handleBannerPicChange = (e) => {
+    setBannerPicFile(e.target.files[0]);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
