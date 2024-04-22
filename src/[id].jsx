@@ -5,12 +5,11 @@ import { useGlobalState, setGlobalState } from './store';
 import { getArtistByWalletId } from './utils/artist';
 import { useTheme } from './components/themeContext'; // Import the useTheme hook
 import mail from './assets/mail.png'
-// import instagram from './assets/instagram.png'
-import mail from './assets/mail.png';
+import instagram from './assets/instagram.png'
 
 const Style = {
   bannerImageContainer: 'h-[35vh] w-screen overflow-hidden flex justify-center items-center',
-  portfolioTitle: 'text-4xl font-bold italic text-center mt-2 mb-2 font-dancing-script', // Updated with the font-dancing-script class
+  portfolioTitle: 'text-4xl font-bold italic text-center mt-2 mb-2 font-dancing-script text-white', // Updated with the font-dancing-script class
   bannerImage: 'w-full object-cover',
   infoContainer: 'w-screen px-4',
   midRow: 'w-full flex justify-center',
@@ -22,19 +21,19 @@ const Style = {
   socialIcon: 'my-2',
   divider: 'border-r-2',
   title: 'text-5xl font-bold mb-4',
-  createdBy: 'text-lg mb-4',
+  createdBy: 'text-lg mb-4 text-white',
   statsContainer: 'w-[44vw] flex justify-between py-4 border border-[#151b22] rounded-xl mb-4',
-  collectionStat: 'w-1/4',
-  statValue: 'text-3xl font-bold w-full flex items-center justify-center',
+  collectionStat: 'w-1/4 text-white',
+  statValue: 'text-2xl font-bold w-full flex items-center justify-center text-white',
   ethLogo: 'h-6 mr-2',
-  statName: 'text-lg w-full text-center mt-1',
-  description: 'text-[#8a939b] text-xl w-max-1/4 flex-wrap mt-4',
+  statName: 'text-lg w-full text-center mt-1 text-white',
+  description: 'text-[#8a939b] text-xl w-max-1/4 flex-wrap mt-4 text-white',
 };
 
 const Portfolio = () => {
   const { id } = useParams();
   const addr = { id };
-  const { darkMode } = useTheme(); // Get darkMode state from the theme context
+  // Get darkMode state from the theme context
   useEffect(async () => {
     await getNFTsByAddress(addr);
     const fetchArtists = async () => {
@@ -53,8 +52,8 @@ const Portfolio = () => {
   const [nfts] = useGlobalState('nftsByAddress');
 
   return (
-    <div className={`overflow-hidden ${darkMode ? '' : 'bg-white'}`}>
-      <div className={`gradient-bg-hero ${darkMode ? '' : 'bg-white'}`}>
+    <div className={`overflow-hidden`}>
+      <div className={`gradient-bg-hero`}>
         <div className="w-4/5 mx-auto py-4 flex justify-center items-center">
           <a href="/home">
             <img
@@ -63,15 +62,17 @@ const Portfolio = () => {
               alt="ArtEon Logo"
             />
           </a>
-          <h1 className={`${Style.portfolioTitle} ${darkMode ? 'text-white' : 'text-black'}`}>Portfolio</h1>
+          <h1 className={`${Style.portfolioTitle}`}>Portfolio</h1>
         </div>
       </div>
+
       <div className={` ${darkMode ? 'bg-white' : 'gradient-bg-hero'}`}>
+
       </div>
       <div className={Style.bannerImageContainer}>
         <img
           className={Style.bannerImage}
-          src={collection?.bannerPicture ? collection.bannerPicture : '/images/ruchita.png'}
+          src={collection?.bannerPicture ? collection.bannerPicture : 'https://via.placeholder.com/150'}
           alt="banner"
         />
       </div>
@@ -79,7 +80,7 @@ const Portfolio = () => {
         <div className={Style.midRow}>
           <img
             className={Style.profileImg}
-            src={collection?.profilePicture ? collection.profilePicture : '/images/sakshi.png'}
+            src={collection?.profilePicture ? collection.profilePicture : 'https://via.placeholder.com/150'}
             alt="profile image"
           />
         </div>
@@ -90,7 +91,7 @@ const Portfolio = () => {
           </div>
         </div>
         <div className={Style.midRow}>
-          <div className={`${Style.title} ${darkMode ? 'text-white' : 'text-black'}`}>{collection?.title}</div>
+          <div className={`${Style.title}`}>{collection?.title}</div>
         </div>
         <div className={Style.midRow}>
           <div className={Style.createdBy}>
@@ -126,12 +127,12 @@ const Portfolio = () => {
               </div>
               <div className={Style.statName}>Instagram</div> 
             </div>
-            <div className={Style.collectionStat}>
+            {/* <div className={Style.collectionStat}>
               <div className={Style.statValue}>
                 {collection?.volumeTraded}.5K
               </div>
               <div className={Style.statName}>volume traded</div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className={Style.midRow}>

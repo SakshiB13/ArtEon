@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useGlobalState } from '../store'; // Add import for useGlobalState
+import { useGlobalState,setGlobalState } from '../store'; // Add import for useGlobalState
 import { FiHeart } from 'react-icons/fi';
 import { AiFillHeart } from 'react-icons/ai';
 import { useTheme } from './themeContext';
