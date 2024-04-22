@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { updateArtistProfile } from '../utils/artist';
-import { useGlobalState, setGlobalState, truncate } from '../store';
-import { auth } from '../utils/firebase';
 import Footer from './Footer';
 import Header from './Header';
 import { useTheme } from './themeContext'; // Import the useTheme hook
 
 const EditProfile = () => {
-  const [userInfo] = useAuthState(auth);
+  const [profilePic, setProfilePic] = useState('');
+  const [bannerPic, setBannerPic] = useState('');
   const [name, setName] = useState('');
   const [quote, setQuote] = useState('');
   const [email, setEmail] = useState('');
   const [insta, setInsta] = useState('');
   const [website, setWebsite] = useState('');
   const { darkMode } = useTheme(); // Get darkMode state from the theme context
+
+
+
+
+  const handleProfilePicChange = (e) => {
+    setProfilePic(e.target.value);
+  };
+
+  const handleBannerPicChange = (e) => {
+    setBannerPic(e.target.value);
+  };
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [bannerPicFile, setBannerPicFile] = useState(null);
 
@@ -45,17 +53,10 @@ const EditProfile = () => {
     setBannerPicFile(e.target.files[0]);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    try {
-      await updateArtistProfile(userInfo.id, name, quote, email, insta, website, profilePicFile, bannerPicFile);
-      console.log('Artist profile updated successfully!');
-      // Optionally, add a success message or redirect to another page upon successful update
-    } catch (error) {
-      console.error('Error updating artist profile:', error);
-      // Handle error (e.g., display error message to user)
-    }
+    // Handle form submission here (e.g., save to Firebase database)
+    console.log('Form submitted:', { profilePic, bannerPic, name, quote, email, insta, website });
   };
 
   return (
@@ -69,11 +70,11 @@ const EditProfile = () => {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Profile Picture:</label>
-            <input type="file"  onChange={handleProfilePicChange} />
+            <input type="file" value={profilePic} onChange={handleProfilePicChange} />
           </div>
           <div className="form-group">
             <label>Banner Picture:</label>
-            <input type="file"  onChange={handleBannerPicChange} />
+            <input type="file" value={bannerPic} onChange={handleBannerPicChange} />
           </div>
           <div className="form-group">
             <label>Name:</label>

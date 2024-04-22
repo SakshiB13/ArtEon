@@ -530,7 +530,7 @@ a.button.btn.github-btn {
   max-width: 600px;
   margin: 20px auto;
   padding: 30px;
-  background-color:#151c25;
+  background-color:hsl(214, 48%, 42%);
   border-radius: 15px;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
 }
