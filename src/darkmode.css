@@ -575,9 +575,9 @@ label {
   color:white;
 }
 
-input[type="file"],
-input[type="text"],
-input[type="emaill"] {
+.container-body-signupp input[type="file"],
+.container-body-signupp input[type="text"],
+.container-body-signupp input[type="emaill"] {
   width: 100%;
   padding: 10px;
   border: none;

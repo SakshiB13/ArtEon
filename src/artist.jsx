@@ -36,7 +36,7 @@ const ArtistPage = () => {
             <div className="artist-details">
               <h2 className="artist-name">{artist.name}</h2>
               <p className="artist-quote">{artist.quote}</p>
-              <button className="view-profile-btn">View Profile</button>
+              <a href={`/${artist.walletId}`}><button className="view-profile-btn">View Profile</button></a>
             </div>
           </div>
           ))}

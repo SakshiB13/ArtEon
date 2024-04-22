@@ -115,7 +115,7 @@ const Header = () => {
             <ul>
               <li><a href='/editprofile'>Edit Profile</a></li>
               <li><a href={`/${connectedAccount}`}>Visit Profile</a></li>
-              <li className="" onClick={toggleDarkMode}>{darkMode ? "Light Mode" : "Dark Mode"}</li>
+              <li className="" onClick={toggleDarkMode}>{darkMode ? "Dark Mode" : "Light Mode"}</li>
               <li>Logout</li>
             </ul>
           </div>
