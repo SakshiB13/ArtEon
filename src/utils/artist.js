@@ -124,7 +124,6 @@ export async function getArtistByWalletId(walletId) {
 
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
-      // Assuming there should be only one document matching the 'walletId'
       const artistDoc = querySnapshot.docs[0];
       const artistData = artistDoc.data();
       return artistData;
