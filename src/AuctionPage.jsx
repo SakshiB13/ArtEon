@@ -120,4 +120,5 @@ const handleRegister = (auctionId) => {
   );
 };
 
+
 export default AuctionPage;

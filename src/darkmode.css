@@ -893,6 +893,7 @@ label {
 .register-btn:hover {
   background-color: #af0cc2;
 }
+
 .start-bidding-btn {
   background-color: #631661;
   color: #ffffff;
@@ -907,6 +908,7 @@ label {
   background-color: #cccccc;
   cursor: not-allowed;
 }
+
 
 
 @tailwind base;
