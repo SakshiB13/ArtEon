@@ -3,9 +3,10 @@ import { useParams } from 'react-router-dom';
 import { getAllNFTs, getNFTsByAddress } from './Blockchain.Services';
 import { useGlobalState, setGlobalState } from './store';
 import { getArtistByWalletId } from './utils/artist';
+import { getCollectorByWalletId } from './utils/collector';
 import { useTheme } from './components/themeContext'; // Import the useTheme hook
 import mail from './assets/mail.png'
-import instagram from './assets/instagram.png'
+import instagram from './assets/instagram.jpeg'
 
 const Style = {
   bannerImageContainer: 'h-[35vh] w-screen overflow-hidden flex justify-center items-center',
@@ -33,13 +34,19 @@ const Style = {
 const Portfolio = () => {
   const { id } = useParams();
   const addr = { id };
+  const [usertype] = useGlobalState('usertype');
   // Get darkMode state from the theme context
   useEffect(async () => {
     await getNFTsByAddress(addr);
     const fetchArtists = async () => {
       try {
+        if (usertype === 'artist') {
         const fetchedArtists = await getArtistByWalletId(addr.id);
         setCollection(fetchedArtists);
+        } else if(usertype === 'collector') {
+          const fetchedCollectors = await getCollectorByWalletId(addr.id);
+          setCollection(fetchedCollectors);
+        }
       } catch (error) {
         console.error('Error fetching artists:', error);
       }

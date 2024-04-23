@@ -77,18 +77,14 @@ contract ArtEon is ERC721Enumerable, Ownable {
     require(auctions[tokenId].active == false);
     require(startTime >= block.timestamp) ;
     require(endTime > startTime);
-
+    uint256 auctionId = nextAuctionId;
     auctions[nextAuctionId] = Auction(nextAuctionId, tokenId, msg.sender, startPrice, 0, address(0), startTime, endTime, true);
-
     emit AuctionCreated(nextAuctionId, tokenId, msg.sender, startPrice, startTime, endTime);
 
-    nextAuctionId++;
-    Auction[] memory updatedAuctions = new Auction[](nextAuctionId - 1);
-    for (uint256 i = 1; i < nextAuctionId; i++) {
-        updatedAuctions[i - 1] = auctions[i];
-    }
-
-    return updatedAuctions;
+    nextAuctionId++; 
+    Auction[] memory result = new Auction[](1);
+    result[0] = auctions[auctionId];
+    return result;
     }
 
     // Function to place a bid on an auction

@@ -1,28 +1,20 @@
 import React, { useState } from 'react';
 import Footer from './Footer';
 import Header from './Header';
-import { useTheme } from './themeContext'; // Import the useTheme hook
+import { useTheme } from './themeContext'; 
+import { useGlobalState, setGlobalState, truncate } from '../store';
+import {updateArtistProfile} from '../utils/artist'
+import {updateCollectorProfile} from '../utils/collector'
 
 const EditProfile = () => {
-  const [profilePic, setProfilePic] = useState('');
-  const [bannerPic, setBannerPic] = useState('');
+  const [userId] = useAuthState(auth);
+  const [usertype] = useGlobalState('usertype');
   const [name, setName] = useState('');
   const [quote, setQuote] = useState('');
   const [email, setEmail] = useState('');
   const [insta, setInsta] = useState('');
   const [website, setWebsite] = useState('');
   const { darkMode } = useTheme(); // Get darkMode state from the theme context
-
-
-
-
-  const handleProfilePicChange = (e) => {
-    setProfilePic(e.target.value);
-  };
-
-  const handleBannerPicChange = (e) => {
-    setBannerPic(e.target.value);
-  };
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [bannerPicFile, setBannerPicFile] = useState(null);
 
@@ -53,10 +45,22 @@ const EditProfile = () => {
     setBannerPicFile(e.target.files[0]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here (e.g., save to Firebase database)
-    console.log('Form submitted:', { profilePic, bannerPic, name, quote, email, insta, website });
+
+    try {
+      if (usertype === 'artist') {
+        await updateArtistProfile(userId.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
+        console.log('Artist profile updated successfully!');
+      } else if (usertype === 'collector') {
+        await updateCollectorProfile(userId.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
+        console.log('Collector profile updated successfully!');
+      }
+    // Optionally, add a success message or redirect to another page upon successful update
+    } catch (error) {
+      console.error('Error updating artist profile:', error);
+      // Handle error (e.g., display error message to user)
+    }
   };
 
   return (

@@ -8,7 +8,7 @@ window.web3 = new Web3(window.web3.currentProvider)
 
 const getEtheriumContract = async () => {
   const web3 = window.web3;
-  const contractAddress = '0xf5b7d3f6b77978e8b6cd2972004b79ed2090d9e6'; 
+  const contractAddress = '0x05907d1b7ecc9715c7f4aedc5452fc7e9aff04fa'; 
   const contract = new web3.eth.Contract(abi.output.abi, contractAddress);
   return contract;
 }
@@ -181,11 +181,11 @@ const createAuction = async ({ tokenId, price, startDate, endDate }) => {
     const contract = await getEtheriumContract();
     const account = getGlobalState('connectedAccount');
 
-    await contract.methods
+    const updatedAuction = await contract.methods
       .createAuction(tokenId, price, startDate, endDate)
       .send({ from: account });
-
-    return true;
+    console.log("Created Auction: ",updatedAuction);
+    return  updatedAuction;
   } catch (error) {
     reportError(error);
   }
