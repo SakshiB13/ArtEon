@@ -14,6 +14,7 @@ import Feature from './feature';
 import EditProfile from './components/EditProfile';
 
 import { ThemeProvider } from './components/themeContext';
+import AuctionPage from './AuctionPage';
 
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
                       <Route path='/collectorpage' element={<CollectorPage/>}/>
                       <Route path='/feature' element={<Feature/>}/>
                       <Route path="/editprofile" element={<EditProfile />}></Route>
+                      <Route path="/auction" element={<AuctionPage />}></Route>
                   </Routes>
                   </ThemeProvider>
     </div>
