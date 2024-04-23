@@ -65,7 +65,9 @@ const Portfolio = () => {
           <h1 className={`${Style.portfolioTitle}`}>Portfolio</h1>
         </div>
       </div>
-      <div className={`gradient-bg-hero`}>
+
+      <div className={` ${darkMode ? 'bg-white' : 'gradient-bg-hero'}`}>
+
       </div>
       <div className={Style.bannerImageContainer}>
         <img
