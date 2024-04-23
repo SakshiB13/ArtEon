@@ -46,7 +46,7 @@ const Header = () => {
           await updateArtistWalletId(userInfo.uid, connectedAccount);
           let artistname = await getArtistNameByUID(userInfo.uid);
           setGlobalState('userName', artistname);
-        } else if (userType === 'collector') {
+        } else if(userType === 'collector') {
           await updateCollectorWalletId(userInfo.uid, connectedAccount);
           let collectorname = await getCollectorNameByUID(userInfo.uid);
           setGlobalState('userName', collectorname);
