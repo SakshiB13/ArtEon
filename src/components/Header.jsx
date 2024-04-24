@@ -46,7 +46,7 @@ const Header = () => {
           await updateArtistWalletId(userInfo.uid, connectedAccount);
           let artistname = await getArtistNameByUID(userInfo.uid);
           setGlobalState('userName', artistname);
-        } else if (userType === 'collector') {
+        } else if(userType === 'collector') {
           await updateCollectorWalletId(userInfo.uid, connectedAccount);
           let collectorname = await getCollectorNameByUID(userInfo.uid);
           setGlobalState('userName', collectorname);
@@ -83,7 +83,7 @@ const Header = () => {
           <a href='/market'><li className="mx-4 cursor-pointer">Market</li></a>
           <a href='/artistpage'><li className="mx-4 cursor-pointer">Artist</li></a>
           <a href='/collectorpage'><li className="mx-4 cursor-pointer">Collector</li></a>
-          <li className="mx-4 cursor-pointer">Auction</li>
+          <a href='/auction'><li className="mx-4 cursor-pointer">Auction</li></a>
         </ul>
 
         {connectedAccount ? (
