@@ -77,19 +77,8 @@ const Portfolio = () => {
           <h1 className={`${Style.portfolioTitle}`}>Portfolio</h1>
         </div>
       </div>
-
-      <div className={'gradient-bg-hero'}>
-
-      </div>
-      <div className={Style.bannerImageContainer}>
-        <img
-          className={Style.bannerImage}
-          src={collection?.bannerPicture ? collection.bannerPicture : 'https://via.placeholder.com/150'}
-          alt="banner"
-        />
-      </div>
-      <div className={Style.infoContainer}>
-        <div className={Style.midRow}>
+      <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
+        <div className={Style.bannerImageContainer}>
           <img
             className={Style.profileImg}
             src={collection?.profilePicture ? collection.profilePicture : 'https://via.placeholder.com/150'}
