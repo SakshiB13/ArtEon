@@ -90,8 +90,11 @@ const CreateNFT = () => {
                 active: auctiondata.active || true,
                 currentBid: auctiondata.currentBid || 'N/A',
                 currentBidder: auctiondata.currentBidder || '0',
-                metadataURI: metadataURI };
+                metadataURI: metadataURI,
+                name: title
+              };
               console.log("Data", data);
+              setLoadingMsg('Creating Auction...');
               const dbauction = await createAuctions(data);
               if (auctionResult && dbauction) {
                 resetForm();
