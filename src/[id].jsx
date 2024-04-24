@@ -7,8 +7,6 @@ import { getCollectorByWalletId } from './utils/collector';
 import { useTheme } from './components/themeContext'; // Import the useTheme hook
 import mail from './assets/mail.png';
 import instagram from './assets/instagram.jpeg';
-import mail from './assets/mail.png'
-import instagram from './assets/instagram.jpeg'
 
 const Style = {
   bannerImageContainer: 'h-[35vh] w-screen overflow-hidden flex justify-center items-center',
@@ -37,21 +35,16 @@ const Portfolio = () => {
   const { id } = useParams();
   const addr = { id };
   const { darkMode } = useTheme(); // Get darkMode state from the theme context
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await getNFTsByAddress(addr);
   const [usertype] = useGlobalState('usertype');
-  // Get darkMode state from the theme context
+
   useEffect(async () => {
     await getNFTsByAddress(addr);
-    const fetchArtists = async () => {
+    const fetchData = async () => {
       try {
         if (usertype === 'artist') {
-        const fetchedArtists = await getArtistByWalletId(addr.id);
-        setCollection(fetchedArtists);
-        } else if(usertype === 'collector') {
+          const fetchedArtists = await getArtistByWalletId(addr.id);
+          setCollection(fetchedArtists);
+        } else if (usertype === 'collector') {
           const fetchedCollectors = await getCollectorByWalletId(addr.id);
           setCollection(fetchedCollectors);
         }
@@ -147,8 +140,8 @@ const Portfolio = () => {
         </div>
         <div className="w-4/5 py-10 mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-4 lg:gap-3 py-2.5">
-          {nfts.map((nft, i) => (
-            <Card key={i} nft={nft} darkMode={darkMode} />
+            {nfts.map((nft, i) => (
+              <Card key={i} nft={nft} darkMode={darkMode} />
             ))}
           </div>
         </div>
@@ -157,7 +150,7 @@ const Portfolio = () => {
   );
 };
 
-const Card = ({ nft,  darkMode  }) => {
+const Card = ({ nft, darkMode }) => {
   const setNFT = () => {
     setGlobalState('nft', nft)
     setGlobalState('showModal', 'scale-100')
