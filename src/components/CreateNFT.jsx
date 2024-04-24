@@ -3,6 +3,8 @@ import { useGlobalState, setGlobalState, setLoadingMsg, setAlert } from '../stor
 import { FaTimes } from 'react-icons/fa';
 import { mintNFT,createAuction} from '../Blockchain.Services';
 import { uploadFileToIPFS } from '../utils/hashing.js';
+import { createAuctions } from '../utils/auction';
+
 
 const CreateNFT = () => {
   const [modal] = useGlobalState('modal');
@@ -76,14 +78,30 @@ const CreateNFT = () => {
           const tokenId = await mintNFT({title,description,metadataURI,price});
           if (isAuction && tokenId) {
             const auctionResult = await createAuction({ tokenId, price: startPriceWei, startDate: startTimeUnix, endDate: endTimeUnix });
-            if (auctionResult) {
-              resetForm();
-              setAlert('Auction created successfully', 'green');
-              window.location.reload();
-              console.log('auction')
-            } else {
-              setAlert('Failed to create auction', 'red');
-            }
+            if(auctionResult){
+              const auctiondata = auctionResult.events.AuctionCreated.returnValues;
+              const data =  {
+                auctionId: auctiondata.auctionId,
+                tokenId: auctiondata.tokenId,
+                startPrice: auctiondata.startPrice,
+                startTime: auctiondata.startTime,
+                endTime: auctiondata.endTime,
+                seller: auctiondata.seller,
+                active: auctiondata.active || true,
+                currentBid: auctiondata.currentBid || 'N/A',
+                currentBidder: auctiondata.currentBidder || '0',
+                metadataURI: metadataURI };
+              console.log("Data", data);
+              const dbauction = await createAuctions(data);
+              if (auctionResult && dbauction) {
+                resetForm();
+                setAlert('Auction created successfully', 'green');
+                window.location.reload();
+                console.log('auction')
+              } else {
+                setAlert('Failed to create auction', 'red');
+              }
+          }
           } else{
           resetForm();
           setAlert('Minting completed...', 'green');

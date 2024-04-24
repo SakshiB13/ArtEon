@@ -111,7 +111,7 @@ export async function getCollectorNameByUID(userId) {
   }
 }
 
-export async function updateCollectorProfile(userId, name, email, profilePicFile, bannerPicFile) {
+export async function updateCollectorProfile(userId, name, quote, email, insta, website, profilePicFile, bannerPicFile) {
   const userRef = doc(db, 'collector', userId);
 
   try {
@@ -134,7 +134,10 @@ export async function updateCollectorProfile(userId, name, email, profilePicFile
     // Update collector document in Firestore with new data including image URLs
     await updateDoc(userRef, {
       name: name,
+      quote: quote,
       email: email,
+      insta: insta,
+      website: website,
       profilePicture: profilePicUrl,
       bannerPicture: bannerPicUrl,
     });

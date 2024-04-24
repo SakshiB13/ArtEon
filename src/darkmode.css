@@ -930,6 +930,7 @@ label {
   z-index: 999; /* Ensure the popup is on top of other content */
 }
 
+<<<<<<< HEAD
 .chatbox {
   max-width: 400px; /* Limit the width of the popup */
 }
@@ -1005,6 +1006,8 @@ label {
   background-color: #af0cc2;
 }
 
+=======
+>>>>>>> 132cc75792f26c3cc00d3ef07d8dc9c24dfb6f81
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

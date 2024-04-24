@@ -156,4 +156,5 @@ const AuctionPage = () => {
   );
 };
 
+
 export default AuctionPage;
