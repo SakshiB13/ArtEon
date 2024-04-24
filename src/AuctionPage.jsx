@@ -2,19 +2,23 @@ import React, { useEffect, useState } from 'react';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import { useTheme } from './components/themeContext'; // Import the useTheme hook
-import { getAllAuctions } from './utils/auction'
+import { getAllAuctions, registerUserForAuction } from './utils/auction'
+import { useGlobalState, setGlobalState, setLoadingMsg, setAlert } from './store';
+import { auth } from './utils/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const AuctionPage = () => {
+  const [userInfo] = useAuthState(auth);
+  const [userName] = useGlobalState('userName');
   const [auctions, setAuctions] = useState([]);
   const currentTime = new Date().getTime();
   useEffect(() => {
-    setCurrentUser("User123");
-
     // Fetch auctions when component mounts
     const fetchAuctions = async () => {
       try {
         const fetchedAuctions = await getAllAuctions();
         setAuctions(fetchedAuctions);
+        console.log(fetchedAuctions);
       } catch (error) {
         console.error('Error fetching auctions:', error);
       }
@@ -22,13 +26,25 @@ const AuctionPage = () => {
 
   fetchAuctions();
 }, []);
-  const [currentUser, setCurrentUser] = useState(""); // State to store current user
   const { darkMode } = useTheme(); // Get darkMode state from the theme context
 
 // Function to handle user registration for auction
-  const handleRegister = (auctionId) => {
-    // Find the auction by ID
-    
+  const handleRegister = async (auctionId) => {
+    console.log(auctionId);
+    const userId = userInfo.uid;
+    try {
+    if (!userId || !auctionId) return;
+    const registeruser = await registerUserForAuction(auctionId, userId, userName);
+    console.log(userName);
+    console.log(registeruser);
+    if(registeruser){
+      setAlert('You have successfully registered for Auction', 'green');
+    }
+  }catch (error) {
+    console.error('An error occurred while trying to register you for this auction.', error);
+    setAlert('An error occurred while trying to register you for this auction.', 'red');
+    // Handle error (e.g., display error message to user)
+  }
   };
 
   // Function to calculate time left for the auction
@@ -124,7 +140,7 @@ const AuctionPage = () => {
                 {/* {auction.registeredUsers.includes(currentUser) ? (
                   <button className="start-bidding-btn" disabled={!auction.countdownFinished}>Start Bidding</button>
                 ) : ( */}
-                  <button className="register-btn" onClick={() => handleRegister(auction.id)}>Register</button>
+                <button className="register-btn" onClick={()=>handleRegister(auction.id)}>Register</button>
                 
               </div>
             </div>

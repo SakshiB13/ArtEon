@@ -1,5 +1,5 @@
 import { User } from 'firebase/auth';
-import { collection, addDoc, getDocs} from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc} from 'firebase/firestore';
 import { db } from './firebase';
 
 export async function createAuctions(auctionData) {
@@ -34,59 +34,63 @@ export async function createAuctions(auctionData) {
 }    
 
 export async function getAllAuctions() {
-    try {
-      // Reference the 'auctions' collection
+  try {
       const collectionRef = collection(db, 'auctions');
-  
-      // Get all documents (auctions) from the 'auctions' collection
       const querySnapshot = await getDocs(collectionRef);
-  
-      // Array to store fetched auctions
-      const auctions = [];
-  
-      // Loop through each document snapshot and extract auction data
-      querySnapshot.forEach((doc) => {
-        // Get auction data from the document
-        const auctionData = doc.data();
-        // Add auction data to the auctions array
-        auctions.push({
-          id: doc.id,
-          tokenId: auctionData.tokenId,
-          startPrice: auctionData.startPrice,
-          startTime:auctionData.startTime ,
-          endTime: auctionData.endTime ,     
-          seller: auctionData.seller,
-          active: auctionData.active,
-          currentBid: auctionData.currentBid || null,
-          currentBidder: auctionData.currentBidder || null,
-          metadataURI: auctionData.metadataURI
-        });
-      });
-  
-      // Return the array of auctions
-      return auctions;
-    } catch (error) {
-      console.error('Error fetching auctions:', error);
-      throw error; // Propagate the error back to the caller
-    }
-  }
 
-  export async function registerUserForAuction(auctionId, userId) {
+      const auctions = [];
+
+      for (const doc of querySnapshot.docs) {
+          const auctionData = doc.data();
+          const registeredUsersRef = collection(doc.ref, 'registeredusers');
+          const registeredUsersSnapshot = await getDocs(registeredUsersRef);
+
+          const registeredUsers = [];
+
+          registeredUsersSnapshot.forEach((userDoc) => {
+              const userData = userDoc.data();
+              registeredUsers.push({
+                  userId: userData.userId,
+                  username: userData.username,
+                  registrationDate: userData.registrationDate,
+              });
+          });
+
+          auctions.push({
+              id: doc.id,
+              tokenId: auctionData.tokenId,
+              name: auctionData.name,
+              startPrice: auctionData.startPrice,
+              startTime: auctionData.startTime,
+              endTime: auctionData.endTime,
+              seller: auctionData.seller,
+              active: auctionData.active,
+              currentBid: auctionData.currentBid || null,
+              currentBidder: auctionData.currentBidder || null,
+              metadataURI: auctionData.metadataURI,
+              registeredUsers: registeredUsers,
+          });
+      }
+
+      return auctions;
+  } catch (error) {
+      console.error('Error fetching auctions:', error);
+      throw error;
+  }
+}
+  export async function registerUserForAuction(auctionId, userId, username) {
     try {
       // Get the auction document reference
       const auctionDocRef = doc(db, 'auctions', auctionId);
-  
-      // Create a reference to the 'registeredusers' subcollection under the auction document
-      const registeredUsersRef = collection(auctionDocRef, 'registeredusers');
-  
-      // Add a new document in the 'registeredusers' subcollection with the user ID
-      const registerDocRef = await addDoc(registeredUsersRef, {
+        const registeredUsersRef = collection(auctionDocRef, 'registeredusers');
+        const registerDocRef = await addDoc(registeredUsersRef, {
         userId: userId,
+        username: username,
         registrationDate: new Date(), // Optionally include registration date/time
       });
   
-      console.log(`User registered successfully for auction ${auctionId}`);
-      return registerDocRef.id; // Return the ID of the registered document
+      console.log("User registered successfully for auction");
+      return true; // Return the ID of the registered document
     } catch (error) {
       console.error('Error registering user for auction:', error);
       throw error; // Propagate the error back to the caller

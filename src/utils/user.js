@@ -12,6 +12,25 @@ export const getUserCollection = async (userId) => {
       )
     );
     if (!querySnapshot.empty) {
+      console.log(collectionName)
+      return collectionName;
+    }
+  }
+  return null;
+};
+
+export const getUserCollectionbywalletId = async (walletId) => {
+  const collections = ['artist', 'collector'];
+  for (const collectionName of collections) {
+    const querySnapshot = await getDocs(
+      query(
+        collection(db, collectionName),
+        where('walletId', '==', walletId),
+        limit(1)
+      )
+    );
+    if (!querySnapshot.empty) {
+      console.log(collectionName)
       return collectionName;
     }
   }

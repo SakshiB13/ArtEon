@@ -1,4 +1,3 @@
-// Header.js
 import React, { useRef, useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { connectWallet } from '../Blockchain.Services';
@@ -15,19 +14,54 @@ import { useTheme } from './themeContext';
 const Header = () => {
   const [userInfo] = useAuthState(auth);
   const [connectedAccount] = useGlobalState('connectedAccount');
+  const usertype = useGlobalState('usertype');
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
   const sidePanelRef = useRef(null);
   const { darkMode, toggleDarkMode } = useTheme();
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (sidePanelRef.current && !sidePanelRef.current.contains(event.target)) {
-        setIsSidePanelOpen(false);
+    // Function to handle wallet connection and wallet ID update
+    const handleWalletConnection = async () => {
+      try {
+        if (userInfo) {
+          const userType = await getUserCollection(userInfo.uid);
+          setGlobalState('usertype', userType);
+          console.log(userType);
+          if (userType === 'artist') {
+            await updateArtistWalletId(userInfo.uid, connectedAccount);
+            let artistname = await getArtistNameByUID(userInfo.uid);
+            setGlobalState('userName', artistname);
+            console.log(artistname);
+          } else if (userType === 'collector') {
+            await updateCollectorWalletId(userInfo.uid, connectedAccount);
+            let collectorname = await getCollectorNameByUID(userInfo.uid);
+            setGlobalState('userName', collectorname);
+          }
+        }
+        // After updating wallet ID and user type, connect the wallet
+        await connectWallet();
+      } catch (error) {
+        console.error('Wallet connection failed:', error.message);
       }
     };
 
-    document.addEventListener('click', handleClickOutside);
+    handleWalletConnection();
 
+    // Automatically connect the wallet when the Header component mounts or userInfo changes
+    if (connectedAccount) {
+      // Wallet is already connected, handle wallet ID update
+      handleWalletConnection();
+    }
+  }, [connectedAccount, userInfo]); // Trigger useEffect on connectedAccount or userInfo change
+
+  const handleClickOutside = (event) => {
+    if (sidePanelRef.current && !sidePanelRef.current.contains(event.target)) {
+      setIsSidePanelOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
@@ -37,33 +71,9 @@ const Header = () => {
     setIsSidePanelOpen(!isSidePanelOpen);
   };
 
-  const handlewalletId = async (e) => {
-    try {
-      if (userInfo) {
-        const userType = await getUserCollection(userInfo.uid);
-        setGlobalState('usertype', userType);
-        if (userType === 'artist') {
-          await updateArtistWalletId(userInfo.uid, connectedAccount);
-          let artistname = await getArtistNameByUID(userInfo.uid);
-          setGlobalState('userName', artistname);
-        } else if(userType === 'collector') {
-          await updateCollectorWalletId(userInfo.uid, connectedAccount);
-          let collectorname = await getCollectorNameByUID(userInfo.uid);
-          setGlobalState('userName', collectorname);
-        }
-      }
-    } catch (error) {
-      console.error('update failed:', error.message);
-    }
-  };
-
   const handleProfileClick = (e) => {
-    e.stopPropagation(); 
-    handleToggleSidePanel(); 
-  };
-
-  const openEditProfileModal = () => {
-    setGlobalState('EditProfilemodal', 'scale-100');
+    e.stopPropagation();
+    handleToggleSidePanel();
   };
 
   return (
@@ -90,7 +100,7 @@ const Header = () => {
           <>
             <button
               className="shadow-xl shadow-black text-white bg-[#800080] hover:bg-[#b300b3] md:text-xs p-2 rounded-full cursor-pointer"
-              onClick={handlewalletId}
+              //onClick={handlewalletId}
             >
               {truncate(connectedAccount, 4, 4, 11)}
             </button>
@@ -98,13 +108,13 @@ const Header = () => {
               className="w-8 h-8 rounded-full ml-2 cursor-pointer"
               src={Profile}
               alt="User Profile"
-              onClick={handleProfileClick} 
+              onClick={handleProfileClick}
             />
           </>
         ) : (
           <button
             className="shadow-xl shadow-black text-white  dark:bg-[#800080] hover:bg-[#b300b3] md:text-xs p-2 rounded-full cursor-pointer"
-            onClick={connectWallet}
+            //onClick={handleWalletConnection} // Connect wallet when button is clicked
           >
             Connect Wallet
           </button>
@@ -123,7 +133,6 @@ const Header = () => {
       </nav>
     </div>
   );
-  {modal === 'scale-100' && <EditProfile />}
 };
 
 export default Header;

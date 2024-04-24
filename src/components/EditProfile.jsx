@@ -3,12 +3,14 @@ import Footer from './Footer';
 import Header from './Header';
 import { useTheme } from './themeContext'; 
 import { useGlobalState, setGlobalState, truncate } from '../store';
+import { getUserCollection } from '../utils/user';
 import { updateArtistProfile } from '../utils/artist';
 import { updateCollectorProfile } from '../utils/collector';
+import { auth } from '../utils/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const EditProfile = () => {
   const [userId] = useAuthState(auth);
-  const [usertype] = useGlobalState('usertype');
   const [name, setName] = useState('');
   const [quote, setQuote] = useState('');
   const [email, setEmail] = useState('');
@@ -18,15 +20,6 @@ const EditProfile = () => {
 
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [bannerPicFile, setBannerPicFile] = useState(null);
-
-  const handleProfilePicChangeInput = (e) => {
-    setProfilePic(e.target.value);
-  };
-
-  const handleBannerPicChangeInput = (e) => {
-    setBannerPic(e.target.value);
-  };
-
   const handleProfilePicChangeFile = (e) => {
     setProfilePicFile(e.target.files[0]);
   };
@@ -57,8 +50,9 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
+      const usertype = await getUserCollection(userId.uid);
+      console.log(usertype);
       if (usertype === 'artist') {
         await updateArtistProfile(userId.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
         console.log('Artist profile updated successfully!');
@@ -84,11 +78,11 @@ const EditProfile = () => {
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Profile Picture:</label>
-              <input type="file" value={profilePic} onChange={handleProfilePicChangeFile} />
+              <input type="file" onChange={handleProfilePicChangeFile} />
             </div>
             <div className="form-group">
               <label>Banner Picture:</label>
-              <input type="file" value={bannerPic} onChange={handleBannerPicChangeFile} />
+              <input type="file" onChange={handleBannerPicChangeFile} />
             </div>
             <div className="form-group">
               <label>Name:</label>
