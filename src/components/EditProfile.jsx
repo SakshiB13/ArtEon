@@ -14,7 +14,7 @@ const EditProfile = () => {
   const [email, setEmail] = useState('');
   const [insta, setInsta] = useState('');
   const [website, setWebsite] = useState('');
-  const { darkMode } = useTheme();
+  const { darkMode } = useTheme(); // Get darkMode state from the theme context
 
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [bannerPicFile, setBannerPicFile] = useState(null);
