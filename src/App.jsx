@@ -15,6 +15,7 @@ import EditProfile from './components/EditProfile';
 
 import { ThemeProvider } from './components/themeContext';
 import AuctionPage from './AuctionPage';
+import Chatbox from './components/Chatbox';
 
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
                       <Route path='/feature' element={<Feature/>}/>
                       <Route path="/editprofile" element={<EditProfile />}></Route>
                       <Route path="/auction" element={<AuctionPage />}></Route>
+                      <Route path="/chatbox" element={<Chatbox />}></Route>
                   </Routes>
                   </ThemeProvider>
     </div>

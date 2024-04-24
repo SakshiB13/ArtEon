@@ -66,7 +66,7 @@ const Portfolio = () => {
         </div>
       </div>
 
-      <div className={` ${darkMode ? 'bg-white' : 'gradient-bg-hero'}`}>
+      <div className={'gradient-bg-hero'}>
 
       </div>
       <div className={Style.bannerImageContainer}>

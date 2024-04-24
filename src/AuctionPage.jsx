@@ -1,9 +1,8 @@
-//AuctionPage.jsx
-
 import React, { useEffect, useState } from 'react';
 import Footer from './components/Footer';
 import Header from './components/Header';
-import { useTheme } from './components/themeContext'; // Import the useTheme hook
+import Chatbox from './components/Chatbox';
+import { useTheme } from './components/themeContext';
 
 const AuctionPage = () => {
   const [auctions, setAuctions] = useState([
@@ -12,39 +11,36 @@ const AuctionPage = () => {
       name: "NFT Artwork 1",
       image: "https://via.placeholder.com/150",
       startingBid: "1 ETH",
-      endTime: new Date().getTime() + 60000, // 1 hour from now
-      registeredUsers: [], // Array to store registered users
-      countdownFinished: false // State to track countdown status
+      startTime: new Date().getTime() + 10000, // Start in 10 seconds
+      endTime: new Date().getTime() + 70000, // End in 1 minute 10 seconds
+      registeredUsers: [],
+      countdownFinished: false,
+      biddingStarted: false
     },
     {
       id: 2,
       name: "NFT Artwork 2",
       image: "https://via.placeholder.com/150",
       startingBid: "0.5 ETH",
-      endTime: new Date().getTime() + 7200000, // 2 hours from now
+      startTime: new Date().getTime() + 20000, // Start in 20 seconds
+      endTime: new Date().getTime() + 80000, // End in 1 minute 20 seconds
       registeredUsers: [],
-      countdownFinished: false
+      countdownFinished: false,
+      biddingStarted: false
     }
   ]);
-  const [currentUser, setCurrentUser] = useState(""); // State to store current user
-  const { darkMode } = useTheme(); // Get darkMode state from the theme context
+  const [currentUser, setCurrentUser] = useState("");
+  const { darkMode } = useTheme();
 
-  // Simulate user login (replace with actual authentication)
   useEffect(() => {
-    // Simulate user login (replace with actual authentication)
     setCurrentUser("User123");
   }, []);
 
-// Function to handle user registration for auction
-const handleRegister = (auctionId) => {
-    // Find the auction by ID
+  const handleRegister = (auctionId) => {
     const auctionIndex = auctions.findIndex(auction => auction.id === auctionId);
     if (auctionIndex !== -1) {
-      // Check if the auction has started (countdownFinished)
-      if (!auctions[auctionIndex].countdownFinished) {
-        // Check if the user is already registered
+      if (!auctions[auctionIndex].biddingStarted) { // Check if bidding has started
         if (!auctions[auctionIndex].registeredUsers.includes(currentUser)) {
-          // If the user is not registered, add them to the registeredUsers array
           setAuctions(prevAuctions => {
             const updatedAuctions = [...prevAuctions];
             updatedAuctions[auctionIndex].registeredUsers.push(currentUser);
@@ -54,9 +50,7 @@ const handleRegister = (auctionId) => {
       }
     }
   };
-  
 
-  // Function to calculate time left for the auction
   const calculateTimeLeft = (endTime) => {
     const difference = endTime - new Date().getTime();
     const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -70,14 +64,20 @@ const handleRegister = (auctionId) => {
     };
   };
 
-  // Update countdown every second
   useEffect(() => {
     const intervalId = setInterval(() => {
       setAuctions(prevAuctions => {
         return prevAuctions.map(auction => {
-          const timeLeft = calculateTimeLeft(auction.endTime);
-          if (timeLeft.hours <= 0 && timeLeft.minutes <= 0 && timeLeft.seconds <= 0) {
-            return { ...auction, countdownFinished: true };
+          if (auction.startTime <= new Date().getTime()) {
+            if (!auction.biddingStarted) {
+              // Auction started
+              return { ...auction, biddingStarted: true };
+            }
+            const timeLeft = calculateTimeLeft(auction.endTime);
+            if (timeLeft.hours <= 0 && timeLeft.minutes <= 0 && timeLeft.seconds <= 0) {
+              // Auction ended
+              return { ...auction, countdownFinished: true };
+            }
           }
           return auction;
         });
@@ -86,6 +86,28 @@ const handleRegister = (auctionId) => {
 
     return () => clearInterval(intervalId);
   }, []);
+
+  const handleOpenChatbox = (auctionId) => {
+    setAuctions(prevAuctions => {
+      return prevAuctions.map(prevAuction => {
+        if (prevAuction.id === auctionId) {
+          return { ...prevAuction, chatboxOpen: true };
+        }
+        return prevAuction;
+      });
+    });
+  };
+
+  const handleCloseChatbox = (auctionId) => {
+    setAuctions(prevAuctions => {
+      return prevAuctions.map(prevAuction => {
+        if (prevAuction.id === auctionId) {
+          return { ...prevAuction, chatboxOpen: false };
+        }
+        return prevAuction;
+      });
+    });
+  };
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-white' : ''}`}>
@@ -103,12 +125,26 @@ const handleRegister = (auctionId) => {
                 <h2 className="nft-name">{auction.name}</h2>
                 <p className="starting-bid">Starting Bid: {auction.startingBid}</p>
                 <p className="timestamp-countdown">
-                  Starts In: {auction.countdownFinished ? "Auction Started" : `${calculateTimeLeft(auction.endTime).hours}h ${calculateTimeLeft(auction.endTime).minutes}m ${calculateTimeLeft(auction.endTime).seconds}s`}
+                  {auction.biddingStarted ? (
+                    auction.countdownFinished ? "Auction Ended" :
+                    `Ends In: ${calculateTimeLeft(auction.endTime).hours}h ${calculateTimeLeft(auction.endTime).minutes}m ${calculateTimeLeft(auction.endTime).seconds}s`
+                  ) : (
+                    `Starts In: ${calculateTimeLeft(auction.startTime).hours}h ${calculateTimeLeft(auction.startTime).minutes}m ${calculateTimeLeft(auction.startTime).seconds}s`
+                  )}
                 </p>
                 {auction.registeredUsers.includes(currentUser) ? (
-                  <button className="start-bidding-btn" disabled={!auction.countdownFinished}>Start Bidding</button>
+                  <button className="start-bidding-btn" disabled={!auction.biddingStarted || auction.countdownFinished} onClick={() => handleOpenChatbox(auction.id)}>{auction.biddingStarted ? "Join Auction" : "Bidding Not Started"}</button>
                 ) : (
-                  <button className="register-btn" onClick={() => handleRegister(auction.id)}>Register</button>
+                  <button className="register-btn" disabled={auction.biddingStarted} onClick={() => handleRegister(auction.id)}>Register</button> // Disable register button if auction has started
+                )}
+                {auction.chatboxOpen && (
+                  <Chatbox
+                    auctionId={auction.id}
+                    currentUser={currentUser}
+                    onClose={() => handleCloseChatbox(auction.id)}
+                    auctionEndTime={auction.endTime} // Pass auction end time to the Chatbox
+                    auction={auction} // Pass the auction object to the Chatbox
+                  />
                 )}
               </div>
             </div>

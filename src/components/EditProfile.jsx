@@ -13,19 +13,6 @@ const EditProfile = () => {
   const [website, setWebsite] = useState('');
   const { darkMode } = useTheme(); // Get darkMode state from the theme context
 
-
-
-
-  const handleProfilePicChange = (e) => {
-    setProfilePic(e.target.value);
-  };
-
-  const handleBannerPicChange = (e) => {
-    setBannerPic(e.target.value);
-  };
-  const [profilePicFile, setProfilePicFile] = useState(null);
-  const [bannerPicFile, setBannerPicFile] = useState(null);
-
   const handleNameChange = (e) => {
     setName(e.target.value);
   };
