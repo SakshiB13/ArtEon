@@ -3,8 +3,8 @@ import Footer from './Footer';
 import Header from './Header';
 import { useTheme } from './themeContext'; 
 import { useGlobalState, setGlobalState, truncate } from '../store';
-import {updateArtistProfile} from '../utils/artist'
-import {updateCollectorProfile} from '../utils/collector'
+import { updateArtistProfile } from '../utils/artist';
+import { updateCollectorProfile } from '../utils/collector';
 
 const EditProfile = () => {
   const [userId] = useAuthState(auth);
@@ -14,7 +14,7 @@ const EditProfile = () => {
   const [email, setEmail] = useState('');
   const [insta, setInsta] = useState('');
   const [website, setWebsite] = useState('');
-  const { darkMode } = useTheme(); // Get darkMode state from the theme context
+  const { darkMode } = useTheme();
 
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [bannerPicFile, setBannerPicFile] = useState(null);
@@ -34,8 +34,6 @@ const EditProfile = () => {
   const handleBannerPicChangeFile = (e) => {
     setBannerPicFile(e.target.files[0]);
   };
-  const [profilePicFile, setProfilePicFile] = useState(null);
-  const [bannerPicFile, setBannerPicFile] = useState(null);
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -68,7 +66,7 @@ const EditProfile = () => {
         await updateCollectorProfile(userId.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
         console.log('Collector profile updated successfully!');
       }
-    // Optionally, add a success message or redirect to another page upon successful update
+      // Optionally, add a success message or redirect to another page upon successful update
     } catch (error) {
       console.error('Error updating artist profile:', error);
       // Handle error (e.g., display error message to user)
