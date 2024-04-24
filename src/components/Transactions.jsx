@@ -31,7 +31,7 @@ const Transactions = () => {
           {collection.map((tx) => (
             <div
               key={tx.id}
-              className="flex justify-between items-center border border-pink-500 text-gray-400 w-full shadow-xl shadow-black rounded-md overflow-hidden bg-gray-800 my-2 p-3"
+              className={`flex justify-between items-center border border-pink-500 text-gray-400 w-full shadow-xl shadow-black rounded-md overflow-hidden bg-gray-800 my-2 p-3 ${darkMode ? ' bg-[#800080]' : ''}`}
             >
               <div className="rounded-md shadow-sm shadow-pink-500 p-2">
                 <BiTransfer />

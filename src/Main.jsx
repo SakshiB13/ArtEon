@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ParticlesBg from "particles-bg";
 import $ from "jquery";
 import "./Main.css"; // Import your CSS file for styling
@@ -6,6 +6,7 @@ import "./Main.css"; // Import your CSS file for styling
 const Main = () => {
   
   const color =["#800080","#fff700","#FF5733","#3498DB"," #2ECC71","#9B59B6"];
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     // Smooth scrolling functionality
@@ -21,6 +22,10 @@ const Main = () => {
     });
   }, []);
 
+  const handleSetActiveSection = (sectionId) => {
+    setActiveSection(sectionId);
+  };
+
   return (
     <div>
       <header id="home">
@@ -33,23 +38,23 @@ const Main = () => {
             Hide navigation
           </a>
           <ul id="nav" className="nav">
-            <li className="current">
-              <a className="smoothscroll" href="#home">
+            <li className={activeSection === "home" ? "current" : ""}>
+              <a className="smoothscroll" href="#home" onClick={() => handleSetActiveSection("home")}>
                 Home
               </a>
             </li>
-            <li>
-              <a className="smoothscroll" href="#about">
+            <li className={activeSection === "about" ? "current" : ""}>
+              <a className="smoothscroll" href="#about" onClick={() => handleSetActiveSection("about")}>
                 About
               </a>
             </li>
-            <li>
-              <a className="smoothscroll" href="#contact">
+            <li className={activeSection === "contact" ? "current" : ""}>
+              <a className="smoothscroll" href="#contact" onClick={() => handleSetActiveSection("contact")}>
                 Contact
               </a>
             </li>
-            <li>
-              <a className="smoothscroll" href="#creators">
+            <li className={activeSection === "creators" ? "current" : ""}>
+              <a className="smoothscroll" href="#creators" onClick={() => handleSetActiveSection("creators")}>
                 Creators
               </a>
             </li>

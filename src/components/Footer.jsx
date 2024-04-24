@@ -5,7 +5,7 @@ const Footer = () => {
   const { darkMode } = useTheme(); // Get darkMode state from the theme context
 
   return (
-    <div className={`w-full flex md:justify-center justify-between items-center flex-col p-4 ${darkMode ? 'bg-[#F8F0E3]' : 'gradient-bg-footer'}`}>
+    <div className={`w-full flex md:justify-center justify-between items-center flex-col p-4 gradient-bg-footer ${darkMode ? 'bg-[#F8F0E3]' : ''}`}>
       <div className="w-full flex sm:flex-row flex-col justify-between items-center my-4">
         <div className="flex flex-[0.25] justify-center items-center">
           <img src={ArtEonLogo} alt="logo" className="w-32" />
