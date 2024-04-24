@@ -1,5 +1,3 @@
-//AuctionPage.jsx
-
 import React, { useEffect, useState } from 'react';
 import Footer from './components/Footer';
 import Header from './components/Header';
@@ -10,7 +8,6 @@ const AuctionPage = () => {
   const [auctions, setAuctions] = useState([]);
   const currentTime = new Date().getTime();
   useEffect(() => {
-    // Simulate user login (replace with actual authentication)
     setCurrentUser("User123");
 
     // Fetch auctions when component mounts
@@ -33,7 +30,6 @@ const AuctionPage = () => {
     // Find the auction by ID
     
   };
-  
 
   // Function to calculate time left for the auction
   const calculateTimeLeft = (startTime, endTime) => {
@@ -66,7 +62,6 @@ const AuctionPage = () => {
   };
   
 
-  // Update countdown every second
   useEffect(() => {
     const intervalId = setInterval(() => {
       setAuctions(prevAuctions => {
@@ -79,6 +74,28 @@ const AuctionPage = () => {
   
     return () => clearInterval(intervalId);
   }, []);
+
+  const handleOpenChatbox = (auctionId) => {
+    setAuctions(prevAuctions => {
+      return prevAuctions.map(prevAuction => {
+        if (prevAuction.id === auctionId) {
+          return { ...prevAuction, chatboxOpen: true };
+        }
+        return prevAuction;
+      });
+    });
+  };
+
+  const handleCloseChatbox = (auctionId) => {
+    setAuctions(prevAuctions => {
+      return prevAuctions.map(prevAuction => {
+        if (prevAuction.id === auctionId) {
+          return { ...prevAuction, chatboxOpen: false };
+        }
+        return prevAuction;
+      });
+    });
+  };
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-white' : ''}`}>
