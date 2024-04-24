@@ -19,6 +19,7 @@ const connectWallet = async () => {
     if (!ethereum) return reportError('Please install Metamask')
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
     setGlobalState('connectedAccount', accounts[0].toLowerCase())
+    
   } catch (error) {
     reportError(error)
   }
@@ -160,11 +161,11 @@ const getNFTsByAddress = async (ownerAddress) => {
     //console.log(ownerAddress)
     const contract = await getEtheriumContract();
     const nfts = await contract.methods.getAllNFTs().call();
-    console.log("All NFTs:", nfts);
-    console.log("Owner Address:", ownerAddress);
+    //console.log("All NFTs:", nfts);
+    //console.log("Owner Address:", ownerAddress);
     const nftsByAddress = nfts.filter(nft => nft.owner.toLowerCase() === ownerAddress.id);
     setGlobalState('nftsByAddress', structuredNfts(nftsByAddress));
-    console.log("NFTs filtered by address:", structuredNfts(nftsByAddress));
+    //console.log("NFTs filtered by address:", structuredNfts(nftsByAddress));
 
     //console.log(nftsByAddress);
   } catch (error) {
