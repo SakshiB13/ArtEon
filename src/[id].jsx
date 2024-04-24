@@ -6,7 +6,7 @@ import { getArtistByWalletId } from './utils/artist';
 import { getCollectorByWalletId } from './utils/collector';
 import { useTheme } from './components/themeContext'; // Import the useTheme hook
 import mail from './assets/mail.png';
-import instagram from './assets/instagram.jpeg';
+import instagram from './assets/instagram.png';
 
 const Style = {
   bannerImageContainer: 'h-[35vh] w-screen overflow-hidden flex justify-center items-center',
@@ -59,6 +59,11 @@ const Portfolio = () => {
   const [collection, setCollection] = useState({});
   const [nfts] = useGlobalState('nftsByAddress');
 
+  const setNFT = () => {
+    setGlobalState('nft', nft)
+    setGlobalState('showModal', 'scale-100')
+  }
+
   return (
     <div className={`overflow-hidden ${darkMode ? 'bg-white' : 'bg-white'}`}>
       <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
@@ -86,77 +91,66 @@ const Portfolio = () => {
       </div>
       <div className={Style.infoContainer}>
         <div className={Style.midRow}>
-      <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
-        <div className={Style.bannerImageContainer}>
           <img
-            className={Style.bannerImage}
-            src={collection?.bannerPicture ? collection.bannerPicture : 'https://via.placeholder.com/150'}
-            alt="banner"
+            className={Style.profileImg}
+            src={collection?.profilePicture ? collection.profilePicture : 'https://via.placeholder.com/150'}
+            alt="profile image"
           />
         </div>
-        <div className={Style.infoContainer}>
-          <div className={Style.midRow}>
-            <img
-              className={Style.profileImg}
-              src={collection?.profilePicture ? collection.profilePicture : 'https://via.placeholder.com/150'}
-              alt="profile image"
-            />
-          </div>
-          <div className={Style.endRow}>
-            <div className={Style.socialIconsContainer}>
-              <div className={Style.socialIconsWrapper}>
-              </div>
+        <div className={Style.endRow}>
+          <div className={Style.socialIconsContainer}>
+            <div className={Style.socialIconsWrapper}>
             </div>
-          </div>
-          <div className={Style.midRow}>
-            <div className={`${Style.title}`}>{collection?.title}</div>
-          </div>
-          <div className={Style.midRow}>
-            <div className={`${Style.createdBy} ${darkMode ? 'text-black' : ''}`}>
-              Created by <span className="text-[#2081e2]">{collection?.name}</span>
-            </div>
-          </div>
-          <div className={Style.midRow}>
-            <div className={Style.statsContainer}>
-              <div className={Style.collectionStat}>
-                <div className={`${Style.statValue} ${darkMode ? 'text-black' : 'text-white'}`}>{nfts.length}</div>
-                <div className={`${Style.statName} ${darkMode ? 'text-black' : 'text-white'}`}>items</div>
-              </div>
-              <div className={Style.collectionStat}>
-                <div className={Style.statValue}>
-                  <a href={`mailto: ${collection?.email}`}><img
-                    src={mail}
-                    alt="eth"
-                    className={Style.ethLogo}
-                  />
-                  </a>
-                </div>
-                <div className={`${Style.statName} ${darkMode ? 'text-black' : 'text-white'}`}>email</div>
-              </div>
-              <div className={Style.collectionStat}>
-                <div className={Style.statValue}>
-                  <a href={`https://www.instagram.com/${collection?.insta}`}><img
-                    src={instagram}
-                    alt="eth"
-                    className={Style.ethLogo}
-                  />
-                  </a>
-                  {collection?.floorPrice}
-                </div>
-                <div className={` ${Style.statName} ${darkMode ? 'text-black' : 'text-white'}`}>Instagram</div>
-              </div>
-            </div>
-          </div>
-          <div className={Style.midRow}>
-            <div className={Style.description}>{collection?.quote}</div>
           </div>
         </div>
-        <div className="w-4/5 py-10 mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-4 lg:gap-3 py-2.5">
-            {nfts.map((nft, i) => (
-              <Card key={i} nft={nft} darkMode={darkMode} />
-            ))}
+        <div className={Style.midRow}>
+          <div className={`${Style.title}`}>{collection?.title}</div>
+        </div>
+        <div className={Style.midRow}>
+          <div className={`${Style.createdBy} ${darkMode ? 'text-black' : ''}`}>
+            Created by <span className="text-[#2081e2]">{collection?.name}</span>
           </div>
+        </div>
+        <div className={Style.midRow}>
+          <div className={Style.statsContainer}>
+            <div className={Style.collectionStat}>
+              <div className={`${Style.statValue} ${darkMode ? 'text-black' : 'text-white'}`}>{nfts.length}</div>
+              <div className={`${Style.statName} ${darkMode ? 'text-black' : 'text-white'}`}>items</div>
+            </div>
+            <div className={Style.collectionStat}>
+              <div className={Style.statValue}>
+                <a href={`mailto: ${collection?.email}`}><img
+                  src={mail}
+                  alt="eth"
+                  className={Style.ethLogo}
+                />
+                </a>
+              </div>
+              <div className={`${Style.statName} ${darkMode ? 'text-black' : 'text-white'}`}>email</div>
+            </div>
+            <div className={Style.collectionStat}>
+              <div className={Style.statValue}>
+                <a href={`https://www.instagram.com/${collection?.insta}`}><img
+                  src={instagram}
+                  alt="eth"
+                  className={Style.ethLogo}
+                />
+                </a>
+                {collection?.floorPrice}
+              </div>
+              <div className={` ${Style.statName} ${darkMode ? 'text-black' : 'text-white'}`}>Instagram</div>
+            </div>
+          </div>
+        </div>
+        <div className={Style.midRow}>
+          <div className={Style.description}>{collection?.quote}</div>
+        </div>
+      </div>
+      <div className="w-4/5 py-10 mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-4 lg:gap-3 py-2.5">
+          {nfts.map((nft, i) => (
+            <Card key={i} nft={nft} darkMode={darkMode} />
+          ))}
         </div>
       </div>
     </div>
@@ -164,10 +158,6 @@ const Portfolio = () => {
 };
 
 const Card = ({ nft, darkMode }) => {
-  const setNFT = () => {
-    setGlobalState('nft', nft)
-    setGlobalState('showModal', 'scale-100')
-  }
 
   return (
     <div className={` w-full shadow-xl shadow-black rounded-md overflow-hidden my-2 p-3 ${darkMode ? ' bg-[#800080]' : 'bg-gray-800'}`}>
