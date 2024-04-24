@@ -3,8 +3,8 @@ import Footer from './Footer';
 import Header from './Header';
 import { useTheme } from './themeContext'; 
 import { useGlobalState, setGlobalState, truncate } from '../store';
-import {updateArtistProfile} from '../utils/artist'
-import {updateCollectorProfile} from '../utils/collector'
+import { updateArtistProfile } from '../utils/artist';
+import { updateCollectorProfile } from '../utils/collector';
 
 const EditProfile = () => {
   const [userId] = useAuthState(auth);
@@ -15,11 +15,25 @@ const EditProfile = () => {
   const [insta, setInsta] = useState('');
   const [website, setWebsite] = useState('');
   const { darkMode } = useTheme(); // Get darkMode state from the theme context
-<<<<<<< HEAD
-=======
+
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [bannerPicFile, setBannerPicFile] = useState(null);
->>>>>>> 132cc75792f26c3cc00d3ef07d8dc9c24dfb6f81
+
+  const handleProfilePicChangeInput = (e) => {
+    setProfilePic(e.target.value);
+  };
+
+  const handleBannerPicChangeInput = (e) => {
+    setBannerPic(e.target.value);
+  };
+
+  const handleProfilePicChangeFile = (e) => {
+    setProfilePicFile(e.target.files[0]);
+  };
+
+  const handleBannerPicChangeFile = (e) => {
+    setBannerPicFile(e.target.files[0]);
+  };
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -40,13 +54,6 @@ const EditProfile = () => {
   const handleWebsiteChange = (e) => {
     setWebsite(e.target.value);
   };
-  const handleProfilePicChange = (e) => {
-    setProfilePicFile(e.target.files[0]);
-  };
-
-  const handleBannerPicChange = (e) => {
-    setBannerPicFile(e.target.files[0]);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,7 +66,7 @@ const EditProfile = () => {
         await updateCollectorProfile(userId.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
         console.log('Collector profile updated successfully!');
       }
-    // Optionally, add a success message or redirect to another page upon successful update
+      // Optionally, add a success message or redirect to another page upon successful update
     } catch (error) {
       console.error('Error updating artist profile:', error);
       // Handle error (e.g., display error message to user)
@@ -71,46 +78,45 @@ const EditProfile = () => {
       <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
         <Header />
       </div>
-    <div className={`container-body-signupp ${darkMode ? 'bg-[#F8F0E3]' : ''}`}>
-      <div className="edit-profile-container">
-        <h2>Edit Profile</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Profile Picture:</label>
-            <input type="file" value={profilePic} onChange={handleProfilePicChange} />
-          </div>
-          <div className="form-group">
-            <label>Banner Picture:</label>
-            <input type="file" value={bannerPic} onChange={handleBannerPicChange} />
-          </div>
-          <div className="form-group">
-            <label>Name:</label>
-            <input type="text" value={name} onChange={handleNameChange} />
-          </div>
-          <div className="form-group">
-            <label>Quote:</label>
-            <input type="text" value={quote} onChange={handleQuoteChange} />
-          </div>
-          <div className="form-group">
-            <label>Email:</label>
-            <input type="emaill" value={email} onChange={handleEmailChange} />
-          </div>
-          <div className="form-group">
-            <label>Instagram:</label>
-            <input type="text" value={insta} onChange={handleInstaChange} />
-          </div>
-          <div className="form-group">
-            <label>Website:</label>
-            <input type="text" value={website} onChange={handleWebsiteChange} />
-          </div>
-          <div className="button-container">
-          <button type="submit">Save Changes</button>
-          </div>
-        </form>
-      </div>
+      <div className={`container-body-signupp ${darkMode ? 'bg-[#F8F0E3]' : ''}`}>
+        <div className="edit-profile-container">
+          <h2>Edit Profile</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Profile Picture:</label>
+              <input type="file" value={profilePic} onChange={handleProfilePicChangeFile} />
+            </div>
+            <div className="form-group">
+              <label>Banner Picture:</label>
+              <input type="file" value={bannerPic} onChange={handleBannerPicChangeFile} />
+            </div>
+            <div className="form-group">
+              <label>Name:</label>
+              <input type="text" value={name} onChange={handleNameChange} />
+            </div>
+            <div className="form-group">
+              <label>Quote:</label>
+              <input type="text" value={quote} onChange={handleQuoteChange} />
+            </div>
+            <div className="form-group">
+              <label>Email:</label>
+              <input type="email" value={email} onChange={handleEmailChange} />
+            </div>
+            <div className="form-group">
+              <label>Instagram:</label>
+              <input type="text" value={insta} onChange={handleInstaChange} />
+            </div>
+            <div className="form-group">
+              <label>Website:</label>
+              <input type="text" value={website} onChange={handleWebsiteChange} />
+            </div>
+            <div className="button-container">
+              <button type="submit">Save Changes</button>
+            </div>
+          </form>
+        </div>
       </div>
       <Footer />
-    
     </div>
   );
 };
