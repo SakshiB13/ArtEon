@@ -11,6 +11,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 const EditProfile = () => {
   const [userId] = useAuthState(auth);
+  const [connectedAccount] = useGlobalState('connectedAccount');
   const [name, setName] = useState('');
   const [quote, setQuote] = useState('');
   const [email, setEmail] = useState('');
@@ -56,9 +57,12 @@ const EditProfile = () => {
       if (usertype === 'artist') {
         await updateArtistProfile(userId.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
         console.log('Artist profile updated successfully!');
+        window.location.href = '/' + connectedAccount;
       } else if (usertype === 'collector') {
         await updateCollectorProfile(userId.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
         console.log('Collector profile updated successfully!');
+        window.location.href = '/' + connectedAccount;
+
       }
       // Optionally, add a success message or redirect to another page upon successful update
     } catch (error) {

@@ -78,7 +78,15 @@ const Portfolio = () => {
         </div>
       </div>
       <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
-        <div className={Style.bannerImageContainer}>
+      <div className={Style.bannerImageContainer}>
+        <img
+          className={Style.bannerImage}
+          src={collection?.bannerPicture ? collection.bannerPicture : 'https://via.placeholder.com/150'}
+          alt="banner"
+        />
+      </div>
+      <div className={Style.infoContainer}>
+        <div className={Style.midRow}>
           <img
             className={Style.profileImg}
             src={collection?.profilePicture ? collection.profilePicture : 'https://via.placeholder.com/150'}
@@ -129,6 +137,7 @@ const Portfolio = () => {
               <div className={` ${Style.statName} ${darkMode ? 'text-black' : 'text-white'}`}>Instagram</div>
             </div>
           </div>
+        </div>
         </div>
         <div className={Style.midRow}>
           <div className={Style.description}>{collection?.quote}</div>
