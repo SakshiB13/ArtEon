@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAllNFTs, getNFTsByAddress } from './Blockchain.Services';
 import { useGlobalState, setGlobalState } from './store';
+import { getUserCollectionbywalletId } from './utils/user';
 import { getArtistByWalletId } from './utils/artist';
 import { getCollectorByWalletId } from './utils/collector';
 import { useTheme } from './components/themeContext'; // Import the useTheme hook
@@ -41,6 +42,8 @@ const Portfolio = () => {
     await getNFTsByAddress(addr);
     const fetchData = async () => {
       try {
+      const usertype = await getUserCollectionbywalletId(addr.id);
+      //console.log(usertype);
         if (usertype === 'artist') {
           const fetchedArtists = await getArtistByWalletId(addr.id);
           setCollection(fetchedArtists);
@@ -59,10 +62,6 @@ const Portfolio = () => {
   const [collection, setCollection] = useState({});
   const [nfts] = useGlobalState('nftsByAddress');
 
-  const setNFT = () => {
-    setGlobalState('nft', nft)
-    setGlobalState('showModal', 'scale-100')
-  }
 
   return (
     <div className={`overflow-hidden ${darkMode ? 'bg-white' : 'bg-white'}`}>
@@ -78,11 +77,7 @@ const Portfolio = () => {
           <h1 className={`${Style.portfolioTitle}`}>Portfolio</h1>
         </div>
       </div>
-<<<<<<< HEAD
-
-      <div className={'gradient-bg-hero'}>
-
-      </div>
+      <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
       <div className={Style.bannerImageContainer}>
         <img
           className={Style.bannerImage}
@@ -92,10 +87,6 @@ const Portfolio = () => {
       </div>
       <div className={Style.infoContainer}>
         <div className={Style.midRow}>
-=======
-      <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
-        <div className={Style.bannerImageContainer}>
->>>>>>> bf7c8972b11ebe86e036f01ad9da380a5161e4b4
           <img
             className={Style.profileImg}
             src={collection?.profilePicture ? collection.profilePicture : 'https://via.placeholder.com/150'}
@@ -147,6 +138,7 @@ const Portfolio = () => {
             </div>
           </div>
         </div>
+        </div>
         <div className={Style.midRow}>
           <div className={Style.description}>{collection?.quote}</div>
         </div>
@@ -163,6 +155,12 @@ const Portfolio = () => {
 };
 
 const Card = ({ nft, darkMode }) => {
+
+  
+  const setNFT = () => {
+    setGlobalState('nft', nft)
+    setGlobalState('showModal', 'scale-100')
+  }
 
   return (
     <div className={` w-full shadow-xl shadow-black rounded-md overflow-hidden my-2 p-3 ${darkMode ? ' bg-[#800080]' : 'bg-gray-800'}`}>
