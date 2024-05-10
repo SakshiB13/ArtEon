@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 const Chatbox = ({ auctionId, currentUser, onClose, auctionEndTime, auction }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [timer, setTimer] = useState(Math.floor((auctionEndTime - new Date().getTime()) / 1000));
+  console.log(auction);
+  const [timer, setTimer] = useState(Math.floor((auction.endTime * 1000 - new Date().getTime()) / 1000));
   const [highestBid, setHighestBid] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const [showWinnerPopup, setShowWinnerPopup] = useState(false);
@@ -39,11 +40,11 @@ const Chatbox = ({ auctionId, currentUser, onClose, auctionEndTime, auction }) =
   const handleSendMessage = () => {
     if (isNumeric(newMessage.trim())) {
       const bidAmount = parseFloat(newMessage.trim());
-      if (bidAmount >= parseFloat(auction.startingBid)) { // Check if bid is higher than or equal to starting bid
+      if (bidAmount >= parseFloat(window.web3.utils.fromWei(auction.startPrice.toString(), 'ether'))) { // Check if bid is higher than or equal to starting bid
         if (bidAmount > highestBid) {
           setHighestBid(bidAmount);
           const messageData = {
-            text: `User ${currentUser} placed a bid of ${bidAmount}`,
+            text: ` ${currentUser} placed a bid of ${bidAmount}`,
             sender: currentUser,
             timestamp: Date.now()
           };
