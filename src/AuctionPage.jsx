@@ -86,7 +86,7 @@ const AuctionPage = () => {
           const timeLeft = calculateTimeLeft(auction.startTime, auction.endTime);
           //console.log(timeLeft)
           if(!auction.biddingStarted){
-            const isAuctionStarted = auction.startTime <= currentTime;
+            const isAuctionStarted = auction.startTime * 1000 <= currentTime;
             return { ...auction, timeLeft, biddingStarted: isAuctionStarted };
           }
           if (timeLeft.end.hours <= 0 && timeLeft.end.minutes <= 0 && timeLeft.end.seconds <= 0) {
