@@ -41,7 +41,12 @@ const Chatbox = ({ auctionId, currentUser, onClose, auctionEndTime, auction }) =
   };
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer(prevTimer => prevTimer - 1);
+    }, 1000);
     fetchBids();
+
+    return () => clearInterval(interval);
   }, []);
 
 
@@ -67,27 +72,31 @@ const Chatbox = ({ auctionId, currentUser, onClose, auctionEndTime, auction }) =
 
 
   const handlePlaceBid = () => {
-    if (isNumeric(Bid)) {
-      const bidAmount = parseFloat(Bid);
-      if (bidAmount >= parseFloat(window.web3.utils.fromWei(auction.startPrice.toString(), 'ether'))) {
-        const bidsCollectionRef = collection(db, `auctions/${auctionid}/bids`);
-      // Create a new document reference
-      const newBidRef = doc(bidsCollectionRef);
-
-      // Set the data for the new bid document
-      setDoc(newBidRef, {
-        userId: currentUser,
-        amount: bidAmount,
-        timestamp: new Date().getTime(),
-      });
-        setErrorMessage('');
-        fetchBids();
-      } else {
-        setErrorMessage('Your bid must be higher than or equal to the starting bid.');
-      }
-    } else {
-      setErrorMessage('Please enter a numerical value for your bid.');
+    const bidAmount = parseFloat(Bid);
+    if (isNaN(bidAmount) || bidAmount <= 0) {
+      setErrorMessage('Please enter a valid bid amount.');
+      return;
     }
+
+    if (bidAmount <= highestBid) {
+      setErrorMessage('Your bid must be higher than the current highest bid.');
+      
+    }
+
+    const bidsCollectionRef = collection(db, `auctions/${auctionid}/bids`);
+    const newBidRef = doc(bidsCollectionRef);
+
+    setDoc(newBidRef, {
+      userId: currentUser,
+      amount: bidAmount,
+      timestamp: new Date().getTime(),
+    }).then(() => {
+      setErrorMessage('');
+      fetchBids(); // Fetch bids after successfully placing a bid
+    }).catch(error => {
+      console.error('Error placing bid:', error);
+      setErrorMessage('Error placing bid');
+    });
   };
 
   return (
