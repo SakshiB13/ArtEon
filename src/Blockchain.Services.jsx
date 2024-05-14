@@ -8,7 +8,7 @@ window.web3 = new Web3(window.web3.currentProvider)
 
 const getEtheriumContract = async () => {
   const web3 = window.web3;
-  const contractAddress = '0x3f494612ea77fe0125ac897049eb1bab4b2eb2da'; 
+  const contractAddress = '0xa135b2e4150cdbd2bc9d10a7fe4bd38d7cb28352'; 
   const contract = new web3.eth.Contract(abi.output.abi, contractAddress);
   return contract;
 }
@@ -173,84 +173,6 @@ const getNFTsByAddress = async (ownerAddress) => {
   }
 }
 
-
-//create auction
-const createAuction = async ({ tokenId, price, startDate, endDate }) => {
-  try {
-    console.log('createauction');
-    console.log(tokenId,price, startDate, endDate);
-    const contract = await getEtheriumContract();
-    const account = getGlobalState('connectedAccount');
-
-    const updatedAuction = await contract.methods
-      .createAuction(tokenId, price, startDate, endDate)
-      .send({ from: account });
-    console.log("Created Auction: ",updatedAuction);
-    return  updatedAuction;
-  } catch (error) {
-    reportError(error);
-  }
-}
-//place bid
-const placeBid = async (auctionId, bidAmount) => {
-  try {
-    bidAmount = window.web3.utils.toWei(bidAmount.toString(), 'ether');
-    const buyer = getGlobalState('connectedAccount');
-    const contract = await getEtheriumContract();
-    await contract.methods.placeBid(auctionId).send({ from: buyer, value: bidAmount });
-    console.log('Bid successfully placed.');
-    return true;
-  } catch (error) {
-    console.error('Error placing bid:', error);
-    return false;
-  }
-}
-
-//end auction
-const endAuction = async (auctionId) => {
-  try {
-    const contract = await getEtheriumContract();
-    const account = getGlobalState('connectedAccount');
-
-    await contract.methods
-      .endAuction(auctionId)
-      .send({ from: account });
-
-    return true;
-  } catch (error) {
-    reportError(error);
-  }
-}
-
-const structuredAuctions = (auctions) => {
-  return auctions
-    .map((auction) => ({
-      id: Number(auction.id),
-      tokenId:Number(auction.tokenId),
-      seller: auction.seller.toLowerCase(),
-      startPrice: auction.startPrice ? window.web3.utils.fromWei(auction.startPrice.toString(), 'ether') : 'N/A',
-      currentBid: auction.currentBid ? window.web3.utils.fromWei(auction.currentBid.toString(), 'ether') : 'N/A',
-      currentBidder: auction.currentBidder.toLowerCase(),
-      startTime: auction.startTime,
-      endTime: auction.endTime,
-      active: auction.active,
-        }))
-    
-};
-const getAllAuctions = async () => {
-  try {
-    const contract = await getEtheriumContract(); 
-    const auctions = await contract.methods.getAllAuctions().call(); 
-    console.log('All Auctions:', structuredAuctions(auctions));
-    setGlobalState('auctions', structuredAuctions(auctions))
-    return structuredAuctions(auctions);
-  } catch (error) {
-    reportError(error);
-    return [];
-  }
-}
-
-
 const reportError = (error) => {
   console.log(error);
 }
@@ -265,10 +187,4 @@ export {
   getEtheriumContract,
   burnNFT,
   getNFTsByAddress,
-  createAuction,
-  placeBid,
-  endAuction,
-  getAllAuctions,
 };
-
-  
