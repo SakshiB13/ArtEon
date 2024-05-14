@@ -40,20 +40,6 @@ contract ArtEon is ERC721Enumerable, Ownable {
     TransactionStruct[] transactions;
     TransactionStruct[] minted;
 
-    struct Auction {
-        uint256 id;
-        uint256 tokenId;
-        address seller;
-        uint256 startPrice;
-        uint256 currentBid;
-        address currentBidder;
-        uint256 startTime;
-        uint256 endTime;
-        bool active;
-    }
-
-    mapping(uint256 => Auction) public auctions;
-    uint256 public nextAuctionId = 1;
 
     constructor(
         string memory __name,
@@ -65,94 +51,7 @@ contract ArtEon is ERC721Enumerable, Ownable {
         royalityFee = _royalityFee;
         artist = _artist;
     }
-
-    event AuctionCreated(uint256 auctionId, uint256 tokenId, address seller, uint256 startPrice, uint256 startTime, uint256 endTime);
-    event BidPlaced(uint256 auctionId, address bidder, uint256 amount);
-    event AuctionEnded(uint256 auctionId, address winner, uint256 amount);
-
-    // Function to create a new auction listing
-
-    function createAuction(uint256 tokenId, uint256 startPrice, uint256 startTime, uint256 endTime) external returns (Auction[] memory) { 
-    require(ownerOf(tokenId) == msg.sender);
-    require(auctions[tokenId].active == false);
-    require(startTime >= block.timestamp) ;
-    require(endTime > startTime);
-    uint256 auctionId = nextAuctionId;
-    auctions[nextAuctionId] = Auction(nextAuctionId, tokenId, msg.sender, startPrice, 0, address(0), startTime, endTime, true);
-    emit AuctionCreated(nextAuctionId, tokenId, msg.sender, startPrice, startTime, endTime);
-
-    nextAuctionId++; 
-    Auction[] memory result = new Auction[](1);
-    result[0] = auctions[auctionId];
-    return result;
-    }
-
-    // Function to place a bid on an auction
-    function placeBid(uint256 auctionId) external payable {
-        Auction storage auction = auctions[auctionId];
-
-        require(auction.active);
-        require(block.timestamp < auction.endTime);
-        require(msg.value > auction.currentBid, "");
-
-        if (auction.currentBidder != address(0)) {
-            // Refund the previous bidder
-            payable(auction.currentBidder).transfer(auction.currentBid);
-        }
-
-        auction.currentBid = msg.value;
-        auction.currentBidder = msg.sender;
-
-        emit BidPlaced(auctionId, msg.sender, msg.value);
-    }
     
-    // Function to end an auction and transfer the NFT to the highest bidder
-    function endAuction(uint256 auctionId) external {
-        Auction storage auction = auctions[auctionId];
-
-        require(auction.active);
-        require(block.timestamp >= auction.endTime);
-
-        address winner = auction.currentBidder;
-        uint256 winningBid = auction.currentBid;
-
-        _transfer(auction.seller, winner, auction.tokenId);
-        
-
-        // Update the minted array to reflect the new owner
-        for (uint256 i = 0; i < minted.length; i++) {
-            if (minted[i].id == auction.tokenId) {
-                minted[i].owner = winner;
-                break;
-            }
-        }
-
-        // Pay royalty to artist
-        uint256 royalty = (winningBid * royalityFee) / 100;
-        payTo(payable(address(artist)), royalty);
-
-        // Pay remaining amount to seller
-        payTo(payable(address(auction.seller)), winningBid - royalty);
-
-        auction.active = false;
-        auctions[auctionId] = auction;
-    
-        emit AuctionEnded(auctionId, winner, winningBid);
-    }
-
-    // Function to cancel an auction
-    function cancelAuction(uint256 auctionId) external {
-        Auction storage auction = auctions[auctionId];
-
-        require(auction.active);
-        require(msg.sender == auction.seller);
-
-        auction.active = false;
-
-        // Transfer the NFT back to the seller
-        _transfer(address(this), auction.seller, auction.tokenId);
-    }
-
     function payToMint(
     string memory title,
     string memory description,
@@ -271,16 +170,5 @@ contract ArtEon is ERC721Enumerable, Ownable {
     
     return ownedNFTs;
     }
-
-    function getAllAuctions() external view returns (Auction[] memory) {
-    Auction[] memory allAuctions = new Auction[](nextAuctionId - 1);
-    for (uint256 i = 1; i < nextAuctionId; i++) {
-        allAuctions[i - 1] = auctions[i];
-    }
-    
-    return allAuctions;
-}
-
-    
     
 }
