@@ -60,52 +60,52 @@ const AuctionPage = () => {
     const startHours = Math.floor((startDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const startMinutes = Math.floor((startDifference % (1000 * 60 * 60)) / (1000 * 60));
     const startSeconds = Math.floor((startDifference % (1000 * 60)) / 1000);
-  
+
     // Calculate time difference to auction end time
     const endDifference = endTime * 1000 - currentTime;
     const endHours = Math.floor((endDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const endMinutes = Math.floor((endDifference % (1000 * 60 * 60)) / (1000 * 60));
     const endSeconds = Math.floor((endDifference % (1000 * 60)) / 1000);
-  
+
     return {
       start: { hours: startHours, minutes: startMinutes, seconds: startSeconds },
       end: { hours: endHours, minutes: endMinutes, seconds: endSeconds }
     };
   };
-  
+
 
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setAuctions(prevAuctions => {
         //console.log('Previous Auctions:', prevAuctions);
-  
+
         const updatedAuctions = prevAuctions.map(auction => {
           if (!auction) return auction; // Ensure to handle undefined auctions
-  
+
           const timeLeft = calculateTimeLeft(auction.startTime, auction.endTime);
           //console.log(timeLeft)
-          if(!auction.biddingStarted){
-            const isAuctionStarted = auction.startTime <= currentTime;
+          if (!auction.biddingStarted) {
+            const isAuctionStarted = auction.startTime * 1000 <= currentTime;
             return { ...auction, timeLeft, biddingStarted: isAuctionStarted };
           }
           if (timeLeft.end.hours <= 0 && timeLeft.end.minutes <= 0 && timeLeft.end.seconds <= 0) {
             // Auction ended
             //console.log('Auction ended:', auction.id);
-            return { ...auction, timeLeft, countdownFinished: true};
+            return { ...auction, timeLeft, countdownFinished: true };
           }
-  
-          return {...auction, timeLeft };
+
+          return { ...auction, timeLeft };
         });
-  
+
         //console.log('Updated Auctions:', updatedAuctions);
         return updatedAuctions;
       });
     }, 1000);
-  
+
     return () => clearInterval(intervalId);
   }, [auctions]);
-   
+
 
   const handleOpenChatbox = (auctionId) => {
     setAuctions(prevAuctions => {
@@ -134,48 +134,48 @@ const AuctionPage = () => {
       <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
         <Header />
       </div>
-      <div className={`container-fluid mx-auto container-body-signupp px-5 ${darkMode ? 'bg-white' : ''}`}>
-      <div className="grid grid-cols-5 gap-8">
-  {auctions.map((auction) => (
-    auction && (
-      <div key={auction.id} className="auction-card">
-        <div>
-          <div className="nft-image-container">
-            <img className="nft-image" src={auction.metadataURI} alt={auction.name} />
-          </div>
-          <div className="auction-details">
-            <h2 className="nft-name">{auction.name}</h2>
-            <p className="starting-bid">Starting Bid: {window.web3.utils.fromWei(auction.startPrice.toString(), 'ether')} ETH</p>
-            <p className="timestamp-countdown">
-              {auction.biddingStarted ? (
-                auction.countdownFinished ? "Auction Ended" :
-                `Ends In: ${auction.timeLeft?.end.hours}h ${auction.timeLeft?.end.minutes}m ${auction.timeLeft?.end.seconds}s`
-              ) : (
-                `Starts In: ${auction.timeLeft?.start.hours}h ${auction.timeLeft?.start.minutes}m ${auction.timeLeft?.start.seconds}s`
-              )}
-            </p>
-            {auction.registeredUsers.some(user => user.userId === currentUser) ? (
-              <button className="start-bidding-btn" disabled={!auction.biddingStarted || auction.countdownFinished} onClick={() => handleOpenChatbox(auction.id)}>
-                {auction.biddingStarted ? "Join Auction" : "Bidding Not Started"}</button>            ) : (
-              <button className="register-btn" disabled={auction.biddingStarted} onClick={() => handleRegister(auction.id)}>Register</button>
-            )}
-             {auction.chatboxOpen && (
-                  <Chatbox
-                    auctionId={auction.id}
-                    currentUser={currentUser}
-                    onClose={() => handleCloseChatbox(auction.id)}
-                    auctionEndTime={auction.endTime} // Pass auction end time to the Chatbox
-                    auction={auction} // Pass the auction object to the Chatbox
-                  />
-                )}
-          </div>
+      <div className={`container-fluid mx-auto px-5 ${darkMode ? 'bg-white' : ''}`} style={{ paddingTop: '20px', paddingBottom: '20px' }}>
+        <div className="grid grid-cols-5 gap-8">
+          {auctions.map((auction) => (
+            auction && (
+              <div key={auction.id} className="auction-card">
+                <div>
+                  <div className="nft-image-container">
+                    <img className="nft-image" src={auction.metadataURI} alt={auction.name} />
+                  </div>
+                  <div className="auction-details">
+                    <h2 className="nft-name">{auction.name}</h2>
+                    <p className="starting-bid">Starting Bid: {window.web3.utils.fromWei(auction.startPrice.toString(), 'ether')} ETH</p>
+                    <p className="timestamp-countdown">
+                      {auction.biddingStarted ? (
+                        auction.countdownFinished ? "Auction Ended" :
+                          `Ends In: ${auction.timeLeft?.end.hours}h ${auction.timeLeft?.end.minutes}m ${auction.timeLeft?.end.seconds}s`
+                      ) : (
+                        `Starts In: ${auction.timeLeft?.start.hours}h ${auction.timeLeft?.start.minutes}m ${auction.timeLeft?.start.seconds}s`
+                      )}
+                    </p>
+                    {auction.registeredUsers.some(user => user.userId === currentUser) ? (
+                      <button className="start-bidding-btn" disabled={!auction.biddingStarted || auction.countdownFinished} onClick={() => handleOpenChatbox(auction.id)}>
+                        {auction.biddingStarted ? "Join Auction" : "Bidding Not Started"}</button>) : (
+                      <button className="register-btn" disabled={auction.biddingStarted} onClick={() => handleRegister(auction.id)}>Register</button>
+                    )}
+                    {auction.chatboxOpen && (
+                      <Chatbox
+                        auctionId={auction.id}
+                        currentUser={currentUser}
+                        onClose={() => handleCloseChatbox(auction.id)}
+                        auctionEndTime={auction.endTime} // Pass auction end time to the Chatbox
+                        auction={auction} // Pass the auction object to the Chatbox
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            )
+          ))}
         </div>
-      </div>
-    )
-  ))}
-</div>
 
-</div>
+      </div>
 
       <Footer />
     </div>
