@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGlobalState, setGlobalState, setLoadingMsg, setAlert } from '../store';
-import { createAuction } from '../Blockchain.Services';
+import { createAuctions } from '../utils/auction';
 import { FaTimes } from 'react-icons/fa';
 import web3 from 'web3'; // Import web3
 
@@ -12,6 +12,8 @@ const StartAuction = () => {
   const [price, setPrice] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const connectedAccount = useGlobalState('connectedAccount');
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,6 +28,7 @@ const StartAuction = () => {
     // Convert start time and end time to Unix timestamp (in seconds)
     const startTimeUnix = Math.floor(new Date(startDate).getTime() / 1000);
     const endTimeUnix = Math.floor(new Date(endDate).getTime() / 1000);
+    const seller = connectedAccount[0];
 
     setGlobalState('modal', 'scale-0');
     setGlobalState('loading', { show: true, msg: 'Initiating auction...' });
@@ -34,12 +37,28 @@ const StartAuction = () => {
       setLoadingMsg('Starting auction...');
       setGlobalState('startAuctionModal', 'scale-0');
 
-      const auctionResult = await createAuction({
+      // const auctionResult = await createAuction({
+      //   tokenId: nft.id,
+      //   price: startPriceWei,
+      //   startDate: startTimeUnix,
+      //   endDate: endTimeUnix,
+      // });
+
+      const auctionData = {
         tokenId: nft.id,
-        price: startPriceWei,
-        startDate: startTimeUnix,
-        endDate: endTimeUnix,
-      });
+        startPrice: startPriceWei,
+        startTime: startTimeUnix,
+        endTime: endTimeUnix,
+        seller:seller,
+        active: true,
+        metadataURI: nft.metadataURI,
+        name: nft.title,
+        currentBid: 'N/A',
+        currentBidder: '0'
+      };
+
+     
+      const dbAuction = await createAuctions(auctionData);
 
       if (auctionResult) {
         setAlert('Auction created successfully', 'green');

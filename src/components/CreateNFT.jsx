@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useGlobalState, setGlobalState, setLoadingMsg, setAlert } from '../store';
 import { FaTimes } from 'react-icons/fa';
-import { mintNFT,createAuction} from '../Blockchain.Services';
+import { mintNFT } from '../Blockchain.Services'; // Removed createAuction import
 import { uploadFileToIPFS } from '../utils/hashing.js';
 import { createAuctions } from '../utils/auction';
-
+import web3 from 'web3'; // Ensure web3 is imported if not already
 
 const CreateNFT = () => {
   const [modal] = useGlobalState('modal');
@@ -14,11 +14,10 @@ const CreateNFT = () => {
   const [fileUrl, setFileUrl] = useState('');
   const [imgBase64, setImgBase64] = useState(null);
   const [mintednfts] = useGlobalState('nfts');
-  const [isAuction, setIsAuction] = useState(false); // State to track if the NFT is being put on auction
-  // Additional states for auction
-  const [minimumPrice, setMinimumPrice] = useState('');
+  const [isAuction, setIsAuction] = useState(false);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const connectedAccount = useGlobalState('connectedAccount');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,8 +25,6 @@ const CreateNFT = () => {
     if (!title || !description || !imgBase64) return;
 
     const startPriceWei = web3.utils.toWei(price.toString(), 'ether');
-
-    // Convert start time and end time to Unix timestamp (in seconds)
     const startTimeUnix = Math.floor(new Date(startDate).getTime() / 1000);
     const endTimeUnix = Math.floor(new Date(endDate).getTime() / 1000);
 
@@ -35,29 +32,22 @@ const CreateNFT = () => {
     setGlobalState('loading', { show: true, msg: 'Uploading IPFS data...' });
 
     try {
-      // Upload to Pinata
       const uploadResponse = await uploadFileToIPFS(fileUrl);
       if (uploadResponse.success) {
         const metadataURI = uploadResponse.pinataURL;
 
-        //auction
-        const nft = { title, description, metadataURI };
         if (!isAuction) {
           if (!price) {
             setAlert('Please enter a price for minting', 'red');
             return;
           }
-          nft.price = price;
         } else {
-          // Handle auction logic here
           if (!price || !startDate || !endDate) {
             setAlert('Please fill in all auction details', 'red');
             return;
           }
-          //nft.minimumPrice = minimumPrice;
-          nft.startDate = startDate;
-          nft.endDate = endDate;
         }
+
         setLoadingMsg('Verifying Art...');
 
         let exists = false;
@@ -75,41 +65,47 @@ const CreateNFT = () => {
         } else {
           setLoadingMsg('Initializing transaction...');
           setFileUrl(metadataURI);
-          const tokenId = await mintNFT({title,description,metadataURI,price});
-          if (isAuction && tokenId) {
-            const auctionResult = await createAuction({ tokenId, price: startPriceWei, startDate: startTimeUnix, endDate: endTimeUnix });
-            if(auctionResult){
-              const auctiondata = auctionResult.events.AuctionCreated.returnValues;
-              const data =  {
-                auctionId: auctiondata.auctionId,
-                tokenId: auctiondata.tokenId,
-                startPrice: auctiondata.startPrice,
-                startTime: auctiondata.startTime,
-                endTime: auctiondata.endTime,
-                seller: auctiondata.seller,
-                active: auctiondata.active || true,
-                currentBid: auctiondata.currentBid || 'N/A',
-                currentBidder: auctiondata.currentBidder || '0',
+          
+          // Mint the NFT and get the tokenId
+          const tokenId = await mintNFT({ title, description, metadataURI, price });
+          
+          if (tokenId) {
+          //   // Get the seller's address
+          //   const web3 = new web3(window.ethereum);
+          // const accounts = await web3.eth.requestAccounts();
+          const seller = connectedAccount[0];
+            
+            if (isAuction) {
+              const auctionData = {
+                tokenId: tokenId,
+                startPrice: startPriceWei,
+                startTime: startTimeUnix,
+                endTime: endTimeUnix,
+                seller: seller,
+                active: true,
                 metadataURI: metadataURI,
-                name: title
+                name: title,
+                currentBid: 'N/A',
+                currentBidder: '0'
               };
-              console.log("Data", data);
+
               setLoadingMsg('Creating Auction...');
-              const dbauction = await createAuctions(data);
-              if (auctionResult && dbauction) {
+              const dbAuction = await createAuctions(auctionData);
+              
+              if (dbAuction) {
                 resetForm();
                 setAlert('Auction created successfully', 'green');
                 window.location.reload();
-                console.log('auction')
               } else {
                 setAlert('Failed to create auction', 'red');
               }
+            } else {
+              resetForm();
+              setAlert('Minting completed...', 'green');
+              window.location.reload();
+            }
           }
-          } else{
-          resetForm();
-          setAlert('Minting completed...', 'green');
-          window.location.reload();
-        }}
+        }
       }
     } catch (error) {
       console.log('Error uploading file: ', error);
@@ -139,8 +135,6 @@ const CreateNFT = () => {
     setTitle('');
     setPrice('');
     setDescription('');
-    // Reset additional auction fields
-    setMinimumPrice('');
     setStartDate('');
     setEndDate('');
   };
@@ -294,9 +288,8 @@ const CreateNFT = () => {
           >
             Mint Now
           </button>
-
-          {/* Toggle button to switch between minting and auction */}
-          <div className="flex flex-row justify-center items-center mt-3">
+ {/* Toggle button to switch between minting and auction */}
+ <div className="flex flex-row justify-center items-center mt-3">
             <div
               onClick={() => setIsAuction(!isAuction)}
               className={`w-12 h-6 rounded-full cursor-pointer bg-gray-500 relative ${
