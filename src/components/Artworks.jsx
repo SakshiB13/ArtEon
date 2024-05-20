@@ -4,21 +4,37 @@ import { useGlobalState, setGlobalState } from '../store';
 import { FiHeart } from 'react-icons/fi';
 import { AiFillHeart } from 'react-icons/ai';
 import { useTheme } from './themeContext';
+import { getAllAuctions } from '../utils/auction';
 
-const Artworks = () => {
+const Artworks = ()  => {
+
+  useEffect(() => {
+    const fetchData = async () => {
+      
+      const auctions = await getAllAuctions();
+      setGlobalState('auctions', auctions)
+    };
+
+    fetchData();
+  }, []);
   const [nfts] = useGlobalState('nfts');
+  const [auctions] = useGlobalState('auctions');
+  console.log(auctions);
   const [end, setEnd] = useState(4);
   const [collection, setCollection] = useState([]);
   const location = useLocation();
   const { darkMode } = useTheme();
 
+  // Function to filter NFTs not in auctions
   const getCollection = () => {
-    return location.pathname === "/market" ? nfts : nfts.slice(0, end);
+    const auctionedTokenIds = auctions.map(auction => auction.tokenId);
+    const filteredNFTs = nfts.filter(nft => !auctionedTokenIds.includes(nft.id));
+    return location.pathname === "/market" ? filteredNFTs : filteredNFTs.slice(0, end);
   };
 
   useEffect(() => {
     setCollection(getCollection());
-  }, [nfts, end, location.pathname]);
+  }, [nfts, auctions, end, location.pathname]);
 
   return (
     <div className={`${darkMode ? 'bg-[#F8F0E3]' : 'bg-[#151c25] gradient-bg-artworks'}`}>
@@ -46,13 +62,6 @@ const Artworks = () => {
 };
 
 const Card = ({ nft, darkMode }) => {
-  const [auctions] = useGlobalState('auctions');
-  const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
-  const currentTime = Math.floor(Date.now() / 1000);
-  const endTime = parseInt(auctionItem?.endTime);
-  const startTime = parseInt(auctionItem?.startTime);
-  const isAuctionActive = auctionItem?.active && currentTime < endTime && currentTime >= startTime;
-
   const setNFT = () => {
     setGlobalState('nft', nft);
     setGlobalState('showModal', 'scale-100');
@@ -82,11 +91,6 @@ const Card = ({ nft, darkMode }) => {
 
   return (
     <div className={`relative w-full shadow-xl shadow-black rounded-md overflow-hidden my-2 p-3 ${darkMode ? ' bg-[#800080]' : 'bg-gray-800'}`}>
-      {isAuctionActive && (
-        <div className="absolute top-0 right-0 bg-red-500 text-white font-semibold py-1 px-3 rounded-tr-md rounded-bl-md">
-          On Auction
-        </div>
-      )}
       <img
         src={nft.metadataURI}
         alt={nft.title}
@@ -99,10 +103,8 @@ const Card = ({ nft, darkMode }) => {
       <p className="text-gray-400 text-xs my-1">{nft.description}</p>
       <div className="flex justify-between items-center mt-3 text-white">
         <div className="flex flex-col">
-          <small className="text-xs">{isAuctionActive && auctionItem?.currentBid != 0 ? 'Current Highest Bid' : 'Current Price'}</small>
-          <p className="text-sm font-semibold">
-            {isAuctionActive && auctionItem?.currentBid != 0 ? `${auctionItem.currentBid} ETH` : `${nft.cost} ETH`}
-          </p>
+          <small className="text-xs">Current Price</small>
+          <p className="text-sm font-semibold">{`${nft.cost} ETH`}</p>
         </div>
         <button
           className="shadow-lg shadow-black text-white text-sm bg-[#e32970] hover:bg-[#bd255f] cursor-pointer rounded-full px-1.5 py-1"

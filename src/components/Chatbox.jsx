@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, orderBy, getDocs, setDoc, doc } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, setDoc, doc, onSnapshot} from 'firebase/firestore';
 import { db } from '../utils/firebase';
 
 
@@ -18,7 +18,7 @@ const Chatbox = ({ auctionId, currentUser, onClose, auctionEndTime, auction }) =
   const fetchBids = async () => {
     const bidsCollectionRef = collection(db, `auctions/${auctionid}/bids`);
     const bidsQuery = query(bidsCollectionRef, orderBy('amount', 'desc'));
-
+  
     try {
       const snapshot = await getDocs(bidsQuery);
       const bidsData = snapshot.docs.map(doc => {
@@ -29,8 +29,7 @@ const Chatbox = ({ auctionId, currentUser, onClose, auctionEndTime, auction }) =
         };
       });
       setBids(bidsData);
-      console.log(bids);
-
+  
       if (bidsData.length > 0) {
         const highest = Math.max(...bidsData.map(bid => bid.amount));
         setHighestBid(highest);
@@ -38,25 +37,66 @@ const Chatbox = ({ auctionId, currentUser, onClose, auctionEndTime, auction }) =
     } catch (error) {
       console.error('Error fetching bids:', error);
     }
+  
+    // Add listener for updates to bids
+    const unsubscribe = onSnapshot(bidsQuery, (snapshot) => {
+      const updatedBids = snapshot.docs.map(doc => {
+        const bidData = doc.data();
+        return {
+          userId: bidData.userId,
+          amount: bidData.amount
+        };
+      });
+      setBids(updatedBids);
+  
+      if (updatedBids.length > 0) {
+        const highest = Math.max(...updatedBids.map(bid => bid.amount));
+        setHighestBid(highest);
+      }
+    });
+  
+    return unsubscribe; // Return the unsubscribe function
   };
+  
+  useEffect(() => {
+    const unsubscribe = fetchBids();
+    // Return a cleanup function to unsubscribe when component unmounts
+    return () => unsubscribe();
+  }, []);
+   
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
       setTimer(prevTimer => prevTimer - 1);
+      //fetchBids();
+      //console.log(bids);
     }, 1000);
-    fetchBids();
+    
+    
 
     return () => clearInterval(interval);
   }, []);
 
 
+  useEffect(() => {
+    fetchBids();
+      console.log(bids);
+  }, []);
+
+  useEffect(() => {
+    if (timer <= 0 && highestBid > 0) {
+      setShowWinnerPopup(true);
+    } else if (timer <= 0) {
+      handleClose();
+      setShowLoserMessage(true);
+    }
+  }, [timer, highestBid]);
 
   const handleClose = () => {
     setShowWinnerPopup(false);
     onClose();
   };
-
-
   const isNumeric = (value) => {
     return !isNaN(parseFloat(value)) && isFinite(value);
   };
@@ -80,7 +120,7 @@ const Chatbox = ({ auctionId, currentUser, onClose, auctionEndTime, auction }) =
 
     if (bidAmount <= highestBid) {
       setErrorMessage('Your bid must be higher than the current highest bid.');
-      
+      return;
     }
 
     const bidsCollectionRef = collection(db, `auctions/${auctionid}/bids`);
@@ -93,16 +133,30 @@ const Chatbox = ({ auctionId, currentUser, onClose, auctionEndTime, auction }) =
     }).then(() => {
       setErrorMessage('');
       fetchBids(); // Fetch bids after successfully placing a bid
+      console.log(bids);
     }).catch(error => {
       console.error('Error placing bid:', error);
       setErrorMessage('Error placing bid');
     });
   };
 
+  const handleCloseChatbox = () => {
+    onClose(); // Call the onClose prop function to close the chatbox
+  };
+
+
   return (
     <div className="chatbox-container">
       <div className="chatbox">
+      <div className="bids-list">
+  <h3>All Bids:</h3>
+  <div className="scrollable-text">
+    {bids.map((bid, index) => (
+      <span key={index}>{bid.userId}: {bid.amount}<br /></span>
+    ))}
+  </div>
         <div className="input-container">
+          
           <input
             type="text"
             placeholder="Place your bid..."
@@ -111,20 +165,27 @@ const Chatbox = ({ auctionId, currentUser, onClose, auctionEndTime, auction }) =
           />
           <button onClick={handlePlaceBid}>Place Bid</button>
         </div>
+
         {errorMessage && <div className="error-message">{errorMessage}</div>}
         <div className="info">
         <div className="timer">Time Remaining: {formatTime(timer)}</div>
           <div className="highest-bid">Current Highest Bid: {highestBid}</div>
+      <button className="close-button" onClick={handleCloseChatbox}>x</button>
+
         </div>
-        <div className="bids-list">
-          <h3>All Bids:</h3>
-          <ul>
-            {bids.map((bid, index) => (
-              <li key={index}>{bid.userId}: {bid.amount}</li>
-            ))}
-          </ul>
-        </div>
+        
+</div>
+
       </div>
+      {showWinnerPopup && (
+        <div className="winner-popup">
+          <div className="winner-message">Congratulations! You won the auction with the highest bid of {highestBid}.</div>
+          <button onClick={handleClose}>Confirm Transaction</button>
+        </div>
+      )}
+      {showLoserMessage && (
+        <div className="loser-message">Sorry, you lost the auction.</div>
+      )}
     </div>
   );
 

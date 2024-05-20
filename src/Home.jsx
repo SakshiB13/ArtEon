@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { getAllNFTs, isWalletConnected, getAllAuctions } from './Blockchain.Services';
+import { getAllNFTs, isWalletConnected } from './Blockchain.Services';
 import Alert from './components/Alert';
 import Artworks from './components/Artworks';
 import CreateNFT from './components/CreateNFT';
@@ -13,6 +13,8 @@ import UpdateNFT from './components/UpdateNFT';
 import ForgotPassword from './ForgotPassword';
 import StartAuction from './components/StartAuction';
 import { useTheme } from './components/themeContext'; // Import the useTheme hook
+import { getAllAuctions } from './utils/auction';
+import { useGlobalState, setGlobalState } from './store';
 
 const Home = () => {
   const { darkMode } = useTheme(); // Get darkMode state from the theme context
@@ -21,7 +23,8 @@ const Home = () => {
     const fetchData = async () => {
       await isWalletConnected();
       await getAllNFTs();
-      await getAllAuctions();
+      //const auctions= await getAllAuctions();
+      //setGlobalState('auctions', auctions)
     };
 
     fetchData();
