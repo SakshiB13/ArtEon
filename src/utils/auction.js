@@ -10,7 +10,7 @@ export async function createAuctions(auctionData) {
       const auctionRef = await addDoc(collection(db,'auctions'), {
         active: auctionData.active,
         name: auctionData.name,
-        auctionId: Number(auctionData.auctionId), // Convert BigInt to string
+        //auctionId: Number(auctionData.auctionId), // Convert BigInt to string
         currentBid: auctionData.currentBid,
         currentBidder: auctionData.currentBidder,
         endTime: Number(auctionData.endTime), // Convert BigInt timestamp to Date
@@ -23,7 +23,10 @@ export async function createAuctions(auctionData) {
 
     const registerSubcollectionRef = collection(auctionRef, 'registeredusers');
     const registerDocRef = await addDoc(registerSubcollectionRef, {});
-      if(auctionRef && registerDocRef ){
+
+    const bidsSubcollectionRef = collection(auctionRef, 'bids');
+    const bidsDocRef = await addDoc(bidsSubcollectionRef, {});
+      if(auctionRef && registerDocRef && bidsDocRef ){
       console.log(`Auction created successfully with ID: ${auctionRef.id}`);
       return [auctionRef.id, registerDocRef.id] ;
       } // Return the ID of the created auction document
