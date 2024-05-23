@@ -16,8 +16,12 @@ const CreateNFT = () => {
   const [mintednfts] = useGlobalState('nfts');
   const [isAuction, setIsAuction] = useState(false);
   const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
   const connectedAccount = useGlobalState('connectedAccount');
+  const [auctionDuration, setAuctionDuration] = useState(5); // Default duration of 5 minutes
+
+  const handleAuctionDurationChange = (e) => {
+    setAuctionDuration(parseInt(e.target.value));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +30,7 @@ const CreateNFT = () => {
 
     const startPriceWei = web3.utils.toWei(price.toString(), 'ether');
     const startTimeUnix = Math.floor(new Date(startDate).getTime() / 1000);
-    const endTimeUnix = Math.floor(new Date(endDate).getTime() / 1000);
+    const endTimeUnix = startTimeUnix + auctionDuration * 60;
 
     setGlobalState('modal', 'scale-0');
     setGlobalState('loading', { show: true, msg: 'Uploading IPFS data...' });
@@ -42,7 +46,7 @@ const CreateNFT = () => {
             return;
           }
         } else {
-          if (!price || !startDate || !endDate) {
+          if (!price || !startDate || !auctionDuration) {
             setAlert('Please fill in all auction details', 'red');
             return;
           }
@@ -65,16 +69,13 @@ const CreateNFT = () => {
         } else {
           setLoadingMsg('Initializing transaction...');
           setFileUrl(metadataURI);
-          
+
           // Mint the NFT and get the tokenId
           const tokenId = await mintNFT({ title, description, metadataURI, price });
-          
+
           if (tokenId) {
-          //   // Get the seller's address
-          //   const web3 = new web3(window.ethereum);
-          // const accounts = await web3.eth.requestAccounts();
-          const seller = connectedAccount[0];
-            
+            const seller = connectedAccount[0];
+
             if (isAuction) {
               const auctionData = {
                 tokenId: tokenId,
@@ -86,12 +87,12 @@ const CreateNFT = () => {
                 metadataURI: metadataURI,
                 name: title,
                 currentBid: 'N/A',
-                currentBidder: '0'
+                currentBidder: '0',
               };
 
               setLoadingMsg('Creating Auction...');
               const dbAuction = await createAuctions(auctionData);
-              
+
               if (dbAuction) {
                 resetForm();
                 setAlert('Auction created successfully', 'green');
@@ -136,7 +137,6 @@ const CreateNFT = () => {
     setPrice('');
     setDescription('');
     setStartDate('');
-    setEndDate('');
   };
 
   return (
@@ -233,15 +233,19 @@ const CreateNFT = () => {
               </div>
 
               <div className="flex flex-row justify-between items-center bg-gray-800 rounded-xl mt-5">
-                <input
+                <select
                   className="block w-full text-sm text-slate-500 bg-transparent border-0 focus:outline-none focus:ring-0"
-                  type="datetime-local"
-                  name="endDate"
-                  placeholder="End Date"
-                  onChange={(e) => setEndDate(e.target.value)}
-                  value={endDate}
+                  name="auctionDuration"
+                  onChange={handleAuctionDurationChange}
+                  value={auctionDuration}
                   required
-                />
+                >
+                  {[5, 6, 7, 8, 9, 10].map((duration) => (
+                    <option key={duration} value={duration}>
+                      {duration} minutes
+                    </option>
+                  ))}
+                </select>
               </div>
             </>
           ) : (
@@ -288,8 +292,8 @@ const CreateNFT = () => {
           >
             Mint Now
           </button>
- {/* Toggle button to switch between minting and auction */}
- <div className="flex flex-row justify-center items-center mt-3">
+
+          <div className="flex flex-row justify-center items-center mt-3">
             <div
               onClick={() => setIsAuction(!isAuction)}
               className={`w-12 h-6 rounded-full cursor-pointer bg-gray-500 relative ${
