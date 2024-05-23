@@ -1063,6 +1063,36 @@ label {
   margin-bottom: 5px;
 }
 
+.loser-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 999; /* Ensure the popup is on top of other content */
+}
+
+.loser-message {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.loser-popup button {
+  padding: 10px 20px;
+  background-color: #631661;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.loser-popup button:hover {
+  background-color: #af0cc2;
+}
+
 .winner-popup {
   position: absolute;
   top: 50%;
