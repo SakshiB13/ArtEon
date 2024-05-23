@@ -9,9 +9,9 @@ const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
   const [timer, setTimer] = useState(Math.floor((auction.endTime * 1000 - new Date().getTime()) / 1000));
   const [highestBid, setHighestBid] = useState(0);
   const [highestBidderId, setHighestBidderId] = useState('');
-  const [Bid, setBid] = useState(0);
-  const userName = useGlobalState('userName');
-  const userId = useGlobalState('userID');
+  const [Bid, setBid] = useState('');
+  const [userName] = useGlobalState('userName');
+  const [userId] = useGlobalState('userID');
 
   const [errorMessage, setErrorMessage] = useState('');
   const [showWinnerPopup, setShowWinnerPopup] = useState(false);
@@ -124,7 +124,7 @@ const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
     return `${hours > 0 ? hours + "h " : ""}${minutes > 0 ? minutes + "m " : ""}${seconds}s`;
   };
 
-  const handlePlaceBid = () => {
+  const handlePlaceBid = async () => {
     const bidAmount = parseFloat(Bid);
     if (isNaN(bidAmount) || bidAmount <= 0) {
       setErrorMessage('Please enter a valid bid amount.');
@@ -139,18 +139,19 @@ const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
     const bidsCollectionRef = collection(db, `auctions/${auctionid}/bids`);
     const newBidRef = doc(bidsCollectionRef);
 
-    setDoc(newBidRef, {
-      userId: currentUser,
-      userName: userName,
-      amount: bidAmount,
-      timestamp: new Date().getTime(),
-    }).then(() => {
+    try {
+      await setDoc(newBidRef, {
+        userId: currentUser,
+        userName: userName,
+        amount: bidAmount,
+        timestamp: new Date().getTime(),
+      });
       setErrorMessage('');
       fetchBids(); // Fetch bids after successfully placing a bid
-    }).catch(error => {
+    } catch (error) {
       console.error('Error placing bid:', error);
       setErrorMessage('Error placing bid');
-    });
+    }
   };
 
   const handleCloseChatbox = () => {
@@ -172,6 +173,7 @@ const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
               type="text"
               placeholder="Place your bid..."
               onChange={(e) => setBid(e.target.value)}
+              value={Bid} // Add value to input field to reflect the state
             />
             <button onClick={handlePlaceBid}>Place Bid</button>
           </div>
