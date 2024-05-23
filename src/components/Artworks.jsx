@@ -28,7 +28,7 @@ const Artworks = ()  => {
   // Function to filter NFTs not in auctions
   const getCollection = () => {
     const auctionedTokenIds = auctions.map(auction => auction.tokenId);
-    const filteredNFTs = nfts.filter(nft => !auctionedTokenIds.includes(nft.id));
+    const filteredNFTs = nfts.filter(nft => !auctionedTokenIds.includes(nft.id) && !nft.listedForSale);
     return location.pathname === "/market" ? filteredNFTs : filteredNFTs.slice(0, end);
   };
 
