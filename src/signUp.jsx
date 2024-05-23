@@ -7,6 +7,7 @@ import { createNewArtist } from './utils/artist';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendEmailVerification,
   signInWithPopup,
   signInWithRedirect,
   signOut,
@@ -53,7 +54,10 @@ function SignUp() {
       } else if (selectedOption === 'collector') {
         await createNewCollector(user, name, email);
       }
-      showAlert("Sign-up successful", "success");
+
+      // Send email verification
+      await sendEmailVerification(user);
+      showAlert("Sign-up successful. Please verify your email.", "success");
       console.log('Sign-up successful');
       console.log('User:', user);
       console.log('User type:', selectedOption);
@@ -70,6 +74,13 @@ function SignUp() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+
+      // Check if email is verified
+      if (!user.emailVerified) {
+        showAlert("Please verify your email before logging in.", "error");
+        return;
+      }
+
       showAlert("Log-in successful", "success");
       console.log('Log-in successful');
       console.log('User:', user);
@@ -163,5 +174,3 @@ function SignUp() {
 }
 
 export default SignUp;
-
-
