@@ -7,7 +7,8 @@ import { buyNFT } from '../Blockchain.Services';
 const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
   const [bids, setBids] = useState([]);
   const [timer, setTimer] = useState(Math.floor((auction.endTime * 1000 - new Date().getTime()) / 1000));
-  const [highestBid, setHighestBid] = useState(0);
+  const startingBid = parseFloat(auction.startingBid);
+  const [highestBid, setHighestBid] = useState(startingBid);
   const [highestBidderId, setHighestBidderId] = useState('');
   const [Bid, setBid] = useState('');
   const [userName] = useGlobalState('userName');
@@ -16,7 +17,7 @@ const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [showWinnerPopup, setShowWinnerPopup] = useState(false);
   const [showLoserMessage, setShowLoserMessage] = useState(false);
-  const startingBid = parseFloat(auction.startingBid);
+  
   const auctionid = auction.id;
 
   const fetchBids = async () => {
@@ -82,13 +83,13 @@ const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
 
   useEffect(() => {
     if (timer <= 0) {
-      if (highestBidderId === userId) {
+      if (highestBidderId === currentUser) {
         setShowWinnerPopup(true);
       } else {
         setShowLoserMessage(true);
       }
     }
-  }, [timer, highestBid, highestBidderId, userId]);
+  }, [timer, highestBidderId, currentUser]);
 
   const handleClose = () => {
     setShowWinnerPopup(false);
