@@ -67,6 +67,7 @@ const structuredNfts = (nfts) => {
       description: nft.description,
       metadataURI: nft.metadataURI,
       timestamp: nft.timestamp,
+      listedForSale: nft.listedForSale,
     }))
     .reverse();
 };

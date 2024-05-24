@@ -18,6 +18,7 @@ const Artworks = ()  => {
     fetchData();
   }, []);
   const [nfts] = useGlobalState('nfts');
+  console.log(nfts);
   const [auctions] = useGlobalState('auctions');
   console.log(auctions);
   const [end, setEnd] = useState(4);
@@ -28,6 +29,8 @@ const Artworks = ()  => {
   // Function to filter NFTs not in auctions
   const getCollection = () => {
     const auctionedTokenIds = auctions.map(auction => auction.tokenId);
+    const filteredNFTs = nfts.filter(nft => nft.listedForSale === true && !auctionedTokenIds.includes(nft.id));
+    console.log(filteredNFTs);
      const filteredNFTs = nfts.filter(nft => nft.listedForSale && !auctionedTokenIds.includes(nft.id));
     return location.pathname === "/market" ? filteredNFTs : filteredNFTs.slice(0, end);
   };
