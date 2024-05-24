@@ -1,4 +1,3 @@
-// SignUp.js
 import React, { useState } from "react";
 import * as Components from './Login';
 import { auth } from './utils/firebase';
@@ -8,15 +7,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendEmailVerification,
-  signInWithPopup,
-  signInWithRedirect,
-  signOut,
 } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import ForgotPassword from './ForgotPassword'; // Import the ForgotPassword component
 import '../src/style.css';
-
 
 function SignUp() {
   const [signIn, toggle] = React.useState(true);
@@ -43,8 +37,29 @@ function SignUp() {
     setSelectedOption(e.target.value);
   };
 
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidPassword = (password) => {
+    const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{7,}$/;
+    return passwordRegex.test(password);
+  };
+
   const handleSignUp = async (e) => {
     e.preventDefault(); 
+
+    if (!isValidEmail(email)) {
+      showAlert("Invalid email format", "error");
+      return;
+    }
+
+    if (!isValidPassword(password)) {
+      showAlert("Password must be greater than 6 characters and include at least one special character", "error");
+      return;
+    }
+
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -55,7 +70,6 @@ function SignUp() {
         await createNewCollector(user, name, email);
       }
 
-      // Send email verification
       await sendEmailVerification(user);
       showAlert("Sign-up successful. Please verify your email.", "success");
       console.log('Sign-up successful');
@@ -71,11 +85,21 @@ function SignUp() {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+
+    if (!isValidEmail(email)) {
+      showAlert("Invalid email format", "error");
+      return;
+    }
+
+    if (!isValidPassword(password)) {
+      showAlert("Password must be greater than 6 characters and include at least one special character", "error");
+      return;
+    }
+
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Check if email is verified
       if (!user.emailVerified) {
         showAlert("Please verify your email before logging in.", "error");
         return;
@@ -100,13 +124,10 @@ function SignUp() {
     alertBox.textContent = message;
     document.body.appendChild(alertBox);
 
-    // Triggering reflow to enable transition
     alertBox.offsetHeight;
 
-    // Add the 'show' class to display the alert
     alertBox.classList.add('show');
 
-    // Remove the alert after a certain time (e.g., 3 seconds)
     setTimeout(() => {
       alertBox.classList.remove('show');
       setTimeout(() => {
@@ -114,63 +135,61 @@ function SignUp() {
       }, 500);
     }, 3000);
   };
-  
-    return (
-        <div className="container-body-signup">
-            <Components.Container>
-                <Components.SignUpContainer signinIn={signIn}>
-                    <Components.Form>
-                        <Components.Title>Create Account</Components.Title>
-                        <Components.Label>Select Role:</Components.Label>
-                        <Components.Select value={selectedOption} onChange={handleOptionChange}>
-                            <Components.Option value="artist">Artist</Components.Option>
-                            <Components.Option value="collector">Collector</Components.Option>
-                        </Components.Select>
-                        <Components.Input type='text' placeholder='Name' value={name} onChange={handleNameChange} />
-                        <Components.Input type='email' placeholder='Email' value={email} onChange={handleEmailChange} />
-                        <Components.Input type='password' placeholder='Password' value={password} onChange={handlePasswordChange} />
-                        <Components.Button onClick={handleSignUp}>Sign Up</Components.Button>
-                    </Components.Form>
-                </Components.SignUpContainer>
 
-                <Components.SignInContainer signinIn={signIn}>
-                    <Components.Form>
-                        <Components.Title>Log in</Components.Title>
-                        <Components.Input type='email' placeholder='Email' value={email} onChange={handleEmailChange} />
-                        <Components.Input type='password' placeholder='Password' value={password} onChange={handlePasswordChange} />
-                     {/*    {!signInMode && <ForgotPassword />} */}
-                        <Components.Anchor href='/forgotpassword'>Forgot your password?</Components.Anchor>
-                        <Components.Button onClick={handleSignIn}>Log In</Components.Button>
-                    </Components.Form>
-                </Components.SignInContainer>
+  return (
+    <div className="container-body-signup">
+      <Components.Container>
+        <Components.SignUpContainer signinIn={signIn}>
+          <Components.Form>
+            <Components.Title>Create Account</Components.Title>
+            <Components.Label>Select Role:</Components.Label>
+            <Components.Select value={selectedOption} onChange={handleOptionChange}>
+              <Components.Option value="artist">Artist</Components.Option>
+              <Components.Option value="collector">Collector</Components.Option>
+            </Components.Select>
+            <Components.Input type='text' placeholder='Name' value={name} onChange={handleNameChange} />
+            <Components.Input type='email' placeholder='Email' value={email} onChange={handleEmailChange} />
+            <Components.Input type='password' placeholder='Password' value={password} onChange={handlePasswordChange} />
+            <Components.Button onClick={handleSignUp}>Sign Up</Components.Button>
+          </Components.Form>
+        </Components.SignUpContainer>
 
-                <Components.OverlayContainer signinIn={signIn}>
-                    <Components.Overlay signinIn={signIn}>
+        <Components.SignInContainer signinIn={signIn}>
+          <Components.Form>
+            <Components.Title>Log in</Components.Title>
+            <Components.Input type='email' placeholder='Email' value={email} onChange={handleEmailChange} />
+            <Components.Input type='password' placeholder='Password' value={password} onChange={handlePasswordChange} />
+            <Components.Anchor href='/forgotpassword'>Forgot your password?</Components.Anchor>
+            <Components.Button onClick={handleSignIn}>Log In</Components.Button>
+          </Components.Form>
+        </Components.SignInContainer>
 
-                        <Components.LeftOverlayPanel signinIn={signIn}>
-                            <Components.Title>Welcome Back!</Components.Title>
-                            <Components.Paragraph>
-                                To keep connected with us please login with your personal info
-                            </Components.Paragraph>
-                            <Components.GhostButton onClick={() => toggle(true)}>
-                                Log In
-                            </Components.GhostButton>
-                        </Components.LeftOverlayPanel>
+        <Components.OverlayContainer signinIn={signIn}>
+          <Components.Overlay signinIn={signIn}>
+            <Components.LeftOverlayPanel signinIn={signIn}>
+              <Components.Title>Welcome Back!</Components.Title>
+              <Components.Paragraph>
+                To keep connected with us please login with your personal info
+              </Components.Paragraph>
+              <Components.GhostButton onClick={() => toggle(true)}>
+                Log In
+              </Components.GhostButton>
+            </Components.LeftOverlayPanel>
 
-                        <Components.RightOverlayPanel signinIn={signIn}>
-                            <Components.Title>Hello, Friend!</Components.Title>
-                            <Components.Paragraph>
-                                Enter Your personal details and start the journey with us
-                            </Components.Paragraph>
-                            <Components.GhostButton onClick={() => toggle(false)}>
-                                Sign Up
-                            </Components.GhostButton>
-                        </Components.RightOverlayPanel>
-                    </Components.Overlay>
-                </Components.OverlayContainer>
-            </Components.Container>
-        </div>
-    );
+            <Components.RightOverlayPanel signinIn={signIn}>
+              <Components.Title>Hello, Friend!</Components.Title>
+              <Components.Paragraph>
+                Enter Your personal details and start the journey with us
+              </Components.Paragraph>
+              <Components.GhostButton onClick={() => toggle(false)}>
+                Sign Up
+              </Components.GhostButton>
+            </Components.RightOverlayPanel>
+          </Components.Overlay>
+        </Components.OverlayContainer>
+      </Components.Container>
+    </div>
+  );
 }
 
 export default SignUp;
