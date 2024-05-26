@@ -23,7 +23,7 @@ const StartAuction = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!price || !startDate || !endDate) {
+    if (!price || !startDate || !auctionDuration) {
       setAlert('Please fill in all auction details', 'red');
       return;
     }
@@ -65,7 +65,7 @@ const StartAuction = () => {
      
       const dbAuction = await createAuctions(auctionData);
 
-      if (auctionResult) {
+      if (dbAuction) {
         setAlert('Auction created successfully', 'green');
         window.location.reload();
       } else {
