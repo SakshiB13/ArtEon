@@ -6,6 +6,8 @@ import { getUserCollection } from '../utils/user';
 import { updateCollectorWalletId, getCollectorNameByUID } from '../utils/collector';
 import { updateArtistWalletId, getArtistNameByUID } from '../utils/artist';
 import { auth } from '../utils/firebase';
+import { signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 import ArtEon from '../assets/ArtEon.png';
 import Profile from '../assets/profile.png';
 import EditProfile from './EditProfile';
@@ -18,9 +20,9 @@ const Header = () => {
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
   const sidePanelRef = useRef(null);
   const { darkMode, toggleDarkMode } = useTheme();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Function to handle wallet connection and wallet ID update
     const handleWalletConnection = async () => {
       try {
         if (userInfo) {
@@ -38,7 +40,6 @@ const Header = () => {
             setGlobalState('userName', collectorname);
           }
         }
-        // After updating wallet ID and user type, connect the wallet
         await connectWallet();
       } catch (error) {
         console.error('Wallet connection failed:', error.message);
@@ -47,12 +48,10 @@ const Header = () => {
 
     handleWalletConnection();
 
-    // Automatically connect the wallet when the Header component mounts or userInfo changes
     if (connectedAccount) {
-      // Wallet is already connected, handle wallet ID update
       handleWalletConnection();
     }
-  }, [connectedAccount, userInfo]); // Trigger useEffect on connectedAccount or userInfo change
+  }, [connectedAccount, userInfo]);
 
   const handleClickOutside = (event) => {
     if (sidePanelRef.current && !sidePanelRef.current.contains(event.target)) {
@@ -74,6 +73,15 @@ const Header = () => {
   const handleProfileClick = (e) => {
     e.stopPropagation();
     handleToggleSidePanel();
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/');
+    } catch (error) {
+      console.error('Logout failed:', error.message);
+    }
   };
 
   return (
@@ -100,7 +108,6 @@ const Header = () => {
           <>
             <button
               className="shadow-xl shadow-black text-white bg-[#800080] hover:bg-[#b300b3] md:text-xs p-2 rounded-full cursor-pointer"
-              //onClick={handlewalletId}
             >
               {truncate(connectedAccount, 4, 4, 11)}
             </button>
@@ -113,8 +120,7 @@ const Header = () => {
           </>
         ) : (
           <button
-            className="shadow-xl shadow-black text-white  dark:bg-[#800080] hover:bg-[#b300b3] md:text-xs p-2 rounded-full cursor-pointer"
-            //onClick={handleWalletConnection} // Connect wallet when button is clicked
+            className="shadow-xl shadow-black text-white dark:bg-[#800080] hover:bg-[#b300b3] md:text-xs p-2 rounded-full cursor-pointer"
           >
             Connect Wallet
           </button>
@@ -126,7 +132,7 @@ const Header = () => {
               <li><a href='/editprofile'>Edit Profile</a></li>
               <li><a href={`/${connectedAccount}`}>Visit Profile</a></li>
               <li className="" onClick={toggleDarkMode}>{darkMode ? "Dark Mode" : "Light Mode"}</li>
-              <li>Logout</li>
+              <li onClick={handleLogout}>Logout</li>
             </ul>
           </div>
         )}

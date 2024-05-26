@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Footer from './Footer';
 import Header from './Header';
-import { useTheme } from './themeContext'; 
+import { useTheme } from './themeContext';
 import { useGlobalState, setGlobalState, truncate } from '../store';
 import { getUserCollection } from '../utils/user';
 import { updateArtistProfile } from '../utils/artist';
@@ -10,7 +10,7 @@ import { auth } from '../utils/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 const EditProfile = () => {
-  const [userId] = useAuthState(auth);
+  const [user] = useAuthState(auth); // Fetch the authenticated user
   const [connectedAccount] = useGlobalState('connectedAccount');
   const [name, setName] = useState('');
   const [quote, setQuote] = useState('');
@@ -21,6 +21,13 @@ const EditProfile = () => {
 
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [bannerPicFile, setBannerPicFile] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email); // Set the email input field to the user's email
+    }
+  }, [user]);
+
   const handleProfilePicChangeFile = (e) => {
     setProfilePicFile(e.target.files[0]);
   };
@@ -52,21 +59,20 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const usertype = await getUserCollection(userId.uid);
+      const usertype = await getUserCollection(user.uid);
       console.log(usertype);
       if (usertype === 'artist') {
-        await updateArtistProfile(userId.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
+        await updateArtistProfile(user.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
         console.log('Artist profile updated successfully!');
         window.location.href = '/' + connectedAccount;
       } else if (usertype === 'collector') {
-        await updateCollectorProfile(userId.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
+        await updateCollectorProfile(user.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
         console.log('Collector profile updated successfully!');
         window.location.href = '/' + connectedAccount;
-
       }
       // Optionally, add a success message or redirect to another page upon successful update
     } catch (error) {
-      console.error('Error updating artist profile:', error);
+      console.error('Error updating profile:', error);
       // Handle error (e.g., display error message to user)
     }
   };
@@ -98,7 +104,7 @@ const EditProfile = () => {
             </div>
             <div className="form-group">
               <label>Email:</label>
-              <input type="email" value={email} onChange={handleEmailChange} />
+              <input type="email" value={email} onChange={handleEmailChange} disabled className={email ? '' : 'disabled-cursor'} />
             </div>
             <div className="form-group">
               <label>Instagram:</label>
