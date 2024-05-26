@@ -6,7 +6,7 @@ import { buyNFT , listForSale} from '../Blockchain.Services';
 
 const ShowNFT = () => {
   const [showModal] = useGlobalState('showModal');
-  const [startAuctionModal] = useGlobalState('startAuctionModal');
+  //const [startAuctionModal] = useGlobalState('startAuctionModal');
   const [connectedAccount] = useGlobalState('connectedAccount');
   const [nft] = useGlobalState('nft');
   const [auctions] = useGlobalState('auctions');
@@ -29,11 +29,11 @@ const ShowNFT = () => {
 
   const onStartAuction = () => {
      setGlobalState('showModal', 'scale-0');
-     console.log("before");
-     console.log(startAuctionModal);
+     //console.log("before");
+     //console.log(startAuctionModal);
      setGlobalState('startAuctionModal', 'scale-100');
-     console.log("after");
-     console.log(startAuctionModal);
+     //console.log("after");
+     //console.log(startAuctionModal);
   };
 
   const handleNFTPurchase = async () => {

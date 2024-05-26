@@ -2,46 +2,59 @@ import React, { useState } from 'react';
 import { useGlobalState, setGlobalState, setLoadingMsg, setAlert } from '../store';
 import { createAuctions } from '../utils/auction';
 import { FaTimes } from 'react-icons/fa';
-import web3 from 'web3';
+import web3 from 'web3'; // Import web3
 
 const StartAuction = () => {
   const [modal] = useGlobalState('startAuctionModal');
+  //console.log('Modal state:', modal);
   const [nft] = useGlobalState('nft');
+  console.log('NFT:', nft);
   const [price, setPrice] = useState('');
   const [startDate, setStartDate] = useState('');
-  const [auctionDuration, setAuctionDuration] = useState(5);
+  const [endDate, setEndDate] = useState('');
   const connectedAccount = useGlobalState('connectedAccount');
+  const [auctionDuration, setAuctionDuration] = useState(5); // Default duration of 5 minutes
 
   const handleAuctionDurationChange = (e) => {
     setAuctionDuration(parseInt(e.target.value));
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!price || !startDate) {
+    if (!price || !startDate || !auctionDuration) {
       setAlert('Please fill in all auction details', 'red');
       return;
     }
 
     const startPriceWei = web3.utils.toWei(price.toString(), 'ether');
+
+    // Convert start time and end time to Unix timestamp (in seconds)
     const startTimeUnix = Math.floor(new Date(startDate).getTime() / 1000);
     const endTimeUnix = startTimeUnix + auctionDuration * 60;
     const seller = connectedAccount[0];
 
-    setGlobalState('startAuctionModal', 'scale-0');
+    setGlobalState('modal', 'scale-0');
     setGlobalState('loading', { show: true, msg: 'Initiating auction...' });
 
     try {
       setLoadingMsg('Starting auction...');
       setGlobalState('startAuctionModal', 'scale-0');
 
+      // const auctionResult = await createAuction({
+      //   tokenId: nft.id,
+      //   price: startPriceWei,
+      //   startDate: startTimeUnix,
+      //   endDate: endTimeUnix,
+      // });
+
       const auctionData = {
         tokenId: nft.id,
         startPrice: startPriceWei,
         startTime: startTimeUnix,
         endTime: endTimeUnix,
-        seller: seller,
+        seller:seller,
         active: true,
         metadataURI: nft.metadataURI,
         name: nft.title,
@@ -49,6 +62,7 @@ const StartAuction = () => {
         currentBidder: '0'
       };
 
+     
       const dbAuction = await createAuctions(auctionData);
 
       if (dbAuction) {
@@ -121,20 +135,20 @@ const StartAuction = () => {
           </div>
 
           <div className="flex flex-row justify-between items-center bg-gray-800 rounded-xl mt-5">
-            <select
-              className="block w-full text-sm text-slate-500 bg-transparent border-0 focus:outline-none focus:ring-0"
-              name="auctionDuration"
-              onChange={handleAuctionDurationChange}
-              value={auctionDuration}
-              required
-            >
-              {[5, 6, 7, 8, 9, 10].map((duration) => (
-                <option key={duration} value={duration}>
-                  {duration} minutes
-                </option>
-              ))}
-            </select>
-          </div>
+                <select
+                  className="block w-full text-sm text-slate-500 bg-transparent border-0 focus:outline-none focus:ring-0"
+                  name="auctionDuration"
+                  onChange={handleAuctionDurationChange}
+                  value={auctionDuration}
+                  required
+                >
+                  {[5, 6, 7, 8, 9, 10].map((duration) => (
+                    <option key={duration} value={duration}>
+                      {duration} minutes
+                    </option>
+                  ))}
+                </select>
+              </div>
 
           <button
             type="submit"
