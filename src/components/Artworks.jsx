@@ -31,7 +31,6 @@ const Artworks = ()  => {
     const auctionedTokenIds = auctions.map(auction => auction.tokenId);
     const filteredNFTs = nfts.filter(nft => nft.listedForSale === true && !auctionedTokenIds.includes(nft.id));
     console.log(filteredNFTs);
-     const filteredNFTs = nfts.filter(nft => nft.listedForSale && !auctionedTokenIds.includes(nft.id));
     return location.pathname === "/market" ? filteredNFTs : filteredNFTs.slice(0, end);
   };
 
