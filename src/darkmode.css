@@ -626,6 +626,10 @@ button {
 .button-container button:hover {
   background-color: #d71f63; /* Darker shade when hovered */
 }
+
+.disabled-cursor {
+  cursor: not-allowed;
+}
 /* Additional Animations */
 @keyframes shine {
   0% {
