@@ -19,7 +19,7 @@ function SignUp() {
   const [password, setPassword] = useState("");
   const [selectedOption, setSelectedOption] = useState("artist");
   const [userInfo] = useAuthState(auth);
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -109,9 +109,7 @@ function SignUp() {
       console.log('Log-in successful');
       console.log('User:', user);
       console.log('Email:', email);
-      if(userInfo){
-        history('/home');
-      }
+      navigate('/home');
     } catch (error) {
       console.error('Log-in failed:', error.message);
       showAlert("Log-in failed", "error");
