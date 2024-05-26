@@ -29,11 +29,11 @@ const ShowNFT = () => {
 
   const onStartAuction = () => {
      setGlobalState('showModal', 'scale-0');
-     console.log("before");
-     console.log(startAuctionModal);
+     //console.log("before");
+     //console.log(startAuctionModal);
      setGlobalState('startAuctionModal', 'scale-100');
-     console.log("after");
-     console.log(startAuctionModal);
+     //console.log("after");
+     //console.log(startAuctionModal);
   };
 
   const handleNFTPurchase = async () => {
