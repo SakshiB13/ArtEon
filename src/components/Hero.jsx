@@ -37,7 +37,7 @@ const Hero = () => {
           )}
         </div>
 
-        <div className="w-3/4 flex justify-between items-center mt-5">
+        {/* <div className="w-3/4 flex justify-between items-center mt-5">
           <div>
             <p className={`text-white font-bold ${darkMode ? 'text-gray-500' : ''}`}>1231k</p>
             <small className={`text-gray-300 ${darkMode ? 'text-gray-700' : ''}`}>User</small>
@@ -50,7 +50,7 @@ const Hero = () => {
             <p className={`text-white font-bold ${darkMode ? 'text-gray-500' : ''}`}>200k</p>
             <small className={`text-gray-300 ${darkMode ? 'text-gray-700' : ''}`}>Artist</small>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="shadow-xl shadow-black md:w-2/5 w-full mt-10 md:mt-0 rounded-md overflow-hidden bg-gray-800">

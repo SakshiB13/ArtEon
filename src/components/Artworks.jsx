@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useGlobalState, setGlobalState } from '../store';
-import { FiHeart } from 'react-icons/fi';
-import { AiFillHeart } from 'react-icons/ai';
+/* import { FiHeart } from 'react-icons/fi';
+import { AiFillHeart } from 'react-icons/ai'; */
 import { useTheme } from './themeContext';
 import { getAllAuctions } from '../utils/auction';
 
@@ -95,30 +95,8 @@ const Card = ({ nft, darkMode }) => {
     setGlobalState('showModal', 'scale-100');
   };
 
-  const LikeButton = ({ initialCount = 0 }) => {
-    const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(initialCount);
-
-    const toggleLike = () => {
-      const newCount = liked ? likeCount - 1 : likeCount + 1;
-      setLikeCount(newCount);
-      setLiked(!liked);
-    };
-
-    return (
-      <button onClick={toggleLike} className="flex items-center space-x-2">
-        {liked ? (
-          <AiFillHeart className="text-red-500 text-xl" />
-        ) : (
-          <FiHeart className="text-xl" />
-        )}
-        <span className="text-white">{likeCount}</span>
-      </button>
-    );
-  };
-
   return (
-    <div className={`relative w-full shadow-xl shadow-black rounded-md overflow-hidden my-2 p-3 ${darkMode ? ' bg-[#800080]' : 'bg-gray-800'}`}>
+    <div className={`relative w-full shadow-xl shadow-black rounded-md overflow-hidden my-2 p-3 ${darkMode ? ' bg-[#800080]' : 'bg-gray-600'}`}>
       <img
         src={nft.metadataURI}
         alt={nft.title}
@@ -126,7 +104,6 @@ const Card = ({ nft, darkMode }) => {
       />
       <div className="flex justify-between items-center">
         <h4 className="text-white font-semibold flex-1">{nft.title}</h4>
-        <LikeButton initialCount={nft.likes || 0} />
       </div>
       <p className="text-gray-400 text-xs my-1">{nft.description}</p>
       <div className="flex justify-between items-center mt-3 text-white">
