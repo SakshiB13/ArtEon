@@ -30,7 +30,7 @@ export const getUserCollectionbywalletId = async (walletId) => {
       )
     );
     if (!querySnapshot.empty) {
-      console.log(collectionName)
+      //console.log(collectionName)
       return collectionName;
     }
   }
