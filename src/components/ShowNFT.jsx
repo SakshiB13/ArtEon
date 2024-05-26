@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import Identicon from 'react-identicons';
 import { FaTimes } from 'react-icons/fa';
 import { useGlobalState, setGlobalState, truncate, setAlert } from '../store';
-import { buyNFT } from '../Blockchain.Services';
+import { buyNFT , listForSale} from '../Blockchain.Services';
 
 const ShowNFT = () => {
   const [showModal] = useGlobalState('showModal');
+  const [startAuctionModal] = useGlobalState('startAuctionModal');
   const [connectedAccount] = useGlobalState('connectedAccount');
   const [nft] = useGlobalState('nft');
   const [auctions] = useGlobalState('auctions');
+  const userType = useGlobalState("usertype");
+  console.log(userType);
   
   const auctionItem = auctions.find(auction => auction.tokenId === nft?.id);
   const currentTime = Math.floor(Date.now() / 1000); // Get current time in seconds
@@ -25,8 +28,12 @@ const ShowNFT = () => {
   };
 
   const onStartAuction = () => {
-    setGlobalState('showModal', 'scale-0');
-    setGlobalState('startAuctionModal', 'scale-100');
+     setGlobalState('showModal', 'scale-0');
+     console.log("before");
+     console.log(startAuctionModal);
+     setGlobalState('startAuctionModal', 'scale-100');
+     console.log("after");
+     console.log(startAuctionModal);
   };
 
   const handleNFTPurchase = async () => {
@@ -43,6 +50,23 @@ const ShowNFT = () => {
     } catch (error) {
       console.log('Error transferring NFT: ', error);
       setAlert('Purchase failed...', 'red');
+    }
+  };
+
+  const handleListForSale = async () => {
+    setGlobalState('showModal', 'scale-0');
+    setGlobalState('loading', {
+      show: true,
+      msg: 'Initializing Listing process...',
+    });
+
+    try {
+      await listForSale({id: nft?.id, price: nft?.cost});
+      setAlert('NFT Listed for Sale...', 'green');
+      window.location.reload();
+    } catch (error) {
+      console.log('Error listing NFT: ', error);
+      setAlert('Listing failed...', 'red');
     }
   };
 
@@ -109,10 +133,23 @@ const ShowNFT = () => {
               </div>
             </div>
           </div>
-
+          
           <div className="flex justify-between items-center space-x-2">
-            {connectedAccount === nft?.owner ? (
-              auctionItem?.active && currentTime < endTime ? (
+            {connectedAccount === nft?.owner && userType[0] === 'artist' ? (
+              nft?.listedForSale === false ? (
+                 <button
+                className="flex flex-row justify-center items-center
+                  w-full text-[#e32970] text-md border-[#e32970]
+                  py-2 px-5 rounded-full bg-transparent 
+                  drop-shadow-xl border hover:bg-[#bd255f]
+                  hover:bg-transparent hover:text-white
+                  hover:border hover:border-[#bd255f]
+                  focus:outline-none focus:ring mt-5"
+                onClick={handleListForSale}
+              >
+              List For Sale
+              </button>
+              ): auctionItem?.active && currentTime < endTime ? (
                 <>
                   <button
                     className="flex flex-row justify-center items-center
