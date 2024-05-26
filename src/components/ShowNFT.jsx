@@ -194,7 +194,7 @@ const ShowNFT = () => {
                 </>
               )
             ) : (
-              userType[0] === 'collector' ? ( <></>): (
+              connectedAccount === nft?.owner && userType[0] === 'collector' ? ( <></>): (
               <>
                 <button
                   className="flex flex-row justify-center items-center
