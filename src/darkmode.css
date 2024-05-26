@@ -702,7 +702,7 @@ button {
 }
 
 .view-profile-btn {
-  background-color: #631661;
+  background-color: #e32970;
   color: #ffffff;
   border: none;
   padding: 10px 20px;
@@ -712,7 +712,7 @@ button {
 }
 
 .view-profile-btn:hover {
-  background-color: #af0cc2;
+  background-color: #d71f63;
 }
 /* EditProfile.css */
 .container-body-signupp {
