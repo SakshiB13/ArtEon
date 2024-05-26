@@ -134,15 +134,15 @@ const AuctionPage = () => {
       <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
         <Header />
       </div>
-      <div className={`container-fluid mx-auto px-5 ${darkMode ? 'bg-white' : ''}`} style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-        <div className="grid grid-cols-5 gap-8">
+      <div className={`container-fluid mx-auto px-5 ${darkMode ? 'bg-white' : ''}`} style={{ paddingTop: '20px', paddingBottom: '20px', display: 'flex', justifyContent: 'center' }}>
+        <div className="grid grid-cols-5 gap-8" style={{  marginLeft:  '100px' }}>
           {auctions.map((auction) => (
             auction && (
-              <div key={auction.id} className="auction-card">
+              <div key={auction.id} className={`relative w-full shadow-xl shadow-black rounded-md overflow-hidden my-2 p-3 ${darkMode ? 'bg-[#800080]' : 'bg-gray-400'}`}>
                 <div>
-                  <div className="nft-image-container">
-                    <img className="nft-image" src={auction.metadataURI} alt={auction.name} />
-                  </div>
+                 {/*  <div className="nft-image-container"> */}
+                    <img className="h-60 w-full object-cover shadow-lg shadow-black rounded-lg mb-3" src={auction.metadataURI} alt={auction.name} />
+                  {/* </div> */}
                   <div className="auction-details">
                     <h2 className="nft-name">{auction.name}</h2>
                     <p className="starting-bid">Starting Bid: {window.web3.utils.fromWei(auction.startPrice.toString(), 'ether')} ETH</p>
