@@ -26,13 +26,13 @@ const ArtistPage = () => {
       <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
         <Header />
       </div>
-      <div className={`container-fluid mx-auto container-body-signupp px-5 ${darkMode ? 'bg-white' : ''}`}>
-        <div className="grid grid-cols-5 gap-8">
+      <div className={`container-fluid mx-auto px-5 ${darkMode ? 'bg-white' : ''}`} style={{ paddingTop: '20px', paddingBottom: '20px', display: 'flex', justifyContent: 'center' }}>
+      <div className="grid grid-cols-5 gap-8" style={{  marginLeft:  '100px' }}>
           {artists.map((artist) => (
-            <div key={artist.id} className="artist-card">
-            <div className="artist-image-container">
-              <img className="artist-image" src={artist.profilePicture} alt={artist.name} />
-            </div>
+            <div key={artist.id} className={`relative w-full shadow-xl shadow-black rounded-md overflow-hidden my-2 p-3 ${darkMode ? 'bg-[#800080]' : 'bg-gray-400'}`}>
+           {/*  <div className="artist-image-container"> */}
+            <img className="h-60 w-full object-cover shadow-lg shadow-black rounded-lg mb-3" src={artist.profilePicture} alt={artist.name} />
+           {/*  </div> */}
             <div className="artist-details">
               <h2 className="artist-name">{artist.name}</h2>
               <p className="artist-quote">{artist.quote}</p>
