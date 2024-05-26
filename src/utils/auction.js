@@ -1,5 +1,5 @@
 import { User } from 'firebase/auth';
-import { collection, addDoc, getDocs, doc} from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, deleteDoc} from 'firebase/firestore';
 import { db } from './firebase';
 
 export async function createAuctions(auctionData) {
@@ -97,5 +97,16 @@ export async function getAllAuctions() {
     } catch (error) {
       console.error('Error registering user for auction:', error);
       throw error; // Propagate the error back to the caller
+    }
+  }
+
+  export async function deleteAuction(auctionId) {
+    try {
+      const auctionDocRef = doc(db, 'auctions', auctionId);
+      await deleteDoc(auctionDocRef);
+      console.log(`Auction with ID: ${auctionId} deleted successfully`);
+    } catch (error) {
+      console.error('Error deleting auction:', error);
+      throw error;
     }
   }
