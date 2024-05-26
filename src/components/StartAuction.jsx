@@ -13,6 +13,11 @@ const StartAuction = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const connectedAccount = useGlobalState('connectedAccount');
+  const [auctionDuration, setAuctionDuration] = useState(5); // Default duration of 5 minutes
+
+  const handleAuctionDurationChange = (e) => {
+    setAuctionDuration(parseInt(e.target.value));
+  };
 
 
   const handleSubmit = async (e) => {
@@ -27,7 +32,7 @@ const StartAuction = () => {
 
     // Convert start time and end time to Unix timestamp (in seconds)
     const startTimeUnix = Math.floor(new Date(startDate).getTime() / 1000);
-    const endTimeUnix = Math.floor(new Date(endDate).getTime() / 1000);
+    const endTimeUnix = startTimeUnix + auctionDuration * 60;
     const seller = connectedAccount[0];
 
     setGlobalState('modal', 'scale-0');
@@ -130,17 +135,20 @@ const StartAuction = () => {
           </div>
 
           <div className="flex flex-row justify-between items-center bg-gray-800 rounded-xl mt-5">
-            <input
-              className="block w-full text-sm
-              text-slate-500 bg-transparent border-0
-              focus:outline-none focus:ring-0"
-              type="datetime-local"
-              name="endDate"
-              placeholder="End Date"
-              onChange={(e) => setEndDate(e.target.value)}
-              required
-            />
-          </div>
+                <select
+                  className="block w-full text-sm text-slate-500 bg-transparent border-0 focus:outline-none focus:ring-0"
+                  name="auctionDuration"
+                  onChange={handleAuctionDurationChange}
+                  value={auctionDuration}
+                  required
+                >
+                  {[5, 6, 7, 8, 9, 10].map((duration) => (
+                    <option key={duration} value={duration}>
+                      {duration} minutes
+                    </option>
+                  ))}
+                </select>
+              </div>
 
           <button
             type="submit"

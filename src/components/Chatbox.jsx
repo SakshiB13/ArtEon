@@ -16,8 +16,7 @@ const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
 
   const [errorMessage, setErrorMessage] = useState('');
   const [showWinnerPopup, setShowWinnerPopup] = useState(false);
-  const [showLoserMessage, setShowLoserMessage] = useState(false);
-  
+  const [showLoserPopup, setShowLoserPopup] = useState(false);  
   const auctionid = auction.id;
 
   const fetchBids = async () => {
@@ -86,15 +85,17 @@ const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
       if (highestBidderId === currentUser) {
         setShowWinnerPopup(true);
       } else {
-        setShowLoserMessage(true);
+        setShowLoserPopup(true);
       }
     }
   }, [timer, highestBidderId, currentUser]);
 
   const handleClose = () => {
     setShowWinnerPopup(false);
+    setShowLoserPopup(false);
     onClose();
   };
+
 
   const winnerTransaction = async () => {
     setGlobalState('showModal', 'scale-0');
@@ -102,16 +103,27 @@ const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
       show: true,
       msg: 'Initializing NFT transfer...',
     });
-
+  
     try {
-      await buyNFT({ tokenId: auction.tokenId, highestBid });
-      setAlert('Transfer completed...', 'green');
-      window.location.reload();
+      const success = await buyNFT({ id: auction.tokenId, cost: highestBid });
+      if (success) {
+        setAlert('Transfer completed...', 'green');
+        // Optionally reload the page if necessary
+        // window.location.reload();
+      } else {
+        setAlert('Purchase failed...', 'red');
+      }
     } catch (error) {
-      console.log('Error transferring NFT: ', error);
+      console.error('Error transferring NFT: ', error);
       setAlert('Purchase failed...', 'red');
+    } finally {
+      setGlobalState('loading', {
+        show: false,
+        msg: '',
+      });
     }
   };
+  
 
   const isNumeric = (value) => {
     return !isNaN(parseFloat(value)) && isFinite(value);
@@ -193,8 +205,11 @@ const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
           <button onClick={winnerTransaction}>Confirm Transaction</button>
         </div>
       )}
-      {showLoserMessage && (
-        <div className="loser-message">Sorry, you lost the auction.</div>
+      {showLoserPopup && (
+        <div className="loser-popup">
+          <div className="loser-message">Sorry, you lost the auction.</div>
+          <button onClick={handleClose}>Close</button>
+        </div>
       )}
     </div>
   );
