@@ -176,12 +176,12 @@ const Card = ({ nft, darkMode }) => {
           <small className="text-xs">Current Price</small>
           <p className="text-sm font-semibold">{nft.cost} ETH</p>
         </div>
-        <button
+        {/* <button
           className="shadow-lg shadow-black text-white text-sm bg-[#e32970] hover:bg-[#bd255f] cursor-pointer rounded-full px-1.5 py-1"
           onClick={setNFT}
         >
           View Details
-        </button>
+        </button> */}
       </div>
     </div>
   )

@@ -6,51 +6,76 @@ import { AiFillHeart } from 'react-icons/ai';
 import { useTheme } from './themeContext';
 import { getAllAuctions } from '../utils/auction';
 
-const Artworks = ()  => {
+const Artworks = () => {
+  const [connectedAccount] = useGlobalState('connectedAccount');
 
   useEffect(() => {
     const fetchData = async () => {
-      
       const auctions = await getAllAuctions();
-      setGlobalState('auctions', auctions)
+      setGlobalState('auctions', auctions);
     };
 
     fetchData();
   }, []);
+  
   const [nfts] = useGlobalState('nfts');
-  console.log(nfts);
   const [auctions] = useGlobalState('auctions');
-  console.log(auctions);
   const [end, setEnd] = useState(4);
-  const [collection, setCollection] = useState([]);
+  const [listedCollection, setListedCollection] = useState([]);
+  const [unlistedCollection, setUnlistedCollection] = useState([]);
   const location = useLocation();
   const { darkMode } = useTheme();
 
   // Function to filter NFTs not in auctions
-  const getCollection = () => {
+  const getListedCollection = () => {
     const auctionedTokenIds = auctions.map(auction => auction.tokenId);
-    const filteredNFTs = nfts.filter(nft => nft.listedForSale === true && !auctionedTokenIds.includes(nft.id));
-    console.log(filteredNFTs);
-     const filteredNFTs = nfts.filter(nft => nft.listedForSale && !auctionedTokenIds.includes(nft.id));
-    return location.pathname === "/market" ? filteredNFTs : filteredNFTs.slice(0, end);
+    return nfts.filter(nft => nft.listedForSale === true && !auctionedTokenIds.includes(nft.id));
+  };
+
+  // Function to filter NFTs that are not listed for sale
+  const getUnlistedCollection = () => {
+    return nfts.filter(nft => nft.listedForSale === false);
+  };
+
+  // Function to filter unlisted NFTs owned by connectedAccount
+  const getOwnedUnlistedNFTs = () => {
+    return nfts.filter(nft => nft.listedForSale === false && nft.owner === connectedAccount);
   };
 
   useEffect(() => {
-    setCollection(getCollection());
+    setListedCollection(getListedCollection());
+    //setUnlistedCollection(getUnlistedCollection());
   }, [nfts, auctions, end, location.pathname]);
+
+  const displayedListedNFTs = location.pathname === "/market" ? listedCollection : listedCollection.slice(0, end);
+  //const displayedUnlistedNFTs = location.pathname === "/market" ? unlistedCollection : [];
+  const ownedUnlistedNFTs = location.pathname === "/market" ? getOwnedUnlistedNFTs() : [];
 
   return (
     <div className={`${darkMode ? 'bg-[#F8F0E3]' : 'bg-[#151c25] gradient-bg-artworks'}`}>
       <div className="w-4/5 py-10 mx-auto">
+        {location.pathname === "/market" && ownedUnlistedNFTs.length > 0 && (
+          <div>
+            <h4 className={`text-3xl font-bold uppercase ${darkMode ? 'text-black' : 'text-white text-gradient'}`}>
+              Your Unlisted NFTs
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-4 lg:gap-3 py-2.5">
+              {ownedUnlistedNFTs.map((nft, i) => (
+                <Card key={i} nft={nft} darkMode={darkMode} />
+              ))}
+            </div>
+          </div>
+        )}
         <h4 className={`text-3xl font-bold uppercase ${darkMode ? 'text-black' : 'text-white text-gradient'}`}>
-          {location.pathname === "/market" ? 'Browse Marketplace' : (collection.length > 0 ? 'Latest Artworks' : 'No Artworks Yet')}
+          {location.pathname === "/market" ? 'Browse Marketplace' : (displayedListedNFTs.length > 0 ? 'Latest Artworks' : 'No Artworks Yet')}
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-4 lg:gap-3 py-2.5">
-          {collection.map((nft, i) => (
+          {displayedListedNFTs.map((nft, i) => (
             <Card key={i} nft={nft} darkMode={darkMode} />
           ))}
+         
         </div>
-        {location.pathname !== "/market" && collection.length > 0 && nfts.length > collection.length && (
+        {location.pathname !== "/market" && listedCollection.length > 0 && nfts.length > listedCollection.length && (
           <div className="text-center my-5">
             <a href="/market">
               <button className="shadow-xl shadow-black text-white bg-[#e32970] hover:bg-[#bd255f] rounded-full cursor-pointer p-2">
