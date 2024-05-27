@@ -9,6 +9,7 @@ import Loading from './components/Loading';
 import ShowNFT from './components/ShowNFT';
 import UpdateNFT from './components/UpdateNFT';
 import EditProfile from './components/EditProfile';
+import StartAuction from './components/StartAuction';
 import { useTheme } from './components/themeContext'; // Import the useTheme hook
 
 
@@ -33,7 +34,7 @@ const Displaymarket = () => {
             <Footer />
             <Alert />
             <Loading />
-            
+            <StartAuction/>
     </div>
   );
 };

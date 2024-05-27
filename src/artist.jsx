@@ -27,7 +27,7 @@ const ArtistPage = () => {
         <Header />
       </div>
       <div className={`container-fluid mx-auto px-5 ${darkMode ? 'bg-white' : ''}`} style={{ paddingTop: '20px', paddingBottom: '20px', display: 'flex', justifyContent: 'center' }}>
-      <div className="grid grid-cols-5 gap-8" style={{  marginLeft:  '100px' }}>
+      <div className="grid grid-cols-5 gap-8" style={{  marginLeft:  '100px',marginRight:'100px' }}>
           {artists.map((artist) => (
             <div key={artist.id} className={`relative w-full shadow-xl shadow-black rounded-md overflow-hidden my-2 p-3 ${darkMode ? 'bg-[#800080]' : 'bg-gray-400'}`}>
            {/*  <div className="artist-image-container"> */}
