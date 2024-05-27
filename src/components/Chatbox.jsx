@@ -3,6 +3,7 @@ import { collection, query, orderBy, getDocs, setDoc, doc, onSnapshot } from 'fi
 import { db } from '../utils/firebase';
 import { useGlobalState, setGlobalState, setAlert } from '../store';
 import { buyNFT } from '../Blockchain.Services';
+import {deleteAuction} from '../utils/auction'
 
 const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
   const [bids, setBids] = useState([]);
@@ -81,21 +82,45 @@ const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
   }, []);
 
   useEffect(() => {
-    if (timer <= 0) {
+    const handleAuctionEnd = async () => {
       if (highestBidderId === currentUser) {
         setShowWinnerPopup(true);
       } else {
         setShowLoserPopup(true);
       }
+  
+      // Check if there is no highest bidder and delete the auction
+      if (!highestBidderId) {
+        try {
+          await deleteAuction(auctionid);
+          console.log(`Auction with ID: ${auctionid} deleted due to no winner`);
+        } catch (error) {
+          console.error('Error deleting auction:', error);
+        }
+      }
+    };
+  
+    if (timer <= 0) {
+      handleAuctionEnd();
     }
   }, [timer, highestBidderId, currentUser]);
-
-  const handleClose = () => {
+  
+  const handleClose = async () => {
     setShowWinnerPopup(false);
     setShowLoserPopup(false);
     onClose();
+  
+    // Delete the auction if there is no highest bidder
+    if (!highestBidderId) {
+      try {
+        await deleteAuction(auctionid);
+        console.log(`Auction with ID: ${auctionid} deleted due to no winner`);
+      } catch (error) {
+        console.error('Error deleting auction:', error);
+      }
+    }
   };
-
+  
 
   const winnerTransaction = async () => {
     setGlobalState('showModal', 'scale-0');
@@ -108,6 +133,7 @@ const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
       const success = await buyNFT({ id: auction.tokenId, cost: highestBid });
       if (success) {
         setAlert('Transfer completed...', 'green');
+        await deleteAuction(auctionid); // Delete the auction document after successful transfer
         // Optionally reload the page if necessary
         // window.location.reload();
       } else {
