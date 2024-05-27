@@ -42,7 +42,7 @@ const AuctionPage = () => {
       //console.log(userName);
       //console.log(registeruser);
       if (registeruser) {
-        setAlert('You have successfully registered for Auction', 'green');
+        //setAlert('You have successfully registered for Auction', 'green');
         window.location.reload();
       }
     } catch (error) {
