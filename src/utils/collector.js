@@ -116,7 +116,7 @@ export async function updateCollectorProfile(userId, name, quote, email, insta, 
 
   try {
     // Upload profile picture to Firebase Storage
-    let profilePicUrl = profilePicUrl;
+    //let profilePicUrl = profilePicUrl;
     if (profilePicFile) {
       const profilePicRef = ref(storage, `collectors/${userId}/profilePic`);
       await uploadBytes(profilePicRef, profilePicFile);
@@ -124,7 +124,7 @@ export async function updateCollectorProfile(userId, name, quote, email, insta, 
     }
 
     // Upload banner picture to Firebase Storage
-    let bannerPicUrl = bannerPicUrl;
+    //let bannerPicUrl = bannerPicUrl;
     if (bannerPicFile) {
       const bannerPicRef = ref(storage, `collectors/${userId}/bannerPic`);
       await uploadBytes(bannerPicRef, bannerPicFile);

@@ -142,7 +142,7 @@ const StartAuction = () => {
                   value={auctionDuration}
                   required
                 >
-                  {[5, 6, 7, 8, 9, 10].map((duration) => (
+                  {[2, 5, 6, 7, 8, 9, 10].map((duration) => (
                     <option key={duration} value={duration}>
                       {duration} minutes
                     </option>

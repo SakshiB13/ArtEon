@@ -135,7 +135,7 @@ const ShowNFT = () => {
           </div>
           
           <div className="flex justify-between items-center space-x-2">
-            {connectedAccount === nft?.owner && userType[0] === 'artist' ? (
+            {connectedAccount === nft?.owner && userType[0].collectionName === 'artist' ? (
               nft?.listedForSale === false ? (
                  <button
                 className="flex flex-row justify-center items-center
@@ -194,7 +194,7 @@ const ShowNFT = () => {
                 </>
               )
             ) : (
-              connectedAccount === nft?.owner && userType[0] === 'collector' ? ( <></>): (
+              connectedAccount === nft?.owner && userType[0].collectionName === 'collector' ? ( <></>): (
               <>
                 <button
                   className="flex flex-row justify-center items-center
