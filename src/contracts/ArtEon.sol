@@ -129,8 +129,9 @@ contract ArtEon is ERC721Enumerable, Ownable {
         // Transfer ownership
         _transfer(previousOwner, msg.sender, id);
 
-        // Update minted array with the new owner
+        // Update minted array with the new owner and price
         minted[id - 1].owner = msg.sender;
+        minted[id - 1].cost = msg.value;
 
         // Unlist the NFT from sale
         listedForSale[id] = false;

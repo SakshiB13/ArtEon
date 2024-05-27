@@ -1388,11 +1388,11 @@
 			]
 		},
 		"contracts/ArtEon.sol": {
-			"keccak256": "0x3ef99a7db0c6624999540be6991dab7493b108b8685a4e5bfe9cdd58fa6e9462",
+			"keccak256": "0xea2b9fc9b4f8d2299b4c9cc36bbc92297ebec752aed624d561bbb0b03c87ab3f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d40a6ffb008e5a2eb2c3dacb852af6a594f667193ab351d04e9cd6b40df75ef8",
-				"dweb:/ipfs/QmeQQsGBsARvdXXyuzMMpS9aNmNEdMdcSfaVhorpvpRQuX"
+				"bzz-raw://3d8b1a8dfc76861733a3a230e5d7f1498894ba55a05783e91021fc92517135ef",
+				"dweb:/ipfs/Qmd1m9HLSWoXzo3HJmDvYnSnK1hNzXVtRt39Cqa2pPNz4v"
 			]
 		}
 	},
