@@ -135,7 +135,7 @@ const Chatbox = ({ auctionId, currentUser, onClose, auction }) => {
         setAlert('Transfer completed...', 'green');
         await deleteAuction(auctionid); // Delete the auction document after successful transfer
         // Optionally reload the page if necessary
-        // window.location.reload();
+        window.location.reload();
       } else {
         setAlert('Purchase failed...', 'red');
       }
