@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Footer from './Footer';
 import Header from './Header';
 import { useTheme } from './themeContext';
-import { useGlobalState, setGlobalState, truncate } from '../store';
+import { useGlobalState } from '../store';
 import { getUserCollection } from '../utils/user';
 import { updateArtistProfile } from '../utils/artist';
 import { updateCollectorProfile } from '../utils/collector';
@@ -21,11 +21,28 @@ const EditProfile = () => {
 
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [bannerPicFile, setBannerPicFile] = useState(null);
+  const [profilePicUrl, setProfilePicUrl] = useState('');
+  const [bannerPicUrl, setBannerPicUrl] = useState('');
+  console.log(profilePicUrl, bannerPicUrl);
 
   useEffect(() => {
-    if (user) {
-      setEmail(user.email); // Set the email input field to the user's email
-    }
+    const fetchUserData = async () => {
+      if (user) {
+        setEmail(user.email); // Set the email input field to the user's email
+        const userProfile = await getUserCollection(user.uid);
+        if (userProfile) {
+          const { userData, profilePicture, bannerPicture } = userProfile;
+          setName(userData.name || '');
+          setQuote(userData.quote || '');
+          setInsta(userData.insta || '');
+          setWebsite(userData.website || '');
+          setProfilePicUrl(userData.profilePicture);
+          setBannerPicUrl(userData.bannerPicture);
+          console.log(profilePicture, bannerPicture, name);
+        }
+      }
+    };
+    fetchUserData();
   }, [user]);
 
   const handleProfilePicChangeFile = (e) => {
@@ -59,18 +76,19 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const usertype = await getUserCollection(user.uid);
-      console.log(usertype);
-      if (usertype === 'artist') {
-        await updateArtistProfile(user.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
-        console.log('Artist profile updated successfully!');
-        window.location.href = '/' + connectedAccount;
-      } else if (usertype === 'collector') {
-        await updateCollectorProfile(user.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile);
-        console.log('Collector profile updated successfully!');
-        window.location.href = '/' + connectedAccount;
+      const userProfile = await getUserCollection(user.uid);
+      if (userProfile) {
+        const { collectionName } = userProfile;
+        if (collectionName === 'artist') {
+          await updateArtistProfile(user.uid, name, quote, email, insta, website, profilePicUrl, bannerPicUrl);
+          console.log('Artist profile updated successfully!');
+          window.location.href = '/' + connectedAccount;
+        } else if (collectionName === 'collector') {
+          await updateCollectorProfile(user.uid, name, quote, email, insta, website, profilePicUrl, bannerPicUrl);
+          console.log('Collector profile updated successfully!');
+          window.location.href = '/' + connectedAccount;
+        }
       }
-      // Optionally, add a success message or redirect to another page upon successful update
     } catch (error) {
       console.error('Error updating profile:', error);
       // Handle error (e.g., display error message to user)
@@ -88,10 +106,12 @@ const EditProfile = () => {
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Profile Picture:</label>
+              {profilePicUrl && <img src={profilePicUrl} alt="Profile" className="profile-pic" />}
               <input type="file" onChange={handleProfilePicChangeFile} />
             </div>
             <div className="form-group">
               <label>Banner Picture:</label>
+              {bannerPicUrl && <img src={bannerPicUrl} alt="Banner" className="banner-pic" />}
               <input type="file" onChange={handleBannerPicChangeFile} />
             </div>
             <div className="form-group">

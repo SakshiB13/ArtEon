@@ -1,17 +1,20 @@
 import React from 'react';
+import { useTheme } from './components/themeContext'; // Import the useTheme hook
 import Header from './components/Header';
 import Footer from './components/Footer';
 
 const FeaturePage = () => {
+  const { darkMode } = useTheme(); // Get darkMode state from the theme context
+  
   return (
-    <div className="min-h-screen">
-      <div className="gradient-bg-hero">
+    <div className={`min-h-screen ${darkMode ? 'bg-white' : ''}`}>
+    <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
         <Header />
         <main>
           <section className="feature-section">
             <div className="container">
               <h2 className="text-gradient">Discover Unique Art NFTs</h2>
-              <p>Explore a curated collection of digital artworks created by talented artists from around the world.</p>
+              <p className={`${darkMode ? 'text-black' : 'text-white'}`}>Explore a curated collection of digital artworks created by talented artists from around the world.</p>
             </div>
           </section>
           <section className="aim-section">
