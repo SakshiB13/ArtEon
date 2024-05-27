@@ -111,12 +111,12 @@ export async function getCollectorNameByUID(userId) {
   }
 }
 
-export async function updateCollectorProfile(userId, name, quote, email, insta, website, profilePicFile, bannerPicFile) {
+export async function updateCollectorProfile(userId, name, quote, email, insta, website, profilePicFile, bannerPicFile, profilePicUrl, bannerPicUrl) {
   const userRef = doc(db, 'collector', userId);
 
   try {
     // Upload profile picture to Firebase Storage
-    let profilePicUrl = profilePicFile;
+    let profilePicUrl = profilePicUrl;
     if (profilePicFile) {
       const profilePicRef = ref(storage, `collectors/${userId}/profilePic`);
       await uploadBytes(profilePicRef, profilePicFile);
@@ -124,7 +124,7 @@ export async function updateCollectorProfile(userId, name, quote, email, insta, 
     }
 
     // Upload banner picture to Firebase Storage
-    let bannerPicUrl = bannerPicFile;
+    let bannerPicUrl = bannerPicUrl;
     if (bannerPicFile) {
       const bannerPicRef = ref(storage, `collectors/${userId}/bannerPic`);
       await uploadBytes(bannerPicRef, bannerPicFile);

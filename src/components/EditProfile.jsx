@@ -80,11 +80,11 @@ const EditProfile = () => {
       if (userProfile) {
         const { collectionName } = userProfile;
         if (collectionName === 'artist') {
-          await updateArtistProfile(user.uid, name, quote, email, insta, website, profilePicUrl, bannerPicUrl);
+          await updateArtistProfile(user.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile, profilePicUrl, bannerPicUrl);
           console.log('Artist profile updated successfully!');
           window.location.href = '/' + connectedAccount;
         } else if (collectionName === 'collector') {
-          await updateCollectorProfile(user.uid, name, quote, email, insta, website, profilePicUrl, bannerPicUrl);
+          await updateCollectorProfile(user.uid, name, quote, email, insta, website, profilePicFile, bannerPicFile, profilePicUrl, bannerPicUrl);
           console.log('Collector profile updated successfully!');
           window.location.href = '/' + connectedAccount;
         }
@@ -100,7 +100,7 @@ const EditProfile = () => {
       <div className={`gradient-bg-hero ${darkMode ? 'bg-white' : ''}`}>
         <Header />
       </div>
-      <div className={`container-body-signupp ${darkMode ? 'bg-[#F8F0E3]' : ''}`}>
+      <div className={`container-body-edit ${darkMode ? 'bg-[#F8F0E3]' : ''}`}>
         <div className="edit-profile-container">
           <h2>Edit Profile</h2>
           <form onSubmit={handleSubmit}>
