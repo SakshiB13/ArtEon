@@ -55,12 +55,13 @@ export async function getArtistNameByUID(userId) {
   }
 }
 
-export async function updateArtistProfile(userId, name, quote, email, insta, website, profilePicFile, bannerPicFile) {
+export async function updateArtistProfile(userId, name, quote, email, insta, website, profilePicFile, 
+  bannerPicFile, profilePicUrl, bannerPicUrl) {
   const userRef = doc(db, 'artist', userId);
 
   try {
     // Upload profile picture to Firebase Storage
-    let profilePicUrl = profilePicFile;
+    //let profilePicUrl = profilePicUrl;
     if (profilePicFile) {
       const profilePicRef = ref(storage, `artists/${userId}/profilePic`);
       await uploadBytes(profilePicRef, profilePicFile);
@@ -68,7 +69,7 @@ export async function updateArtistProfile(userId, name, quote, email, insta, web
     }
 
     // Upload banner picture to Firebase Storage
-    let bannerPicUrl = bannerPicFile;
+    //let bannerPicUrl = bannerPicUrl;
     if (bannerPicFile) {
       const bannerPicRef = ref(storage, `artists/${userId}/bannerPic`);
       await uploadBytes(bannerPicRef, bannerPicFile);
