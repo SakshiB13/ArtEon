@@ -8,7 +8,7 @@ window.web3 = new Web3(window.web3.currentProvider)
 
 const getEtheriumContract = async () => {
   const web3 = window.web3;
-  const contractAddress = '0xb01744a9435a282f5234e9c545ab295a08a5442a'; 
+  const contractAddress = '0x775a58756c31c5e4a2a05a685fc6d8c02efc7402'; 
   const contract = new web3.eth.Contract(abi.output.abi, contractAddress);
   return contract;
 }
