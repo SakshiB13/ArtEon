@@ -29,12 +29,12 @@ const Header = () => {
           const userType = await getUserCollection(userInfo.uid);
           setGlobalState('usertype', userType);
           console.log(userType);
-          if (userType === 'artist') {
+          if (userType.collectionName === 'artist') {
             await updateArtistWalletId(userInfo.uid, connectedAccount);
             let artistname = await getArtistNameByUID(userInfo.uid);
             setGlobalState('userName', artistname);
             console.log(artistname);
-          } else if (userType === 'collector') {
+          } else if (userType.collectionName === 'collector') {
             await updateCollectorWalletId(userInfo.uid, connectedAccount);
             let collectorname = await getCollectorNameByUID(userInfo.uid);
             setGlobalState('userName', collectorname);

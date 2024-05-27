@@ -27,7 +27,7 @@ const Hero = () => {
         </div>
 
         <div className="flex flex-row mt-5">
-          {usertype === 'artist' && ( 
+          {usertype.collectionName === 'artist' && ( 
             <button
               className="shadow-xl shadow-black text-white bg-[#800080] hover:bg-[#b300b3] rounded-full cursor-pointer p-2"
               onClick={onCreatedNFT}
