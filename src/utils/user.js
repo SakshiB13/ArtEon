@@ -1,4 +1,5 @@
-import { collection, getDocs, query, where, limit } from 'firebase/firestore';
+// utils/user.js
+import { collection, getDocs, query, where, limit, doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase';
 
 export const getUserCollection = async (userId) => {
@@ -12,8 +13,8 @@ export const getUserCollection = async (userId) => {
       )
     );
     if (!querySnapshot.empty) {
-      console.log(collectionName)
-      return collectionName;
+      const userData = querySnapshot.docs[0].data();
+      return { collectionName, userData };
     }
   }
   return null;
@@ -35,4 +36,12 @@ export const getUserCollectionbywalletId = async (walletId) => {
     }
   }
   return null;
+};
+
+export const checkIfEmailExists = async (email) => {
+  const usersRef = collection(db, 'users'); // Assuming 'users' is your collection name
+  const q = query(usersRef, where('email', '==', email));
+  const querySnapshot = await getDocs(q);
+
+  return !querySnapshot.empty;
 };

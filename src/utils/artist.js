@@ -60,7 +60,7 @@ export async function updateArtistProfile(userId, name, quote, email, insta, web
 
   try {
     // Upload profile picture to Firebase Storage
-    let profilePicUrl = '';
+    let profilePicUrl = profilePicFile;
     if (profilePicFile) {
       const profilePicRef = ref(storage, `artists/${userId}/profilePic`);
       await uploadBytes(profilePicRef, profilePicFile);
@@ -68,7 +68,7 @@ export async function updateArtistProfile(userId, name, quote, email, insta, web
     }
 
     // Upload banner picture to Firebase Storage
-    let bannerPicUrl = '';
+    let bannerPicUrl = bannerPicFile;
     if (bannerPicFile) {
       const bannerPicRef = ref(storage, `artists/${userId}/bannerPic`);
       await uploadBytes(bannerPicRef, bannerPicFile);
